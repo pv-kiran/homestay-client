@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Mail, X, ArrowRight, Chrome } from 'lucide-react';
+import { Mail, ArrowRight, Chrome } from 'lucide-react';
 import { Modal } from './common/Modal';
+import { Button } from './common/Button';
 
 const emailSchema = yup.object({
   email: yup.string().email('Please enter a valid email').required('Email is required'),
@@ -21,8 +22,7 @@ export function SignupModal({ isOpen, onClose }) {
   const {
     register: registerEmail,
     handleSubmit: handleEmailSubmit,
-    formState: { errors: emailErrors },
-    setValue
+    formState: { errors: emailErrors, isSubmitting: isEmailSubmitting },
   } = useForm({
     resolver: yupResolver(emailSchema),
   });
@@ -30,32 +30,25 @@ export function SignupModal({ isOpen, onClose }) {
   const {
     register: registerOTP,
     handleSubmit: handleOTPSubmit,
-    formState: { errors: otpErrors },
+    formState: { errors: otpErrors, isSubmitting: isOTPSubmitting },
   } = useForm({
     resolver: yupResolver(otpSchema),
   });
 
-  const onEmailSubmit = (data) => {
+  const onEmailSubmit = async (data) => {
     console.log('Email submitted:', data.email);
     setShowOTP(true);
   };
 
-  const onOTPSubmit = (data) => {
+  const onOTPSubmit = async (data) => {
     console.log('OTP submitted:', data.otp);
+    // Handle OTP verification here
   };
-
-  const handleClose = () => {
-    setShowOTP(false);
-    setValue('email', "");
-    onClose()
-  }
-
-  if (!isOpen) return null;
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={onClose}
       title={showOTP ? 'Enter OTP' : 'Welcome'}
       description={
         showOTP
@@ -80,13 +73,14 @@ export function SignupModal({ isOpen, onClose }) {
             )}
           </div>
 
-          <button
+          <Button
             type="submit"
-            className="group relative w-full rounded-lg bg-turquoise-500 py-3 text-sm font-semibold text-white hover:bg-turquoise-600 focus:outline-none focus:ring-2 focus:ring-turquoise-500 focus:ring-offset-2"
+            fullWidth
+            isLoading={isEmailSubmitting}
           >
             Generate OTP
             <ArrowRight className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
-          </button>
+          </Button>
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
@@ -97,13 +91,15 @@ export function SignupModal({ isOpen, onClose }) {
             </div>
           </div>
 
-          <button
+          <Button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2"
+            variant="outline"
+            fullWidth
+            onClick={() => console.log('Google sign-up clicked')}
           >
-            <Chrome className="h-5 w-5" />
+            <Chrome className="mr-2 h-5 w-5" />
             Sign up with Google
-          </button>
+          </Button>
         </form>
       ) : (
         <form onSubmit={handleOTPSubmit(onOTPSubmit)} className="space-y-4">
@@ -120,20 +116,22 @@ export function SignupModal({ isOpen, onClose }) {
             )}
           </div>
 
-          <button
+          <Button
             type="submit"
-            className="w-full rounded-lg bg-turquoise-500 py-3 text-sm font-semibold text-white hover:bg-turquoise-600 focus:outline-none focus:ring-2 focus:ring-turquoise-500 focus:ring-offset-2"
+            fullWidth
+            isLoading={isOTPSubmitting}
           >
             Verify OTP
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            fullWidth
             onClick={() => setShowOTP(false)}
-            className="w-full text-sm text-gray-600 hover:text-turquoise-600"
           >
             Back to email
-          </button>
+          </Button>
         </form>
       )}
     </Modal>
