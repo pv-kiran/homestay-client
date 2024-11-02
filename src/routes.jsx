@@ -7,11 +7,12 @@ import RoomsPage from './pages/RoomsPage'
 import CategoriesPage from './pages/CategoriesPage'
 import AddOnsPage from './pages/AddOnsPage'
 import SamplePage from './pages/SamplePage'
+import LandingPage from './pages/LandingPage'
 
 function AppRoutes() {
   return (
     <Routes>
-        
+      <Route path='/' element={<LandingPage/>}/>
       <Route path='/admin' element={<Layout></Layout>}>
           <Route path='' element={<DashboardPage/>}/>
           <Route path='dashboard' element={<DashboardPage />}/>

@@ -10,7 +10,7 @@ export function Button({
   className = '',
   ...props
 }) {
-  const baseStyles = 'rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = 'rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center item-center';
   
   const variants = {
     primary: 'bg-turquoise-500 text-white hover:bg-turquoise-600 focus:ring-turquoise-500',
