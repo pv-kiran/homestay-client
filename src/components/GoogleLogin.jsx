@@ -1,10 +1,10 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userService from '../services/userServices';
 import useApi from '../hooks/useApi';
 
-const GoogleLogin = ({handleClose}) => {
+const GoogleLogin = ({handleSuccess}) => {
   const navigate = useNavigate();
   const {
     data,
@@ -18,6 +18,7 @@ const GoogleLogin = ({handleClose}) => {
   useEffect(() => {
     if (success) {
       localStorage.setItem('user', JSON.stringify(data?.userDetails));
+      handleSuccess(data?.userDetails)
     }
   } , [success])
 

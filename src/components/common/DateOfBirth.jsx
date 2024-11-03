@@ -1,10 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-const DateOfBirth = () => {
-  const [date, setDate] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
-
+const DateOfBirth = ({dob, handleDob}) => {
+  
   const days = useMemo(() => Array.from({ length: 31 }, (_, i) => i + 1), []);
   const months = useMemo(() => [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -16,10 +13,10 @@ const DateOfBirth = () => {
   }, []);
 
   const selectClass = `
-    w-full px-3 py-2.5 text-gray-700 bg-white border border-turquoise-300 
-    rounded-lg focus:border-turquoise-500 focus:ring-2 focus:ring-turquoise-200 
+    w-full px-3 py-2.5 text-gray-700 bg-white border border-gray-300 
+    rounded-lg focus:border-gray-500 focus:ring-2 focus:ring-gray-200 
     appearance-none cursor-pointer transition-colors duration-200
-    hover:border-turquoise-400
+    hover:border-gray-400
   `;
 
   const wrapperClass = `
@@ -28,16 +25,21 @@ const DateOfBirth = () => {
     after:border-6 after:border-transparent after:border-t-gray-400
     after:transition-colors hover:after:border-t-gray-600
   `;
+    
+    const handleDateOfBirth = (e) => {
+        const { name, value } = e.target;
+        handleDob(name, value)
+    }
 
-    return (
-      <>
-    <div className="grid grid-cols-3 gap-3">
-      <div>
+  return (
+    <div className="grid grid-cols-4 gap-3">
+      <div className=' col-span-2'>
         <label className="block text-sm font-medium text-gray-600 mb-1">Month</label>
         <div className={wrapperClass}>
-          <select 
-            value={month} 
-            onChange={(e) => setMonth(e.target.value)}
+                  <select 
+                      name='month'
+            value={dob?.month} 
+            onChange={(e) => handleDateOfBirth(e)}
             className={selectClass}
           >
             <option value="" disabled>Month</option>
@@ -53,9 +55,10 @@ const DateOfBirth = () => {
       <div>
         <label className="block text-sm font-medium text-gray-600 mb-1">Day</label>
         <div className={wrapperClass}>
-          <select 
-            value={date} 
-            onChange={(e) => setDate(e.target.value)}
+                  <select 
+                      name='date'
+            value={dob?.date} 
+            onChange={(e) => handleDateOfBirth(e)}
             className={selectClass}
           >
             <option value="" disabled>Day</option>
@@ -72,8 +75,9 @@ const DateOfBirth = () => {
         <label className="block text-sm font-medium text-gray-600 mb-1">Year</label>
         <div className={wrapperClass}>
           <select 
-            value={year} 
-            onChange={(e) => setYear(e.target.value)}
+            name='year'
+            value={dob?.year} 
+            onChange={(e) => handleDateOfBirth(e)}
             className={selectClass}
           >
             <option value="" disabled>Year</option>
@@ -85,11 +89,8 @@ const DateOfBirth = () => {
           </select>
         </div>
       </div>
-      </div>
-      <p className="mt-4 text-sm text-gray-500">
-          Selected: {month && date && year ? `${months[parseInt(month) - 1]} ${date}, ${year}` : ''}
-            </p>
-            </>
+    </div>
+    
   );
 };
 

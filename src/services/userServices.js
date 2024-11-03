@@ -26,6 +26,15 @@ const userService = {
     } catch (error) {
       throw error;
     }
+  },
+  UserAccountSetUp: async (userData) => {
+    console.log(userData);
+    // try {
+    //   const response = await axiosInstance.post(apiEndpoints.Bestays_User_AccountSetUp.replace(':$userId', userData?.id), JSON.stringify(otpData));
+    //   return response;
+    // } catch (error) {
+    //   throw error;
+    // }
   }
 };
 
