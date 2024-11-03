@@ -11,8 +11,15 @@ const userService = {
       throw error;
     }
   },
-    UserOtpVerification: async (otpData) => {
-        console.log(otpData);
+  UserGoogleSignup: async (token) => {
+    try {
+      const response = await axiosInstance.post(apiEndpoints.Bestays_User_GoogleSignIn, JSON.stringify(token));
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  UserOtpVerification: async (otpData) => {
     try {
       const response = await axiosInstance.post(apiEndpoints.Bestays_User_OtpVerify, JSON.stringify(otpData));
       return response;

@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormField } from './common/FormField';
 import { Button } from './common/Button';
+import DateOfBirth from './common/DateOfBirth';
 
 const schema = yup.object({
   fullName: yup.string().required('Full name is required'),
@@ -16,6 +17,7 @@ const schema = yup.object({
   interests: yup.array().required().min(1, 'Please select at least one interest'),
   subscription: yup.string().required('Please select a subscription type'),
   terms: yup.boolean().oneOf([true], 'You must accept the terms'),
+  dob: yup.string().required('Date is required')
 });
 
 export function FormExample() {
@@ -113,6 +115,18 @@ export function FormExample() {
         register={register}
         error={errors.terms}
       />
+      <div className='w-6/12'>
+        <FormField
+          type="date"
+          name="dob"
+          label="Date of Birth"
+          placeholder="Date of Birth"
+          register={register}
+          control={control}
+          error={errors.dob}
+        />
+      </div>
+      <DateOfBirth/>
 
      <Button
         type="submit"

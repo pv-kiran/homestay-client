@@ -1,54 +1,44 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import userService from '../services/userServices';
+import useApi from '../hooks/useApi';
 
 const GoogleLogin = ({handleClose}) => {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const {
+    data,
+    error,
+    loading,
+    execute: handleGoogleSignin,
+    success,
+    reset
+  } = useApi(userService.UserGoogleSignup);
+
+  useEffect(() => {
+    if (success) {
+      localStorage.setItem('user', JSON.stringify(data?.userDetails));
+    }
+  } , [success])
+
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-          try {
-          
-            setLoading(true);
-            const response = await fetch(`http://localhost:4000/api/user/auth/google/signin`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                access_token: tokenResponse.access_token
-            }),
-            });
-
-            const data = await response.json();
-        
-            if (response.ok) {
-              localStorage.setItem('user', JSON.stringify(data?.userDetails));
-            }
-            handleClose()
-      } catch (error) {
-        console.error('Login error:', error);
-      } finally {
-        setLoading(false);
-      }
+      handleGoogleSignin(tokenResponse)
     },
     onError: (error) => {
       console.error('Login Failed:', error);
-      setLoading(false);
     },
   });
 
   return (
     <button
       onClick={() => {
-        setLoading(true);
         login();
       }}
       disabled={loading}
-      className="flex items-center justify-center gap-2 bg-white text-turquoise-300 px-6 py-2  w-full rounded-lg border border-turquoise-300 hover:bg-gray-50 transition-colors disabled:opacity-50"
+      className="flex items-center justify-center gap-2 bg-white text-turquoise-300 px-6 py-2  w-full rounded-lg border border-turquoise-300 hover:bg-gray-50 transition-colors disabled:opacity-50 mt-4"
     >
-      {/* Google Icon */}
       <svg 
         className="w-10 h-5" 
         viewBox="0 0 24 24"

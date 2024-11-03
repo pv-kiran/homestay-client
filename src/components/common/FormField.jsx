@@ -1,6 +1,7 @@
 import React from 'react';
 import {  Controller } from 'react-hook-form';
 import Select from 'react-select';
+import CalenderView from './calender/CalenderView';
 
 export function FormField({
   type,
@@ -13,6 +14,7 @@ export function FormField({
   options = [],
   rows = 4,
   isMulti = false,
+  disabled
 }) {
   const baseInputStyles = "w-full rounded-lg border border-gray-300 bg-white py-3 px-4 text-sm placeholder:text-gray-400 focus:border-turquoise-500 focus:outline-none focus:ring-1 focus:ring-turquoise-500";
   
@@ -103,6 +105,20 @@ export function FormField({
             <span className="text-sm text-gray-700">{placeholder}</span>
           </label>
         );
+      
+      case 'date':
+        return <Controller
+          name={name}
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <CalenderView
+              selectedDate={value}
+              onDateSelect={(date) => onChange(date)}
+              error={error}
+              disabled={disabled}
+            />
+        )}
+    />
 
       default:
         return (
