@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Mail, ArrowRight, Chrome, Timer } from 'lucide-react';
-// import { Modal } from './Modal';
-// import { Button } from './Button';
 import { Modal } from './common/Modal';
 import { Button } from './common/Button';
-import { GoogleLogin } from '@react-oauth/google';
-import CustomGoogleLogin from './Login';
+import GoogleLogin from './GoogleLogin';
+import useApi from '../hooks/useApi';
+import userService from '../services/userServices';
+
 
 const emailSchema = yup.object({
   email: yup.string().email('Please enter a valid email').required('Email is required'),
@@ -25,8 +25,27 @@ const otpSchema = yup.object({
 
 export function SignupModal({ isOpen, onClose }) {
   const [showOTP, setShowOTP] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(120); 
   
+  const {
+    data: emailData,
+    error: emailError,
+    loading: emailLoading,
+    execute: signUpUser,
+    success: emailSuccess,
+    reset: resetEmailState
+  } = useApi(userService.UserSignup);
+
+  const {
+    data: otpData,
+    error: otpError,
+    loading: otpLoading,
+    execute: verifyOtp,
+    success: otpSuccess,
+    reset: resetOtpState
+  } = useApi(userService.UserOtpVerification);
+
+
   const {
     register: registerEmail,
     handleSubmit: handleEmailSubmit,
@@ -64,9 +83,10 @@ export function SignupModal({ isOpen, onClose }) {
   }, [showOTP, timeLeft, resetOTPField]);
 
   const onEmailSubmit = async (data) => {
-    console.log('Email submitted:', data.email);
-    setShowOTP(true);
-    setTimeLeft(120); // Reset timer when OTP is sent
+    signUpUser({ email: data.email })
+    if (showOTP) {
+      setShowOTP(false);
+    }
   };
 
   const onOTPSubmit = async (data) => {
@@ -74,8 +94,10 @@ export function SignupModal({ isOpen, onClose }) {
       console.log('OTP has expired');
       return;
     }
-    console.log('OTP submitted:', data.otp);
-    // Handle OTP verification here
+    verifyOtp({
+      email: emailData?.user?.email,
+      otp:data.otp
+    })
   };
 
   const handleClose = () => {
@@ -83,6 +105,8 @@ export function SignupModal({ isOpen, onClose }) {
     resetOTPField('otp');
     setShowOTP(false);
     setTimeLeft(120);
+    resetEmailState();
+    resetOtpState();
     onClose();
   };
 
@@ -98,6 +122,19 @@ export function SignupModal({ isOpen, onClose }) {
     // Add your resend OTP logic here
     console.log('Resending OTP...');
   };
+
+
+  useEffect(() => {
+    if (emailSuccess) {
+      setShowOTP(true);
+      setTimeLeft(120); 
+    }
+    if (otpSuccess) {
+      localStorage.setItem('user', JSON.stringify(otpData?.userDetails));
+      handleClose();
+    }
+  } , [emailSuccess, otpSuccess])
+
 
   return (
     <Modal
@@ -130,7 +167,7 @@ export function SignupModal({ isOpen, onClose }) {
           <Button
             type="submit"
             fullWidth
-            isLoading={isEmailSubmitting}
+            isLoading={emailLoading}
           >
             Generate OTP
             <ArrowRight className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
@@ -141,20 +178,10 @@ export function SignupModal({ isOpen, onClose }) {
               <div className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">Or continue with</span>
+              <span className="bg-white px-2 text-gray-500">Or</span>
             </div>
           </div>
-
-        
-            {/* <GoogleLogin
-                onSuccess={credentialResponse => {
-                  console.log(credentialResponse);
-                }}
-                onError={() => {
-                  console.log('Login Failed');
-                }}
-              /> */}
-         <CustomGoogleLogin/>
+          <GoogleLogin handleClose={ () => onClose()} />
           
         </form>
       ) : (
@@ -194,20 +221,11 @@ export function SignupModal({ isOpen, onClose }) {
           <Button
             type="submit"
             fullWidth
-            isLoading={isOTPSubmitting}
+            isLoading={otpLoading}
             disabled={timeLeft === 0}
           >
             Verify OTP
           </Button>
-
-          {/* <Button
-            type="button"
-            variant="secondary"
-            fullWidth
-            onClick={() => setShowOTP(false)}
-          >
-            Back to email
-          </Button> */}
         </form>
       )}
     </Modal>
