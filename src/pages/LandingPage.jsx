@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
-import { SignupModal } from '../components/SignupModal';
-import { Button } from '../components/common/Button';
-import Logout from '../components/Logout';
+import React from "react";
+import { useSelector } from "react-redux";
 
 const LandingPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { authState } = useSelector((state) => state?.userAuth);
+
   return (
-    <div className='flex justify-center items-center'>
-        <Button
-        type="button"
-        onClick = {() => {setIsModalOpen(true)}}
-        >
-           Sign Up
-        </Button>
-        <SignupModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}     
-      />
-      <Logout/>
+    <div className="flex justify-center items-center h-[95vh]">
+      {!authState ? (
+        <span>Login and Continue</span>
+      ) : (
+        <span>{authState?.name}</span>
+      )}
     </div>
   );
-}
+};
 
 export default LandingPage;
