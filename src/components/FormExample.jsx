@@ -1,23 +1,28 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { FormField } from './common/FormField';
-import { Button } from './common/Button';
-import DateOfBirth from './common/DateOfBirth';
+import React from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FormField } from "./common/FormField";
+import { Button } from "./common/Button";
+import DateOfBirth from "./common/DateOfBirth";
 
 const schema = yup.object({
-  fullName: yup.string().required('Full name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  message: yup.string().required('Message is required'),
-  preference: yup.object({
-    label: yup.string().required(),
-    value: yup.string().required(),
-  }).required('Please select a preference'),
-  interests: yup.array().required().min(1, 'Please select at least one interest'),
-  subscription: yup.string().required('Please select a subscription type'),
-  terms: yup.boolean().oneOf([true], 'You must accept the terms'),
-  dob: yup.string().required('Date is required')
+  fullName: yup.string().required("Full name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  message: yup.string().required("Message is required"),
+  preference: yup
+    .object({
+      label: yup.string().required(),
+      value: yup.string().required(),
+    })
+    .required("Please select a preference"),
+  interests: yup
+    .array()
+    .required()
+    .min(1, "Please select at least one interest"),
+  subscription: yup.string().required("Please select a subscription type"),
+  terms: yup.boolean().oneOf([true], "You must accept the terms"),
+  dob: yup.string().required("Date is required"),
 });
 
 export function FormExample() {
@@ -25,7 +30,7 @@ export function FormExample() {
     register,
     control,
     handleSubmit,
-    formState: { isSubmitting,errors },
+    formState: { isSubmitting, errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -71,9 +76,9 @@ export function FormExample() {
         register={register}
         error={errors.preference}
         options={[
-          { label: 'Light Theme', value: 'light' },
-          { label: 'Dark Theme', value: 'dark' },
-          { label: 'System Theme', value: 'system' },
+          { label: "Light Theme", value: "light" },
+          { label: "Dark Theme", value: "dark" },
+          { label: "System Theme", value: "system" },
         ]}
       />
 
@@ -86,11 +91,11 @@ export function FormExample() {
         error={errors.interests}
         isMulti={true}
         options={[
-          { label: 'Programming', value: 'programming' },
-          { label: 'Design', value: 'design' },
-          { label: 'Business', value: 'business' },
-          { label: 'Marketing', value: 'marketing' },
-          { label: 'Writing', value: 'writing' },
+          { label: "Programming", value: "programming" },
+          { label: "Design", value: "design" },
+          { label: "Business", value: "business" },
+          { label: "Marketing", value: "marketing" },
+          { label: "Writing", value: "writing" },
         ]}
       />
 
@@ -101,9 +106,9 @@ export function FormExample() {
         register={register}
         error={errors.subscription}
         options={[
-          { label: 'Free', value: 'free' },
-          { label: 'Pro', value: 'pro' },
-          { label: 'Enterprise', value: 'enterprise' },
+          { label: "Free", value: "free" },
+          { label: "Pro", value: "pro" },
+          { label: "Enterprise", value: "enterprise" },
         ]}
       />
 
@@ -115,7 +120,7 @@ export function FormExample() {
         register={register}
         error={errors.terms}
       />
-      <div className='w-6/12'>
+      <div className="w-6/12">
         <FormField
           type="date"
           name="dob"
@@ -126,13 +131,9 @@ export function FormExample() {
           error={errors.dob}
         />
       </div>
-      <DateOfBirth/>
+      <DateOfBirth />
 
-     <Button
-        type="submit"
-        fullWidth
-        isLoading={isSubmitting}
-      >
+      <Button type="submit" fullWidth isLoading={isSubmitting}>
         Submit
       </Button>
     </form>
