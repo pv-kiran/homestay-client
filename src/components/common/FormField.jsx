@@ -14,7 +14,7 @@ export function FormField({
   options = [],
   rows = 4,
   isMulti = false,
-  disabled
+  disabled = false
 }) {
   const baseInputStyles = "w-full rounded-lg border border-gray-300 bg-white py-3 px-4 text-sm placeholder:text-gray-400 focus:border-turquoise-500 focus:outline-none focus:ring-1 focus:ring-turquoise-500";
   
@@ -127,6 +127,7 @@ export function FormField({
             {...register(name)}
             placeholder={placeholder}
             className={baseInputStyles}
+            disabled={disabled}
           />
         );
     }

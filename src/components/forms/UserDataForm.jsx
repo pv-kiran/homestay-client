@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { Button } from '../common/Button';
 import { FormField } from '../common/FormField';
 import DateOfBirth from '../common/DateOfBirth';
+import { useSelector } from 'react-redux';
 
 // Custom validation for checking if all DOB fields are filled
 const isDobComplete = (dob) => {
@@ -25,11 +26,20 @@ const calculateAge = (dob) => {
 };
 
 const schema = yup.object({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
+  fullName: yup
+    .string()
+    .matches(/^[A-Za-z\s]+$/, 'Full name should contain only alphabets')
+    .required('Full name is required'),
+  email: yup
+    .string()
+    .email('Please enter a valid email')
+    .required('Email is required'),
 });
 
 export const UserDataForm = ({ submitHandler, isLoading }) => {
+  const {authState} = useSelector((state) => {
+        return state.userAuth;
+  })
   const [dob, setDob] = useState({
     date: '',
     month: '',
@@ -39,8 +49,8 @@ export const UserDataForm = ({ submitHandler, isLoading }) => {
 
   const {
     register,
-    control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -74,27 +84,36 @@ export const UserDataForm = ({ submitHandler, isLoading }) => {
     // If all validations pass, submit the form with DOB data
     submitHandler({
       ...formData,
-      dob: `${dob.year}-${dob.month.padStart(2, '0')}-${dob.date.padStart(2, '0')}`
+      dob: `${dob.year}-${dob.month.padStart(2, '0')}-${dob.date.padStart(2, '0')}`,
+      userId: authState?.userId
     });
   };
+
+  useEffect(() => {
+    if (!authState?.accountCreationStatus) {
+      setValue("email", authState?.email);
+      setValue("fullName", authState?.name ? authState?.name : "");
+    }
+  }, [authState]);
 
   return (
     <form onSubmit={handleSubmit(validateDobAndSubmit)} className="space-y-6 p-6">
       <FormField
         type="text"
-        name="firstName"
-        label="First Name"
-        placeholder="Enter your First name"
+        name="fullName"
+        label="Full Name"
+        placeholder="Enter your full name"
         register={register}
-        error={errors.firstName}
+        error={errors.fullName}
       />
       <FormField
         type="text"
-        name="lastName"
-        label="Last Name"
-        placeholder="Enter your Last name"
+        name="email"
+        label="Email"
+        placeholder="Enter your email name"
         register={register}
-        error={errors.lastName}
+        error=""
+        disabled
       />
       <div>
         <DateOfBirth
@@ -108,7 +127,7 @@ export const UserDataForm = ({ submitHandler, isLoading }) => {
       <div className='ml-1'>
         <FormField
           type="checkbox"
-          name="terms"
+          name="isMarketingAllowed"
           label="Terms"
           placeholder="I agree to receive emails from Bestays"
           register={register}

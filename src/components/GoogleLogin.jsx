@@ -3,9 +3,15 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userService from '../services/userServices';
 import useApi from '../hooks/useApi';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../app/features/users/authSlice';
 
-const GoogleLogin = ({handleSuccess}) => {
+
+
+const GoogleLogin = ({ handleSuccess }) => {
+  
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const {
     data,
     error,
@@ -18,6 +24,7 @@ const GoogleLogin = ({handleSuccess}) => {
   useEffect(() => {
     if (success) {
       localStorage.setItem('user', JSON.stringify(data?.userDetails));
+      dispatch(setAuth());
       handleSuccess(data?.userDetails)
     }
   } , [success])
