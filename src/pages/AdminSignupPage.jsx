@@ -12,6 +12,8 @@ export function AdminSignupPage() {
     otpVerify: false,
   });
 
+  const [message, setMessage] = useState("");
+
   const [timeLeft, setTimeLeft] = useState(120);
 
   const {
@@ -27,21 +29,19 @@ export function AdminSignupPage() {
     execute: verifyOtp,
   } = useApi(adminService.adminOtpVerification);
 
+  const { execute: resendOtp, data: resendOtpData } = useApi(
+    adminService.adminOtpResend
+  );
+
   const navigate = useNavigate();
 
   const handleAdminSignUp = async (data) => {
     const result = await adminSignUp(data);
-    if (!result) {
-      if (adminError?.isVerified) {
-        alert(`Account is already in use, u can signin ${adminError?.message}`);
-        navigate("/admin/signin");
-      } else {
-        alert(adminError?.message);
-      }
-    } else {
+    if (result) {
       setShowFlow({ otpGenerate: false, otpVerify: true });
       const leftTime = getOtpExpiryInSeconds(result?.otpExpiry);
       setTimeLeft(leftTime);
+      setMessage(result?.message);
     }
   };
 
@@ -56,19 +56,19 @@ export function AdminSignupPage() {
       otp: data.otp,
     });
 
-    if (!result) {
-      console.error("OTP Error:", otpError);
-      console.error("OTP verification failed:", otpError);
-      alert(otpError?.message);
-    } else {
+    if (result) {
       setShowFlow({ otpGenerate: true, otpVerify: false });
       navigate("/admin/signin");
     }
   };
 
-  const handleResendOTP = () => {
-    setTimeLeft(120);
-    console.log("Resending OTP...");
+  const handleResendOTP = async () => {
+    const result = await resendOtp({ email: adminData?.admin?.email });
+    if (result) {
+      const leftTime = getOtpExpiryInSeconds(result?.otpExpiry);
+      setTimeLeft(leftTime);
+      setMessage(result?.message);
+    }
   };
 
   useEffect(() => {
@@ -82,6 +82,20 @@ export function AdminSignupPage() {
       if (timer) clearInterval(timer);
     };
   }, [showFlow, timeLeft]);
+
+  useEffect(() => {
+    if (adminError) {
+      if (adminError?.isVerified) {
+        alert(`Account is already in use, u can signin ${adminError?.message}`);
+        navigate("/admin/signin");
+      } else {
+        alert(adminError?.message);
+      }
+    }
+    if (otpError) {
+      alert(otpError?.message);
+    }
+  }, [adminError, otpError]);
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -97,7 +111,7 @@ export function AdminSignupPage() {
           <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">
             Enter OTP
           </h2>
-          <p className="text-center text-gray-600 mb-6">{adminData?.message}</p>
+          <p className="text-center text-gray-600 mb-6">{message}</p>
 
           <OtpForm
             onSubmit={handleOTPSubmit}

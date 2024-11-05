@@ -12,7 +12,14 @@ import { setAuth } from "../../app/features/users/authSlice";
 
 const adminSigninSchema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup.string().required("Password is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/,
+      "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
+    ),
 });
 
 const AdminSigninForm = () => {

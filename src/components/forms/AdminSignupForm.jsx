@@ -7,10 +7,22 @@ import { Button } from "../common/Button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const adminAccountSchema = yup.object({
-  name: yup.string().required("Full name is required"),
+const adminSignUpSchema = yup.object({
+  name: yup
+    .string()
+    .required("Full name is required")
+    .matches(/^[A-Za-z\s]+$/, "Name should contain alphabets only"),
+
   email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup.string().required("Message is required"),
+
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/,
+      "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character"
+    ),
 });
 
 const AdminSignupForm = ({ onSubmit, isLoading }) => {
@@ -20,7 +32,7 @@ const AdminSignupForm = ({ onSubmit, isLoading }) => {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm({
-    resolver: yupResolver(adminAccountSchema),
+    resolver: yupResolver(adminSignUpSchema),
   });
 
   return (
@@ -66,7 +78,9 @@ const AdminSignupForm = ({ onSubmit, isLoading }) => {
       </form>
       <p className="text-sm text-center text-gray-600 mt-4">
         Already have an account?{" "}
-        <Link href="/login" className=" text-turquoise-500 hover:underline">
+        <Link
+          to={"/admin/signin"}
+          className=" text-turquoise-500 hover:underline">
           Sign In
         </Link>
       </p>

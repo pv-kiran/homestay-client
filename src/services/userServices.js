@@ -35,6 +35,17 @@ const userService = {
       throw error;
     }
   },
+  UserOtpResend: async (email) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_OtpResend,
+        JSON.stringify(email)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   UserAccountSetUp: async (userData) => {
     const { userId, fullName, dob, email, isMarketingAllowed } = userData;
 

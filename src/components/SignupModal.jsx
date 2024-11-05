@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-import { Modal } from './common/Modal';
-import useApi from '../hooks/useApi';
-import userService from '../services/userServices';
-import { EmailForm } from './forms/EmailForm';
-import { OtpForm } from './forms/OtpForm';
-import { UserDataForm } from './forms/UserDataForm';
-import GoogleLogin from './GoogleLogin';
-import { useDispatch } from 'react-redux';
-import { setAuth } from '../app/features/users/authSlice';
+import { Modal } from "./common/Modal";
+import useApi from "../hooks/useApi";
+import userService from "../services/userServices";
+import { EmailForm } from "./forms/EmailForm";
+import { OtpForm } from "./forms/OtpForm";
+import { UserDataForm } from "./forms/UserDataForm";
+import GoogleLogin from "./GoogleLogin";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../app/features/users/authSlice";
+import getOtpExpiryInSeconds from "./../utils/otpExpiry";
 
 export function SignupModal({ isOpen, onClose }) {
   const [showFlow, setShowFlow] = useState({
     otpGenerate: true,
     otpVerify: false,
-    finishScreen: false
+    finishScreen: false,
   });
 
   const [timeLeft, setTimeLeft] = useState(120);
@@ -25,26 +26,29 @@ export function SignupModal({ isOpen, onClose }) {
     loading: emailLoading,
     execute: signUpUser,
     success: emailSuccess,
-    reset: resetEmailState
+    reset: resetEmailState,
   } = useApi(userService.UserSignup);
 
   const {
-    data: otpData,
     error: otpError,
     loading: otpLoading,
     execute: verifyOtp,
-    success: otpSuccess,
-    reset: resetOtpState
+    reset: resetOtpState,
   } = useApi(userService.UserOtpVerification);
 
   const {
-    data: userData,
     error: userError,
     loading: userLoading,
     execute: userDataSubmit,
-    success: userSuccess,
-    reset: userDataReset
+    reset: userDataReset,
   } = useApi(userService.UserAccountSetUp);
+
+  const {
+    data: otpResendData,
+    error: otpResendError,
+    loading: otpResendLoading,
+    execute: otpResend,
+  } = useApi(userService.UserOtpResend);
 
   const dispatch = useDispatch();
 
@@ -61,21 +65,37 @@ export function SignupModal({ isOpen, onClose }) {
   }, [showFlow, timeLeft]);
 
   const handleEmailSubmit = async (data) => {
-    signUpUser({ email: data.email });
+    const result = await signUpUser({ email: data.email });
+    if (result) {
+      setShowFlow({ otpGenerate: false, otpVerify: true, finishScreen: false });
+      const timer = getOtpExpiryInSeconds(result?.otpExpiry);
+      setTimeLeft(timer);
+    }
   };
 
   const handleOTPSubmit = async (data) => {
     if (timeLeft === 0) {
-      console.log('OTP has expired');
+      console.log("OTP has expired");
       return;
     }
-    verifyOtp({
+    const result = await verifyOtp({
       email: emailData?.user?.email,
-      otp: data.otp
+      otp: data.otp,
     });
+    if (result) {
+      localStorage.setItem("user", JSON.stringify(result?.userDetails));
+      dispatch(setAuth());
+      if (!result?.userDetails?.accountCreationStatus) {
+        setShowFlow({
+          otpGenerate: false,
+          otpVerify: false,
+          finishScreen: true,
+        });
+      } else {
+        handleClose();
+      }
+    }
   };
-
-  
 
   const handleClose = () => {
     setShowFlow({ otpGenerate: true, otpVerify: false, finishScreen: false });
@@ -86,41 +106,48 @@ export function SignupModal({ isOpen, onClose }) {
     onClose();
   };
 
+  const handleResendOTP = async () => {
+    const result = await otpResend({
+      email: emailData?.user?.email,
+    });
+    if (result) {
+      const leftTime = getOtpExpiryInSeconds(result?.otpExpiry);
+      setTimeLeft(leftTime);
+      alert(result?.message);
+    }
+  };
 
-  const handleResendOTP = () => {
-    setTimeLeft(120);
-    console.log('Resending OTP...');
+  const handleUserDataSubmit = async (data) => {
+    const result = await userDataSubmit(data);
+    if (result) {
+      handleClose();
+    }
   };
 
   useEffect(() => {
-    if (emailSuccess) {
-      setShowFlow({ otpGenerate: false, otpVerify: true, finishScreen: false });
-      setTimeLeft(120);
+    if (emailError) {
+      alert(emailError?.message);
     }
-    if (otpSuccess) {
-      localStorage.setItem('user', JSON.stringify(otpData?.userDetails));
-      dispatch(setAuth());
-      if (!otpData?.userDetails?.accountCreationStatus) {
-        setShowFlow({ otpGenerate: false, otpVerify: false, finishScreen: true });
-      } else {
-        handleClose();
-      }
+    if (otpError) {
+      alert(otpError?.message);
     }
-    if (userSuccess) {
-      handleClose();
+    if (userError) {
+      alert(userError?.message);
     }
-  }, [emailSuccess, otpSuccess, userSuccess,otpData]);
+  }, [emailError, otpError, userError]);
 
   const getTitle = () => {
-    if (showFlow?.otpGenerate) return 'Welcome';
-    if (showFlow?.otpVerify) return 'Enter OTP';
-    if (showFlow?.finishScreen) return 'Finishing Signup';
+    if (showFlow?.otpGenerate) return "Welcome";
+    if (showFlow?.otpVerify) return "Enter OTP";
+    if (showFlow?.finishScreen) return "Finishing Signup";
   };
 
   const getDescription = () => {
-    if (showFlow?.otpGenerate) return 'Sign up to start booking your perfect homestay';
-    if (showFlow?.otpVerify) return 'Please enter the verification code sent to your email';
-    if (showFlow?.finishScreen) return '';
+    if (showFlow?.otpGenerate)
+      return "Sign up to start booking your perfect homestay";
+    if (showFlow?.otpVerify)
+      return "Please enter the verification code sent to your email";
+    if (showFlow?.finishScreen) return "";
   };
 
   const handleGoogleAuthSucces = (user) => {
@@ -128,15 +155,11 @@ export function SignupModal({ isOpen, onClose }) {
       setShowFlow({
         otpGenerate: false,
         otpVerify: false,
-        finishScreen: true
-      })
+        finishScreen: true,
+      });
     } else {
       handleClose();
     }
-  }
-
-  const handleUserDataSubmit = (data) => {
-    userDataSubmit(data)
   };
 
   return (
@@ -144,17 +167,11 @@ export function SignupModal({ isOpen, onClose }) {
       isOpen={isOpen}
       onClose={handleClose}
       title={getTitle()}
-      description={getDescription()}
-    >
+      description={getDescription()}>
       {showFlow?.otpGenerate && (
         <>
-          <EmailForm
-            onSubmit={handleEmailSubmit}
-            isLoading={emailLoading}
-          />
-          <GoogleLogin
-            handleSuccess={handleGoogleAuthSucces} 
-          />
+          <EmailForm onSubmit={handleEmailSubmit} isLoading={emailLoading} />
+          <GoogleLogin handleSuccess={handleGoogleAuthSucces} />
         </>
       )}
       {showFlow?.otpVerify && (
@@ -168,7 +185,7 @@ export function SignupModal({ isOpen, onClose }) {
       {showFlow?.finishScreen && (
         <UserDataForm
           submitHandler={handleUserDataSubmit}
-          isLoading={userLoading}   
+          isLoading={userLoading}
         />
       )}
     </Modal>
