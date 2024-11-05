@@ -48,7 +48,7 @@ const adminService = {
   },
   adminLogout: async () => {
     try {
-      const response = await axiosInstance.get(
+      const response = await axiosInstance.post(
         apiEndpoints.Bestays_Admin_LogOut
       );
       return response;

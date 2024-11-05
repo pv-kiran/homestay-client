@@ -11,6 +11,8 @@ import LandingPage from "./pages/LandingPage";
 import UserLayout from "./layout/UserLayout";
 import { AdminSignupPage } from "./pages/AdminSignupPage";
 import AdminSigninPage from "./pages/AdminSigninPage";
+import PublicRoutesAdmin from "./utils/PublicRoutesAdmin";
+import PrivateRoutesAdmin from "./utils/PrivateRoutesAdmin";
 
 function AppRoutes() {
   return (
@@ -20,18 +22,22 @@ function AppRoutes() {
         <Route index element={<LandingPage />} />
       </Route>
 
-      <Route path="/admin/signup" element={<AdminSignupPage />} />
-      <Route path="/admin/signin" element={<AdminSigninPage />} />
+      <Route element={<PublicRoutesAdmin />}>
+        <Route path="/admin/signup" element={<AdminSignupPage />} />
+        <Route path="/admin/signin" element={<AdminSigninPage />} />
+      </Route>
 
       {/* Admin layout and its nested routes */}
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<DashboardPage />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="rooms" element={<RoomsPage />} />
-        <Route path="categories" element={<CategoriesPage />} />
-        <Route path="add-ons" element={<AddOnsPage />} />
-        <Route path="account" element={<AccountPage />} />
-        <Route path="sample" element={<SamplePage />} />
+      <Route element={<PrivateRoutesAdmin />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<DashboardPage />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="rooms" element={<RoomsPage />} />
+          <Route path="categories" element={<CategoriesPage />} />
+          <Route path="add-ons" element={<AddOnsPage />} />
+          <Route path="account" element={<AccountPage />} />
+          <Route path="sample" element={<SamplePage />} />
+        </Route>
       </Route>
     </Routes>
   );

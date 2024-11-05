@@ -45,11 +45,7 @@ const AdminSigninForm = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
-    const result = await adminSignIn(data);
-    if (!result) {
-      console.error("Signup failed:", adminError?.message);
-      alert(adminError?.message);
-    }
+    await adminSignIn(data);
   };
 
   useEffect(() => {
@@ -60,7 +56,10 @@ const AdminSigninForm = () => {
       resetField("password", "");
       navigate("/admin");
     }
-  }, [signInSuccess]);
+    if (adminError) {
+      alert(adminError?.errorInfo);
+    }
+  }, [signInSuccess, adminError]);
 
   return (
     <div className="w-full max-w-md mx-auto p-8 border border-gray-300 rounded-lg shadow-lg bg-white">
