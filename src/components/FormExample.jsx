@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormField } from "./common/FormField";
 import { Button } from "./common/Button";
 import DateOfBirth from "./common/DateOfBirth";
+import { FileUpload } from "./common/FileUpload";
 
 const schema = yup.object({
   fullName: yup.string().required("Full name is required"),
@@ -38,6 +39,8 @@ export function FormExample() {
   const onSubmit = (data) => {
     console.log(data);
   };
+
+  const [file, setFile] = useState(null);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
@@ -132,6 +135,8 @@ export function FormExample() {
         />
       </div>
       <DateOfBirth />
+
+      <FileUpload onChange={setFile} value={file} />
 
       <Button type="submit" fullWidth isLoading={isSubmitting}>
         Submit
