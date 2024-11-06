@@ -13,6 +13,7 @@ import { AdminSignupPage } from "./pages/AdminSignupPage";
 import AdminSigninPage from "./pages/AdminSigninPage";
 import PublicRoutesAdmin from "./utils/PublicRoutesAdmin";
 import PrivateRoutesAdmin from "./utils/PrivateRoutesAdmin";
+import AmenitiesPage from "./pages/AmenitiesPage";
 
 function AppRoutes() {
   return (
@@ -34,6 +35,7 @@ function AppRoutes() {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="rooms" element={<RoomsPage />} />
           <Route path="categories" element={<CategoriesPage />} />
+          <Route path="amenities" element={<AmenitiesPage />} />
           <Route path="add-ons" element={<AddOnsPage />} />
           <Route path="account" element={<AccountPage />} />
           <Route path="sample" element={<SamplePage />} />

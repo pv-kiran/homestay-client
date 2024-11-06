@@ -10,41 +10,42 @@ import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
 
-const categorySchema = yup.object({
-  category: yup.string().required("Category title is required"),
+const amenitySchema = yup.object({
+  amenity: yup.string().required("Amenity title is required"),
 });
 
-export default function CategoriesPage() {
+export default function AmenitiesPage() {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
-  const [categoryId, setCategoryId] = useState(null);
+  const [amenityId, setamenityId] = useState(null);
   const [fileError, setFileError] = useState(null);
 
   const {
-    loading: addCategoryLoading,
-    execute: addCategory,
-    reset: addCategoryReset,
-    error: addCategoryError,
-  } = useApi(adminService.adminCategoryAdd);
+    loading: addAmenityLoading,
+    execute: addAmenity,
+    reset: addAmenityReset,
+    error: addAmenityError,
+  } = useApi(adminService.adminAmenitiesAdd);
 
   const {
-    data: allCategories,
-    execute: getAllCategories,
-    error: getCategoriesError,
-  } = useApi(adminService.adminGetAllCategory);
+    data: allAmenities,
+    execute: getAllAmenities,
+    error: getAmenitiesError,
+  } = useApi(adminService.adminGetAllAmenities);
 
   const {
-    execute: toggleCategory,
-    error: toggledCategoryError,
-  } = useApi(adminService.adminToggleCategory);
+    execute: toggleAmenity,
+    error: toggledamenityError,
+  } = useApi(adminService.adminToggleAmenity);
 
   const {
-    loading: categoryEditLoading,
-    execute: categoryEdit,
-    reset: editCategoryReset,
-    error: categoryEditError,
-  } = useApi(adminService.adminCategoryEdit);
+    loading: amenityEditLoading,
+    execute: amenityEdit,
+    reset: aditAmenityReset,
+    error: amenityEditError,
+  } = useApi(adminService.adminAmenityEdit);
 
   const {
     register,
@@ -52,7 +53,7 @@ export default function CategoriesPage() {
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(categorySchema),
+    resolver: yupResolver(amenitySchema),
   });
 
   const handleFileUpload = (file) => {
@@ -62,10 +63,10 @@ export default function CategoriesPage() {
     }
   };
 
-  const handleCategorySubmit = async (data) => {
+  const handleamenitySubmit = async (data) => {
     const formData = new FormData();
     console.log(data);
-    formData.append("categoryName", data.category);
+    formData.append("amenityName", data.amenity);
     if (file) {
       formData.append("iconUrl", file);
     }
@@ -74,20 +75,20 @@ export default function CategoriesPage() {
         setFileError("Please select a file");
         return;
       } else {
-        const result = await addCategory(formData);
+        const result = await addAmenity(formData);
         if (result) {
           alert(result?.message);
-          addCategoryReset();
+          addAmenityReset();
         }
       }
     } else {
-      const result = await categoryEdit({ formData , categoryId});
+      const result = await amenityEdit({ formData , amenityId});
       if (result) {
         alert(result?.message);
-        editCategoryReset();
+        aditAmenityReset();
       }
     }
-    getAllCategories()
+    getAllAmenities()
     handleClose();
   };
 
@@ -95,39 +96,41 @@ export default function CategoriesPage() {
     setIsModalOpen(false);
     setFile(null);
     setIsEditing(false);
-    setCategoryId(null);
+    setamenityId(null);
     setFileError(null);
   };
 
+  
+  
 
   const handleEdit = (id) => {
-    const chosenCategory = allCategories?.data.filter((category) => category._id === id);
+    const chosenamenity = allAmenities?.data.filter((amenity) => amenity._id === id);
     setIsModalOpen(true);
-    setValue('category', chosenCategory[0].categoryName)
+    setValue('amenity', chosenamenity[0].amenityName)
     setIsEditing(true)
-    setCategoryId(id);
+    setamenityId(id);
   };
 
   const handleToggle = async (id) => {
     console.log("Toggle clicked for id:", id);
-    const result = await toggleCategory(id);
+    const result = await toggleAmenity(id);
     if (result) {
-      await getAllCategories();
+      await getAllAmenities();
     }
   };
 
-  const categoryColumns = [
+  const amenityColumns = [
     {
       header: "Title",
-      accessor: "categoryName",
+      accessor: "amenityName",
       sortable: true,
     },
     {
       header: "Icon",
-      accessor: (category) => (
+      accessor: (amenity) => (
         <img
-          src={category.iconUrl}
-          alt={category.categoryName}
+          src={amenity.iconUrl}
+          alt={amenity.amenityName}
           className="w-16 h-16 rounded-lg object-cover"
         />
       ),
@@ -135,14 +138,14 @@ export default function CategoriesPage() {
     },
     {
       header: "Status",
-      accessor: (category) => (
+      accessor: (amenity) => (
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${
-            category?.isDisabled
+            amenity?.isDisabled
               ? "bg-turquoise-200 text-turquoise-500"
               : "bg-gray-100 text-gray-800"
           }`}>
-          {category?.isDisabled ? "Active" : "Disabled"}
+          {amenity?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
       sortable: true,
@@ -166,13 +169,13 @@ export default function CategoriesPage() {
 
   const handleSearch = (query) => {
     console.log("Search query:", query);
-  };
-
+    };
+    
   const getTitle = () => {
     if (!isEditing) {
-      return "Add a category";
+      return "Add a amenity";
     } else {
-      return "Edit a category";
+      return "Edit a amenity";
     }
   };
 
@@ -186,27 +189,27 @@ export default function CategoriesPage() {
 
 
   useEffect(() => {
-    getAllCategories();
+    getAllAmenities();
   }, []);
 
   useEffect(() => {
-    if (addCategoryError) {
-      alert(addCategoryError?.message);
+    if (addAmenityError) {
+      alert(addAmenityError?.message);
     }
-    if (getCategoriesError) {
-      alert(getCategoriesError?.message);
+    if (getAmenitiesError) {
+      alert(getAmenitiesError?.message);
     }
-    if (toggledCategoryError) {
-      alert(toggledCategoryError?.message);
+    if (toggledamenityError) {
+      alert(toggledamenityError?.message);
     }
-    if (categoryEditError) {
-      alert(categoryEditError?.message);
+    if (amenityEditError) {
+      alert(amenityEditError?.message);
     }
   }, [
-    addCategoryError,
-    getCategoriesError,
-    toggledCategoryError,
-    categoryEditError
+    addAmenityError,
+    getAmenitiesError,
+    toggledamenityError,
+    amenityEditError
   ]);
 
 
@@ -214,24 +217,26 @@ export default function CategoriesPage() {
     <>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-gray-800">
-          Categories Management
+          Amenities Management
         </h1>
-        <Button onClick={() => setIsModalOpen(true)}>Add Category</Button>
+        <Button onClick={() => setIsModalOpen(true)}>Add amenity</Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
-          title={getTitle()}
-          description={getDescription()}>
+          title={"Add a amenity"}
+          description={
+            "Add a new image with title. Click submit when you're done"
+          }>
           <form
-            onSubmit={handleSubmit(handleCategorySubmit)}
+            onSubmit={handleSubmit(handleamenitySubmit)}
             className=" space-y-4">
             <FormField
               type="text"
-              name="category"
-              label="Category Title"
-              placeholder="Enter category title"
+              name="amenity"
+              label="Amenity Title"
+              placeholder="Enter amenity title"
               register={register}
-              error={errors.category}
+              error={errors.amenity}
             />
             <FileUpload onChange={handleFileUpload} value={file} />
             {fileError ?
@@ -242,19 +247,19 @@ export default function CategoriesPage() {
             <Button
               type="submit"
               fullWidth
-              isLoading={isEditing ? categoryEditLoading : addCategoryLoading}>
+              isLoading={isEditing ? amenityEditLoading : addAmenityLoading}>
               Submit
             </Button>
           </form>
         </Modal>
       </div>
       <div className="min-h-screen my-4">
-        {allCategories?.data ? (
+        {allAmenities?.data ? (
           <Table
-            title="Category Management"
-            subtitle="Manage your product categories"
-            columns={categoryColumns}
-            data={allCategories?.data}
+            title="amenity Management"
+            subtitle="Manage your product Amenities"
+            columns={amenityColumns}
+            data={allAmenities?.data}
             actions={getActions}
             onSearch={handleSearch}
             initialSort={{ field: "title", direction: "asc" }}
