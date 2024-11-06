@@ -110,7 +110,60 @@ const adminService = {
       throw error;
     }
   },
-  
+  adminAmenitiesAdd: async (amenityData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Amenities_Add,
+        amenityData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllAmenities: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Amenities_Get_All
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminToggleAmenity: async (amenityId) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Amenities_Toggle.replace(":$amenityId", amenityId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminAmenityEdit: async ({ formData, amenityId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Amenities_Edit.replace(
+          ":$amenityId", amenityId
+        ),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }, 
 };
 
 export default adminService;
