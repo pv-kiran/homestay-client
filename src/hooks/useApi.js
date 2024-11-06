@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 const useApi = (apiFunc) => {
   const [data, setData] = useState(null);
@@ -13,22 +13,25 @@ const useApi = (apiFunc) => {
     setSuccess(false);
   }, []);
 
-  const execute = useCallback(async (...params) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const {data} = await apiFunc(...params);
-      setData(data);
-      setSuccess(true);
-      return data;
-    } catch (err) {
-      setError(err?.response?.data?.message || 'An error occurred');
-      setSuccess(false);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [apiFunc]);
+  const execute = useCallback(
+    async (...params) => {
+      try {
+        setLoading(true);
+        setError(null);
+        const { data } = await apiFunc(...params);
+        setData(data);
+        setSuccess(true);
+        return data;
+      } catch (err) {
+        setError(err?.response?.data || "An error occurred");
+        setSuccess(false);
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [apiFunc]
+  );
 
   return {
     data,
@@ -36,7 +39,7 @@ const useApi = (apiFunc) => {
     loading,
     success,
     execute,
-    reset
+    reset,
   };
 };
 

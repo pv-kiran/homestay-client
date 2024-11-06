@@ -8,7 +8,7 @@ export function Modal({
   children,
   title,
   description,
-  maxWidth = '400px',
+  maxWidth = '430px',
 }) {
   if (!isOpen) return null;
 
