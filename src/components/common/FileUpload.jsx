@@ -66,7 +66,7 @@ export function FileUpload({ onChange, value }) {
           <img
             src={preview}
             alt="Preview"
-            className="w-full h-48 object-cover"
+            className="w-full h-48 object-contain"
           />
           <button
             onClick={removeFile}

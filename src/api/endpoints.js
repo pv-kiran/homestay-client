@@ -13,6 +13,10 @@ const apiEndpoints = {
   Bestays_Admin_Signin: "/admin/auth/signin",
   Bestays_Admin_LogOut: "/admin/auth/logout",
   Bestays_Admin_Otp_Resend: "/admin/auth/otp/resend",
+  Bestays_Admin_Category_Add: "/admin/add-category",
+  Bestays_Admin_Category_Get_All: "/admin/get-allcategories",
+  Bestays_Admin_Category_Toggle: "admin/toggle-category/:$categoryId",
+  Bestays_Admin_Category_Edit: "admin/edit-category/:$categoryId"
 };
 
 export default apiEndpoints;

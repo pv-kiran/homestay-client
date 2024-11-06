@@ -1,10 +1,254 @@
+import { useEffect, useState } from "react";
+import { Button } from "./../components/common/Button";
+import { Modal } from "../components/common/Modal";
+import { FileUpload } from "./../components/common/FileUpload";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { FormField } from "../components/common/FormField";
+import adminService from "../services/adminServices";
+import useApi from "../hooks/useApi";
+import { Table } from "../components/common/table/Table";
+
+const categorySchema = yup.object({
+  category: yup.string().required("Category title is required"),
+});
+
 export default function CategoriesPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [file, setFile] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
+  const [fileError, setFileError] = useState(null);
+
+  const {
+    loading: addCategoryLoading,
+    execute: addCategory,
+    reset: addCategoryReset,
+    error: addCategoryError,
+  } = useApi(adminService.adminCategoryAdd);
+
+  const {
+    data: allCategories,
+    execute: getAllCategories,
+    error: getCategoriesError,
+  } = useApi(adminService.adminGetAllCategory);
+
+  const {
+    execute: toggleCategory,
+    error: toggledCategoryError,
+  } = useApi(adminService.adminToggleCategory);
+
+  const {
+    loading: categoryEditLoading,
+    execute: categoryEdit,
+    reset: editCategoryReset,
+    error: categoryEditError,
+  } = useApi(adminService.adminCategoryEdit);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(categorySchema),
+  });
+
+  const handleFileUpload = (file) => {
+    setFile(file);
+    if (fileError) {
+      setFileError(null);
+    }
+  };
+
+  const handleCategorySubmit = async (data) => {
+    const formData = new FormData();
+    console.log(data);
+    formData.append("categoryName", data.category);
+    if (file) {
+      formData.append("iconUrl", file);
+    }
+    if (!isEditing) {
+      if (!file) {
+        setFileError("Please select a file");
+        return;
+      } else {
+        const result = await addCategory(formData);
+        if (result) {
+          alert(result?.message);
+          addCategoryReset();
+        }
+      }
+    } else {
+      const result = await categoryEdit({ formData , categoryId});
+      if (result) {
+        alert(result?.message);
+        editCategoryReset();
+      }
+    }
+    getAllCategories()
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setFile(null);
+    setIsEditing(false);
+    setCategoryId(null);
+    setFileError(null);
+  };
+
+  
+  
+
+  const handleEdit = (id) => {
+    const chosenCategory = allCategories?.data.filter((category) => category._id === id);
+    setIsModalOpen(true);
+    setValue('category', chosenCategory[0].categoryName)
+    setIsEditing(true)
+    setCategoryId(id);
+  };
+
+  const handleToggle = async (id) => {
+    console.log("Toggle clicked for id:", id);
+    const result = await toggleCategory(id);
+    if (result) {
+      await getAllCategories();
+    }
+  };
+
+  const categoryColumns = [
+    {
+      header: "Title",
+      accessor: "categoryName",
+      sortable: true,
+    },
+    {
+      header: "Icon",
+      accessor: (category) => (
+        <img
+          src={category.iconUrl}
+          alt={category.categoryName}
+          className="w-16 h-16 rounded-lg object-cover"
+        />
+      ),
+      sortable: false,
+    },
+    {
+      header: "Status",
+      accessor: (category) => (
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium ${
+            category?.isDisabled
+              ? "bg-turquoise-200 text-turquoise-500"
+              : "bg-gray-100 text-gray-800"
+          }`}>
+          {category?.isDisabled ? "Active" : "Disabled"}
+        </span>
+      ),
+      sortable: true,
+    },
+  ];
+
+
+  const getActions = (item) => [
+    {
+      icon: "edit",
+      onClick: () => handleEdit(item._id),
+      title: "Edit",
+    },
+    {
+      icon: "toggle",
+      isActive: item.isDisabled,
+      onClick: () => handleToggle(item._id),
+      title: "Toggle status",
+    },
+  ];
+
+  const handleSearch = (query) => {
+    console.log("Search query:", query);
+  };
+
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  useEffect(() => {
+    if (addCategoryError) {
+      alert(addCategoryError?.message);
+    }
+    if (getCategoriesError) {
+      alert(getCategoriesError?.message);
+    }
+    if (toggledCategoryError) {
+      alert(toggledCategoryError?.message);
+    }
+    if (categoryEditError) {
+      alert(categoryEditError?.message);
+    }
+  }, [
+    addCategoryError,
+    getCategoriesError,
+    toggledCategoryError,
+    categoryEditError
+  ]);
+
+
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-gray-800">Categories Management</h1>
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <p>Categories content will be displayed here</p>
+    <>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Categories Management
+        </h1>
+        <Button onClick={() => setIsModalOpen(true)}>Add Category</Button>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleClose}
+          title={"Add a category"}
+          description={
+            "Add a new image with title. Click submit when you're done"
+          }>
+          <form
+            onSubmit={handleSubmit(handleCategorySubmit)}
+            className=" space-y-4">
+            <FormField
+              type="text"
+              name="category"
+              label="Category Title"
+              placeholder="Enter category title"
+              register={register}
+              error={errors.category}
+            />
+            <FileUpload onChange={handleFileUpload} value={file} />
+            {fileError ?
+              <p className="text-xs text-red-500">{fileError}</p>
+              :
+              null
+            }
+            <Button
+              type="submit"
+              fullWidth
+              isLoading={isEditing ? categoryEditLoading : addCategoryLoading}>
+              Submit
+            </Button>
+          </form>
+        </Modal>
       </div>
-    </div>
+      <div className="min-h-screen my-4">
+        {allCategories?.data ? (
+          <Table
+            title="Category Management"
+            subtitle="Manage your product categories"
+            columns={categoryColumns}
+            data={allCategories?.data}
+            actions={getActions}
+            onSearch={handleSearch}
+            initialSort={{ field: "title", direction: "asc" }}
+          />
+        ) : null}
+      </div>
+    </>
   );
 }
