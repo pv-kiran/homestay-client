@@ -6,6 +6,7 @@ import { FormField } from "./common/FormField";
 import { Button } from "./common/Button";
 import DateOfBirth from "./common/DateOfBirth";
 import { FileUpload } from "./common/FileUpload";
+import { MultipleFileUpload } from "./MultipleFileUpload";
 
 const schema = yup.object({
   fullName: yup.string().required("Full name is required"),
@@ -41,6 +42,11 @@ export function FormExample() {
   };
 
   const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
+
+  const handleFileUpload = (newFiles) => {
+    setFiles(newFiles);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
@@ -137,6 +143,10 @@ export function FormExample() {
       <DateOfBirth />
 
       <FileUpload onChange={setFile} value={file} />
+
+       <MultipleFileUpload onChange={handleFileUpload} value={files} multiple={false} />
+      
+      <MultipleFileUpload onChange={handleFileUpload} value={files} multiple={true} />
 
       <Button type="submit" fullWidth isLoading={isSubmitting}>
         Submit
