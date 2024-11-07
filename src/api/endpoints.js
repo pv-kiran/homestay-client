@@ -19,8 +19,10 @@ const apiEndpoints = {
   Bestays_Admin_Category_Edit: "admin/edit-category/:$categoryId",
   Bestays_Admin_Amenities_Add: "/admin/add-amenities",
   Bestays_Admin_Amenities_Get_All: "/admin/get-allamenities",
-  Bestays_Admin_Amenities_Toggle: "admin/toggle-amenity/:$amenityId",
-  Bestays_Admin_Amenities_Edit: "admin/edit-amenity/:$amenityId"
+  Bestays_Admin_Amenities_Toggle: "/admin/toggle-amenity/:$amenityId",
+  Bestays_Admin_Amenities_Edit: "/admin/edit-amenity/:$amenityId",
+  Bestays_Admin_User_Get_All: "/admin/get-allusers",
+  Bestays_Admin_User_Toggle: "/admin/toggle-user/:$userId",
 };
 
 export default apiEndpoints;

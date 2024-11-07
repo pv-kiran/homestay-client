@@ -141,11 +141,11 @@ export default function AmenitiesPage() {
       accessor: (amenity) => (
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${
-            amenity?.isDisabled
+            !amenity?.isDisabled
               ? "bg-turquoise-200 text-turquoise-500"
               : "bg-gray-100 text-gray-800"
           }`}>
-          {amenity?.isDisabled ? "Active" : "Disabled"}
+          {!amenity?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
       sortable: true,
@@ -173,9 +173,9 @@ export default function AmenitiesPage() {
     
   const getTitle = () => {
     if (!isEditing) {
-      return "Add a amenity";
+      return "Add a Amenity";
     } else {
-      return "Edit a amenity";
+      return "Edit a Amenity";
     }
   };
 
@@ -223,9 +223,9 @@ export default function AmenitiesPage() {
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
-          title={"Add a amenity"}
+          title={getTitle()}
           description={
-            "Add a new image with title. Click submit when you're done"
+            getDescription()
           }>
           <form
             onSubmit={handleSubmit(handleamenitySubmit)}
@@ -256,7 +256,7 @@ export default function AmenitiesPage() {
       <div className="min-h-screen my-4">
         {allAmenities?.data ? (
           <Table
-            title="amenity Management"
+            title="Amenity Management"
             subtitle="Manage your product Amenities"
             columns={amenityColumns}
             data={allAmenities?.data}

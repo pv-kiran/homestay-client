@@ -138,11 +138,11 @@ export default function CategoriesPage() {
       accessor: (category) => (
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${
-            category?.isDisabled
+            !category?.isDisabled
               ? "bg-turquoise-200 text-turquoise-500"
               : "bg-gray-100 text-gray-800"
           }`}>
-          {category?.isDisabled ? "Active" : "Disabled"}
+          {!category?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
       sortable: true,

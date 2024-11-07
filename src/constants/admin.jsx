@@ -17,6 +17,11 @@ export const routes = [
     icon: <Grid className="w-5 h-5" />
   },
   {
+    path: '/admin/users',
+    title: 'Users',
+    icon: <Grid className="w-5 h-5" />
+  },
+  {
     path: '/admin/rooms',
     title: 'Rooms',
     icon: <BedDouble className="w-5 h-5" />

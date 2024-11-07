@@ -164,6 +164,26 @@ const adminService = {
       throw error;
     }
   }, 
+  adminGetAllUsers: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_User_Get_All
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminToggleUser: async (amenityId) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_User_Toggle.replace(":$userId", amenityId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

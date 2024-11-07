@@ -14,6 +14,7 @@ import AdminSigninPage from "./pages/AdminSigninPage";
 import PublicRoutesAdmin from "./utils/PublicRoutesAdmin";
 import PrivateRoutesAdmin from "./utils/PrivateRoutesAdmin";
 import AmenitiesPage from "./pages/AmenitiesPage";
+import UserManagementPage from "./pages/UserManagmentPage";
 
 function AppRoutes() {
   return (
@@ -35,6 +36,7 @@ function AppRoutes() {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="rooms" element={<RoomsPage />} />
           <Route path="categories" element={<CategoriesPage />} />
+          <Route path="users" element={<UserManagementPage />} />
           <Route path="amenities" element={<AmenitiesPage />} />
           <Route path="add-ons" element={<AddOnsPage />} />
           <Route path="account" element={<AccountPage />} />
