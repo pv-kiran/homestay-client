@@ -141,11 +141,11 @@ export default function AmenitiesPage() {
       accessor: (amenity) => (
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${
-            amenity?.isDisabled
+            !amenity?.isDisabled
               ? "bg-turquoise-200 text-turquoise-500"
               : "bg-gray-100 text-gray-800"
           }`}>
-          {amenity?.isDisabled ? "Active" : "Disabled"}
+          {!amenity?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
       sortable: true,
