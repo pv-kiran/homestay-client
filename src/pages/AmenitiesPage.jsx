@@ -9,6 +9,7 @@ import { FormField } from "../components/common/FormField";
 import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
+import { toast } from "react-toastify";
 
 const amenitySchema = yup.object({
   amenity: yup.string().required("Amenity title is required"),
@@ -77,14 +78,14 @@ export default function AmenitiesPage() {
       } else {
         const result = await addAmenity(formData);
         if (result) {
-          alert(result?.message);
+          toast.success(result?.message);
           addAmenityReset();
         }
       }
     } else {
       const result = await amenityEdit({ formData , amenityId});
       if (result) {
-        alert(result?.message);
+        toast.success(result?.message);
         aditAmenityReset();
       }
     }
@@ -194,16 +195,16 @@ export default function AmenitiesPage() {
 
   useEffect(() => {
     if (addAmenityError) {
-      alert(addAmenityError?.message);
+      toast.error(addAmenityError?.message);
     }
     if (getAmenitiesError) {
-      alert(getAmenitiesError?.message);
+      toast.error(getAmenitiesError?.message);
     }
     if (toggledamenityError) {
-      alert(toggledamenityError?.message);
+      toast.error(toggledamenityError?.message);
     }
     if (amenityEditError) {
-      alert(amenityEditError?.message);
+      toast.error(amenityEditError?.message);
     }
   }, [
     addAmenityError,

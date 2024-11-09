@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
+import { toast } from "react-toastify";
 
 
 
@@ -71,10 +72,10 @@ export default function UserManagementPage() {
 
   useEffect(() => {
     if (getUserError) {
-      alert(getUserError?.message);
+      toast.error(getUserError?.message);
     }
     if (toggleUserError) {
-      alert(toggleUserError?.message);
+      toast.error(toggleUserError?.message);
     }
   }, [
     getUserError,

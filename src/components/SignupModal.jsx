@@ -10,6 +10,7 @@ import GoogleLogin from "./GoogleLogin";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../app/features/users/authSlice";
 import getOtpExpiryInSeconds from "./../utils/otpExpiry";
+import { toast } from "react-toastify";
 
 export function SignupModal({ isOpen, onClose }) {
   const [showFlow, setShowFlow] = useState({
@@ -113,7 +114,7 @@ export function SignupModal({ isOpen, onClose }) {
     if (result) {
       const leftTime = getOtpExpiryInSeconds(result?.otpExpiry);
       setTimeLeft(leftTime);
-      alert(result?.message);
+      toast.success(result?.message);
     }
   };
 
@@ -126,13 +127,13 @@ export function SignupModal({ isOpen, onClose }) {
 
   useEffect(() => {
     if (emailError) {
-      alert(emailError?.message);
+      toast.error(emailError?.message);
     }
     if (otpError) {
-      alert(otpError?.message);
+      toast.error(otpError?.message);
     }
     if (userError) {
-      alert(userError?.message);
+      toast.error(userError?.message);
     }
   }, [emailError, otpError, userError]);
 
