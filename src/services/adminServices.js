@@ -174,10 +174,46 @@ const adminService = {
       throw error;
     }
   },
-  adminToggleUser: async (amenityId) => {
+  adminToggleUser: async (userId) => {
     try {
       const response = await axiosInstance.put(
-        apiEndpoints.Bestays_Admin_User_Toggle.replace(":$userId", amenityId)
+        apiEndpoints.Bestays_Admin_User_Toggle.replace(":$userId", userId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminHomeStayAdd: async (homestayData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_Homestay,
+        homestayData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllHomestays: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Get_Homestays
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminToggleHomestay: async (homeStayId) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Homestays_Toggle.replace(":$homestayId", homeStayId)
       );
       return response;
     } catch (error) {
