@@ -1,9 +1,10 @@
 import React from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Eye } from "lucide-react";
 
 const iconMap = {
   edit: Pencil,
   delete: Trash2,
+  view: Eye
 };
 
 const defaultClassNames = {
