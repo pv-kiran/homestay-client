@@ -7,6 +7,7 @@ import { Button } from "./common/Button";
 import DateOfBirth from "./common/DateOfBirth";
 import { FileUpload } from "./common/FileUpload";
 import { MultipleFileUpload } from "./MultipleFileUpload";
+import InputList from './InputList';
 
 const schema = yup.object({
   fullName: yup.string().required("Full name is required"),
@@ -58,7 +59,6 @@ export function FormExample() {
         register={register}
         error={errors.fullName}
       />
-
       <FormField
         type="email"
         name="email"
@@ -147,6 +147,7 @@ export function FormExample() {
        <MultipleFileUpload onChange={handleFileUpload} value={files} multiple={false} />
       
       <MultipleFileUpload onChange={handleFileUpload} value={files} multiple={true} />
+      <InputList />
 
       <Button type="submit" fullWidth isLoading={isSubmitting}>
         Submit

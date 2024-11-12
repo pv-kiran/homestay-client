@@ -23,6 +23,10 @@ const apiEndpoints = {
   Bestays_Admin_Amenities_Edit: "/admin/edit-amenity/:$amenityId",
   Bestays_Admin_User_Get_All: "/admin/get-allusers",
   Bestays_Admin_User_Toggle: "/admin/toggle-user/:$userId",
+  Bestays_Admin_Add_Homestay: "/admin/add-homestay",
+  Bestays_Admin_Get_Homestays: "/admin/get-allhomestays",
+  Bestays_Admin_Homestays_Toggle: "/admin/toggle-homestay/:$homestayId",
+  Bestays_Admin_Homestays_Edit: "/admin/update-homestay/:$homestayId"
 };
 
 export default apiEndpoints;

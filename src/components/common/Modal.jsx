@@ -17,7 +17,7 @@ export function Modal({
       <div className="fixed inset-0 bg-black/40 animate-overlayShow" onClick={onClose} />
       <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-modalSlide">
         <div
-          className="w-[90vw] rounded-2xl bg-white p-6 shadow-xl"
+          className="w-[90vw] rounded-2xl p-6 shadow-xl bg-white max-h-[450px] overflow-y-auto"
           style={{ maxWidth }}
         >
           <div className="relative">
