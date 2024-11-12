@@ -159,6 +159,7 @@ const RoomsPage = () => {
   };
 
   const handleFileUpload = (newFiles) => {
+    setFileError('');
     setFiles(newFiles);
   };
 
@@ -344,9 +345,10 @@ const RoomsPage = () => {
     setValue('zip', zip)
     setValue('latitude', latitude)
     setValue('longitude', longitude)
-    const { checkInTime, checkOutTime } = chosenHomeStay[0]?.hotelPolicies
+    const { checkInTime, checkOutTime, guestPolicies } = chosenHomeStay[0]?.hotelPolicies
     setValue('checkInTime', checkInTime)
     setValue('checkOutTime', checkOutTime)
+    setGuestPolicyList(guestPolicies);
     setHomeStayImages(chosenHomeStay[0]?.images);
   };
 
