@@ -64,7 +64,6 @@ export default function CategoriesPage() {
 
   const handleCategorySubmit = async (data) => {
     const formData = new FormData();
-    console.log(data);
     formData.append("categoryName", data.category);
     if (file) {
       formData.append("iconUrl", file);

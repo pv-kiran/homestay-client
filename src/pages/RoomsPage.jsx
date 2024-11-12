@@ -13,6 +13,7 @@ import InputList from '../components/InputList';
 import { homeStayFormData } from '../utils/formData';
 import { Table } from '../components/common/table/Table';
 import { ViewHomeStay } from '../components/VeiwHomeStay';
+import ImageList from '../components/common/ImageList';
 
 
 const schema = yup.object({
@@ -73,12 +74,15 @@ const RoomsPage = () => {
   const [files, setFiles] = useState([]);
   const [guestPolicyList, setGuestPolicyList] = useState([]);
   const [chosenHomestay, setChosenHomeStay] = useState([]);
+  const [homeStayId, setHomeStayId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [homeStayImages, setHomeStayImages] = useState([]);
 
   const {
     register,
     control,
     handleSubmit,
-    reset,
+    reset, setValue,
     formState: {  errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -139,11 +143,7 @@ const RoomsPage = () => {
 
   const handleClose = () => {
     setIsModalOpen(false);
-    setShowModalDetails({
-      add: true,
-      edit: false,
-      view: false
-    })
+    setIsViewDetail(false);
     reset();
   };
 
@@ -220,7 +220,6 @@ const RoomsPage = () => {
     fetchAmentitiesandCategories()
     getAllHomeStays();
   }, [])
-  console.log(allHomeStays);
 
 
   const homestayColumn = [
@@ -285,6 +284,38 @@ const RoomsPage = () => {
      const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
      setChosenHomeStay(chosenHomeStay)
   };
+  const handleEdit = (id) => {
+    const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
+    console.log(chosenHomeStay);
+    setIsModalOpen(true);
+    setIsViewDetail(false);
+    setIsEditing(true);
+    setHomeStayId(id);
+    setValue('title', chosenHomeStay[0].title)
+    setValue('description', chosenHomeStay[0].description)
+    const categoryChosen = chosenHomeStay[0].category
+    console.log(categoryChosen)
+    setValue('category', { label: categoryChosen?.categoryName, value: categoryChosen?._id })
+    setValue('amenities', [{ label: categoryChosen?.categoryName, value: categoryChosen?._id }])
+    setValue('numberOfRooms', chosenHomeStay[0].noOfRooms)
+    setValue('numberOfBathRooms', chosenHomeStay[0].noOfBathRooms)
+    setValue('price', chosenHomeStay[0].pricePerNight)
+    setValue('maxGuests', chosenHomeStay[0].maxGuests)
+    const { street, city, state, district, zip,
+      coordinates: {latitude, longitude}
+    } = chosenHomeStay[0].address
+    setValue('street', street)
+    setValue('city', city)
+    setValue('state', state)
+    setValue('district', district)
+    setValue('zip', zip)
+    setValue('latitude', latitude)
+    setValue('longitude', longitude)
+    const { checkInTime, checkOutTime } = chosenHomeStay[0]?.hotelPolicies
+    setValue('checkInTime', checkInTime)
+    setValue('checkOutTime', checkOutTime)
+    setHomeStayImages(chosenHomeStay[0]?.images)
+  };
 
   const getActions = (item) => [
     {
@@ -310,6 +341,11 @@ const RoomsPage = () => {
   const handleSearch = (query) => {
     console.log("Search query:", query);
   };
+
+  const removeImages = (images) => {
+    console.log(images);
+    setHomeStayImages([...images])
+  }
 
   return (
     <>
@@ -486,10 +522,17 @@ const RoomsPage = () => {
               lists={guestPolicyList}
               setLists={setGuestPolicyList}
             />
+                {
+                  isEditing ? <ImageList
+                    images={homeStayImages} 
+                    setImages={removeImages}
+                    /> : null
+                }
             <MultipleFileUpload
               onChange={handleFileUpload}
               value={files}
-              multiple={true} 
+                  multiple={true} 
+                  maxFiles={!isEditing ? 5 : 5 - homeStayImages.length}
             />
             <Button type="submit" fullWidth isLoading={addHomeStayLoading}>
               Submit
