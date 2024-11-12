@@ -77,6 +77,7 @@ const RoomsPage = () => {
   const [homeStayId, setHomeStayId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [homeStayImages, setHomeStayImages] = useState([]);
+  const [fileError, setFileError] = useState(false);
 
   const {
     register,
@@ -117,6 +118,12 @@ const RoomsPage = () => {
     error: toggleHomeStayError,
   } = useApi(adminService.adminToggleHomestay);
 
+   const {
+    execute: editHomeStay,
+     error: editHomeStayError,
+    loading: editHomeStayLoading,
+  } = useApi(adminService.adminHomestayEdit);
+
   const fetchAmentitiesandCategories = async () => {
     const categories = await getAllCategories();
     const amenities = await getAllAmenities();
@@ -144,11 +151,14 @@ const RoomsPage = () => {
   const handleClose = () => {
     setIsModalOpen(false);
     setIsViewDetail(false);
+    if (isEditing) {
+       setHomeStayImages([]);
+    }
+    setIsEditing(false);
     reset();
   };
 
   const handleFileUpload = (newFiles) => {
-    console.log(newFiles);
     setFiles(newFiles);
   };
 
@@ -168,11 +178,16 @@ const RoomsPage = () => {
     if (toggleHomeStayError) {
       alert(toggleHomeStayError?.message);
     }
-  }, [getAmenitiesError,
+    if (editHomeStayError) {
+      alert(editHomeStayError?.message);
+    }
+  }, [
+    getAmenitiesError,
     getCategoriesError,
     addHomeStayError,
     allHomeStaysError,
-    toggleHomeStayError
+    toggleHomeStayError,
+    editHomeStayError
   ]);
 
   const onSubmit = async (data) => {
@@ -205,15 +220,30 @@ const RoomsPage = () => {
 
     const formData = new FormData();
     homeStayFormData(formData, roomData);
+    if (!isEditing) {
+      if (files.length === 0) {
+        setFileError("Please select a file");
+        return;
+      }
+    }
     files.forEach(file => {
       formData.append("images", file)
     });
-
-    const result = await addHomeStay(formData);
-    if(result) {
-      alert(result?.message);
-      addHomeStayReset();
+    if (!isEditing) {
+      const result = await addHomeStay(formData);
+      if(result) {
+        alert(result?.message);
+        addHomeStayReset();
+      } 
+    } else {
+      const result = await editHomeStay({ formData , homeStayId});
+        if(result) {
+          alert(result?.message);
+          addHomeStayReset();
+        } 
     }
+    getAllHomeStays()
+    handleClose();
   }
 
   useEffect(() => {
@@ -271,7 +301,6 @@ const RoomsPage = () => {
   ];
 
   const handleToggle = async (id) => {
-    console.log("Toggle clicked for id:", id);
     const result = await toggleHomeStay(id);
     if (result) {
       await getAllHomeStays();
@@ -286,7 +315,6 @@ const RoomsPage = () => {
   };
   const handleEdit = (id) => {
     const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
-    console.log(chosenHomeStay);
     setIsModalOpen(true);
     setIsViewDetail(false);
     setIsEditing(true);
@@ -294,9 +322,14 @@ const RoomsPage = () => {
     setValue('title', chosenHomeStay[0].title)
     setValue('description', chosenHomeStay[0].description)
     const categoryChosen = chosenHomeStay[0].category
-    console.log(categoryChosen)
+    const amenityChosen = chosenHomeStay[0].amenities
     setValue('category', { label: categoryChosen?.categoryName, value: categoryChosen?._id })
-    setValue('amenities', [{ label: categoryChosen?.categoryName, value: categoryChosen?._id }])
+    const amenityData = amenityChosen?.map((amenityChosen) => {
+      return {
+        label: amenityChosen?.amenityName, value: amenityChosen?._id
+      }
+    })
+    setValue('amenities', amenityData)
     setValue('numberOfRooms', chosenHomeStay[0].noOfRooms)
     setValue('numberOfBathRooms', chosenHomeStay[0].noOfBathRooms)
     setValue('price', chosenHomeStay[0].pricePerNight)
@@ -314,7 +347,7 @@ const RoomsPage = () => {
     const { checkInTime, checkOutTime } = chosenHomeStay[0]?.hotelPolicies
     setValue('checkInTime', checkInTime)
     setValue('checkOutTime', checkOutTime)
-    setHomeStayImages(chosenHomeStay[0]?.images)
+    setHomeStayImages(chosenHomeStay[0]?.images);
   };
 
   const getActions = (item) => [
@@ -336,14 +369,11 @@ const RoomsPage = () => {
     }
   ];
 
-  
-
   const handleSearch = (query) => {
     console.log("Search query:", query);
   };
 
   const removeImages = (images) => {
-    console.log(images);
     setHomeStayImages([...images])
   }
 
@@ -533,8 +563,22 @@ const RoomsPage = () => {
               value={files}
                   multiple={true} 
                   maxFiles={!isEditing ? 5 : 5 - homeStayImages.length}
-            />
-            <Button type="submit" fullWidth isLoading={addHomeStayLoading}>
+                />
+                {fileError ?
+              <p className="text-xs text-red-500">{fileError}</p>
+              :
+              null
+            }
+                <Button
+                  type="submit"
+                  fullWidth
+                  isLoading={
+                    !isEditing ?
+                      addHomeStayLoading
+                      :
+                      editHomeStayLoading
+                  }
+                >
               Submit
             </Button>
               </form> :  <ViewHomeStay

@@ -6,13 +6,13 @@ export function homeStayFormData(formData, data, parentKey = "") {
 
       if (value && typeof value === "object" && !Array.isArray(value)) {
         // Recursive call for nested objects
-        appendFormData(formData, value, formKey);
+        homeStayFormData(formData, value, formKey);
       } else if (Array.isArray(value)) {
         // Handle arrays
         value.forEach((item, index) => {
           const arrayKey = `${formKey}[${index}]`;
           if (typeof item === "object") {
-            appendFormData(formData, item, arrayKey);
+            homeStayFormData(formData, item, arrayKey);
           } else {
             formData.append(arrayKey, item);
           }

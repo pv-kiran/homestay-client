@@ -220,6 +220,24 @@ const adminService = {
       throw error;
     }
   },
+  adminHomestayEdit: async ({ formData, homeStayId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Homestays_Edit.replace(
+          ":$homestayId", homeStayId
+        ),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;
