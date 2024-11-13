@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./../components/common/Button";
 import { Modal } from "../components/common/Modal";
 import { FileUpload } from "./../components/common/FileUpload";
@@ -11,6 +11,7 @@ import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
 import { toast } from "react-toastify";
 
+
 const amenitySchema = yup.object({
   amenity: yup.string().required("Amenity title is required"),
 });
@@ -22,6 +23,10 @@ export default function AmenitiesPage() {
   const [file, setFile] = useState(null);
   const [amenityId, setamenityId] = useState(null);
   const [fileError, setFileError] = useState(null);
+  const [pageSize, setPageSize] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchKey, setSearchKey] = useState('');
+  const timer = useRef(null);
 
   const {
     loading: addAmenityLoading,
@@ -83,13 +88,17 @@ export default function AmenitiesPage() {
         }
       }
     } else {
-      const result = await amenityEdit({ formData , amenityId});
+      const result = await amenityEdit({ formData, amenityId });
       if (result) {
         toast.success(result?.message);
         aditAmenityReset();
       }
     }
-    getAllAmenities()
+    getAllAmenities({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: ""
+    })
     handleClose();
   };
 
@@ -101,8 +110,8 @@ export default function AmenitiesPage() {
     setFileError(null);
   };
 
-  
-  
+
+
 
   const handleEdit = (id) => {
     const chosenamenity = allAmenities?.data.filter((amenity) => amenity._id === id);
@@ -116,9 +125,21 @@ export default function AmenitiesPage() {
     console.log("Toggle clicked for id:", id);
     const result = await toggleAmenity(id);
     if (result) {
-      await getAllAmenities();
+      await getAllAmenities({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: ""
+      });
     }
   };
+
+  const handlePageNumber = (page) => {
+    setCurrentPage(page);
+  }
+
+  const handlePageSize = (size) => {
+    setPageSize(size);
+  }
 
   const amenityColumns = [
     {
@@ -141,11 +162,10 @@ export default function AmenitiesPage() {
       header: "Status",
       accessor: (amenity) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            !amenity?.isDisabled
-              ? "bg-turquoise-200 text-turquoise-500"
-              : "bg-gray-100 text-gray-800"
-          }`}>
+          className={`px-3 py-1 rounded-full text-xs font-medium ${!amenity?.isDisabled
+            ? "bg-turquoise-200 text-turquoise-500"
+            : "bg-gray-100 text-gray-800"
+            }`}>
           {!amenity?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
@@ -169,9 +189,9 @@ export default function AmenitiesPage() {
   ];
 
   const handleSearch = (query) => {
-    console.log("Search query:", query);
-    };
-    
+    setSearchKey(query)
+  };
+
   const getTitle = () => {
     if (!isEditing) {
       return "Add a Amenity";
@@ -184,14 +204,18 @@ export default function AmenitiesPage() {
     if (!isEditing) {
       return "Add a new image with title. Click submit when you're done";
     } else {
-       return "Edit the title and upload the image if u need. Click submit when you're done";
+      return "Edit the title and upload the image if u need. Click submit when you're done";
     }
   };
 
 
   useEffect(() => {
-    getAllAmenities();
-  }, []);
+    getAllAmenities({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: ""
+    });
+  }, [pageSize, currentPage]);
 
   useEffect(() => {
     if (addAmenityError) {
@@ -212,6 +236,26 @@ export default function AmenitiesPage() {
     toggledamenityError,
     amenityEditError
   ]);
+
+  useEffect(() => {
+    if (!timer.current) {
+      getAllAmenities({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(() => {
+      getAllAmenities({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }, 500);
+  }, [searchKey]);
 
 
   return (
@@ -264,6 +308,11 @@ export default function AmenitiesPage() {
             actions={getActions}
             onSearch={handleSearch}
             initialSort={{ field: "title", direction: "asc" }}
+            currentPage={currentPage}
+            onPageChange={handlePageNumber}
+            onPageSizeChange={handlePageSize}
+            pageSize={pageSize}
+            totalItems={allAmenities?.totalPages}
           />
         ) : null}
       </div>

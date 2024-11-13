@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useEffect } from 'react';
 import adminService from './../services/adminServices';
 import useApi from '../hooks/useApi';
@@ -78,6 +78,10 @@ const RoomsPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [homeStayImages, setHomeStayImages] = useState([]);
   const [fileError, setFileError] = useState(false);
+  const [pageSize, setPageSize] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchKey, setSearchKey] = useState('');
+  const timer = useRef(null);
 
   const {
     register,
@@ -253,14 +257,30 @@ const RoomsPage = () => {
         editHomeStayReset();
       }
     }
-    getAllHomeStays()
+    getAllHomeStays({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: ""
+    })
     handleClose();
   }
 
   useEffect(() => {
     fetchAmentitiesandCategories()
-    getAllHomeStays();
-  }, [])
+    getAllHomeStays({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: ""
+    });
+  }, [pageSize, currentPage])
+
+  const handlePageNumber = (page) => {
+    setCurrentPage(page);
+  }
+
+  const handlePageSize = (size) => {
+    setPageSize(size);
+  }
 
 
   const homestayColumn = [
@@ -313,7 +333,11 @@ const RoomsPage = () => {
   const handleToggle = async (id) => {
     const result = await toggleHomeStay(id);
     if (result) {
-      await getAllHomeStays();
+      await getAllHomeStays({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: ""
+      });
     }
   };
 
@@ -381,12 +405,32 @@ const RoomsPage = () => {
   ];
 
   const handleSearch = (query) => {
-    console.log("Search query:", query);
+    setSearchKey(query);
   };
 
   const removeImages = (images) => {
     setHomeStayImages([...images])
   }
+
+  useEffect(() => {
+    if (!timer.current) {
+      getAllHomeStays({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(() => {
+      getAllHomeStays({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }, 500);
+  }, [searchKey]);
 
   return (
     <>
@@ -609,6 +653,11 @@ const RoomsPage = () => {
             actions={getActions}
             onSearch={handleSearch}
             initialSort={{ field: "title", direction: "asc" }}
+            currentPage={currentPage}
+            onPageChange={handlePageNumber}
+            onPageSizeChange={handlePageSize}
+            pageSize={pageSize}
+            totalItems={allHomeStays?.totalPages}
           />
         ) : null}
       </div>

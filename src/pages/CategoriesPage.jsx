@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./../components/common/Button";
 import { Modal } from "../components/common/Modal";
 import { FileUpload } from "./../components/common/FileUpload";
@@ -15,12 +15,17 @@ const categorySchema = yup.object({
   category: yup.string().required("Category title is required"),
 });
 
+
 export default function CategoriesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
   const [fileError, setFileError] = useState(null);
+  const [pageSize, setPageSize] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchKey, setSearchKey] = useState('');
+  const timer = useRef(null);
 
   const {
     loading: addCategoryLoading,
@@ -81,13 +86,17 @@ export default function CategoriesPage() {
         }
       }
     } else {
-      const result = await categoryEdit({ formData , categoryId});
+      const result = await categoryEdit({ formData, categoryId });
       if (result) {
         toast.success(result?.message);
         editCategoryReset();
       }
     }
-    getAllCategories()
+    getAllCategories({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: ""
+    })
     handleClose();
   };
 
@@ -112,15 +121,28 @@ export default function CategoriesPage() {
     console.log("Toggle clicked for id:", id);
     const result = await toggleCategory(id);
     if (result) {
-      await getAllCategories();
-      if(result.success === true) {
+      await getAllCategories({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: ""
+      });
+      if (result.success === true) {
         toast.success(result.message);
-      }    
-      else{
+      }
+      else {
         toast.error(result.message);
       }
+
     }
   };
+
+  const handlePageNumber = (page) => {
+    setCurrentPage(page);
+  }
+
+  const handlePageSize = (size) => {
+    setPageSize(size);
+  }
 
   const categoryColumns = [
     {
@@ -143,11 +165,10 @@ export default function CategoriesPage() {
       header: "Status",
       accessor: (category) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            !category?.isDisabled
-              ? "bg-turquoise-200 text-turquoise-500"
-              : "bg-gray-100 text-gray-800"
-          }`}>
+          className={`px-3 py-1 rounded-full text-xs font-medium ${!category?.isDisabled
+            ? "bg-turquoise-200 text-turquoise-500"
+            : "bg-gray-100 text-gray-800"
+            }`}>
           {!category?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
@@ -171,7 +192,7 @@ export default function CategoriesPage() {
   ];
 
   const handleSearch = (query) => {
-    console.log("Search query:", query);
+    setSearchKey(query)
   };
 
   const getTitle = () => {
@@ -186,14 +207,18 @@ export default function CategoriesPage() {
     if (!isEditing) {
       return "Add a new image with title. Click submit when you're done";
     } else {
-       return "Edit the title and upload the image if u need. Click submit when you're done";
+      return "Edit the title and upload the image if u need. Click submit when you're done";
     }
   };
 
 
   useEffect(() => {
-    getAllCategories();
-  }, []);
+    getAllCategories({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: ""
+    });
+  }, [pageSize, currentPage]);
 
   useEffect(() => {
     if (addCategoryError) {
@@ -214,6 +239,26 @@ export default function CategoriesPage() {
     toggledCategoryError,
     categoryEditError
   ]);
+
+  useEffect(() => {
+    if (!timer.current) {
+      getAllCategories({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(() => {
+      getAllCategories({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }, 500);
+  }, [searchKey]);
 
 
   return (
@@ -264,6 +309,11 @@ export default function CategoriesPage() {
             actions={getActions}
             onSearch={handleSearch}
             initialSort={{ field: "title", direction: "asc" }}
+            currentPage={currentPage}
+            onPageChange={handlePageNumber}
+            onPageSizeChange={handlePageSize}
+            pageSize={pageSize}
+            totalItems={allCategories?.totalPages}
           />
         ) : null}
       </div>
