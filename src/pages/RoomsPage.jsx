@@ -84,7 +84,7 @@ const RoomsPage = () => {
     control,
     handleSubmit,
     reset, setValue,
-    formState: {  errors },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -118,10 +118,11 @@ const RoomsPage = () => {
     error: toggleHomeStayError,
   } = useApi(adminService.adminToggleHomestay);
 
-   const {
+  const {
     execute: editHomeStay,
-     error: editHomeStayError,
+    error: editHomeStayError,
     loading: editHomeStayLoading,
+    reset: editHomeStayReset,
   } = useApi(adminService.adminHomestayEdit);
 
   const fetchAmentitiesandCategories = async () => {
@@ -152,9 +153,11 @@ const RoomsPage = () => {
     setIsModalOpen(false);
     setIsViewDetail(false);
     if (isEditing) {
-       setHomeStayImages([]);
+      setHomeStayImages([]);
     }
     setIsEditing(false);
+    setFiles([]);
+    setFileError('');
     reset();
   };
 
@@ -203,7 +206,7 @@ const RoomsPage = () => {
         zip: data?.zip,
         coordinates: {
           latitude: data?.latitude,
-          longitude:  data?.longitude
+          longitude: data?.longitude
         }
       },
       amenityIds: data?.amenities?.map((item) => item?.value),
@@ -232,16 +235,23 @@ const RoomsPage = () => {
     });
     if (!isEditing) {
       const result = await addHomeStay(formData);
-      if(result) {
+      if (result) {
         alert(result?.message);
         addHomeStayReset();
-      } 
+      }
     } else {
-      const result = await editHomeStay({ formData , homeStayId});
-        if(result) {
-          alert(result?.message);
-          addHomeStayReset();
-        } 
+      if (homeStayImages.length === 1) {
+        formData.append("homestayImages[0]", homeStayImages[0])
+      } else {
+        homeStayImages.forEach(image => {
+          formData.append("homestayImages", image)
+        });
+      }
+      const result = await editHomeStay({ formData, homeStayId });
+      if (result) {
+        alert(result?.message);
+        editHomeStayReset();
+      }
     }
     getAllHomeStays()
     handleClose();
@@ -269,7 +279,7 @@ const RoomsPage = () => {
       accessor: "noOfBathRooms",
       sortable: true,
     },
-     {
+    {
       header: "Price",
       accessor: "pricePerNight",
       sortable: true,
@@ -289,11 +299,10 @@ const RoomsPage = () => {
       header: "Status",
       accessor: (homeStay) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            !homeStay?.isDisabled
-              ? "bg-turquoise-200 text-turquoise-500"
-              : "bg-gray-100 text-gray-800"
-          }`}>
+          className={`px-3 py-1 rounded-full text-xs font-medium ${!homeStay?.isDisabled
+            ? "bg-turquoise-200 text-turquoise-500"
+            : "bg-gray-100 text-gray-800"
+            }`}>
           {!homeStay?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
@@ -308,11 +317,11 @@ const RoomsPage = () => {
     }
   };
 
-   const handleView =  (id) => {
-     setIsModalOpen(true);
-     setIsViewDetail(true)
-     const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
-     setChosenHomeStay(chosenHomeStay)
+  const handleView = (id) => {
+    setIsModalOpen(true);
+    setIsViewDetail(true)
+    const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
+    setChosenHomeStay(chosenHomeStay)
   };
   const handleEdit = (id) => {
     const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
@@ -336,7 +345,7 @@ const RoomsPage = () => {
     setValue('price', chosenHomeStay[0].pricePerNight)
     setValue('maxGuests', chosenHomeStay[0].maxGuests)
     const { street, city, state, district, zip,
-      coordinates: {latitude, longitude}
+      coordinates: { latitude, longitude }
     } = chosenHomeStay[0].address
     setValue('street', street)
     setValue('city', city)
@@ -382,195 +391,195 @@ const RoomsPage = () => {
   return (
     <>
       <div className='flex justify-between items-center'>
-          <h1 className="text-2xl font-semibold text-gray-800">
-            Amenities Management
-          </h1>
-          <Button onClick={() => setIsModalOpen(true)}>Add Homestays</Button>
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Amenities Management
+        </h1>
+        <Button onClick={() => setIsModalOpen(true)}>Add Homestays</Button>
         <Modal
-            isOpen={isModalOpen}
-            onClose={handleClose}
-            title={"Create Your Perfect Escape"}
-            description={
-              "Share your unique homestay with the world – where comfort meets unforgettable experiences"
-            }
-            maxWidth={!isViewDetail ? "600px" : "700px"}
-          >
+          isOpen={isModalOpen}
+          onClose={handleClose}
+          title={"Create Your Perfect Escape"}
+          description={
+            "Share your unique homestay with the world – where comfort meets unforgettable experiences"
+          }
+          maxWidth={!isViewDetail ? "600px" : "700px"}
+        >
           {
-             !isViewDetail ?
+            !isViewDetail ?
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
-              <FormField
-                type="text"
-                name="title"
-                label="Homestay title"
-                placeholder="Enter homestay title"
-                register={register}
-                error={errors.title}
-              />
-              <FormField
-                type="textarea"
-                name="description"
-                label="Description"
-                placeholder="Enter home stay description"
-                register={register}
-                error={errors.description}
-              />
-              <FormField
-                type="select"
-                name="category"
-                label="Category"
-                control={control}
-                register={register}
-                error={errors.category}
-                options={categoryList}
-              />
-              <FormField
-                type="select"
-                name="amenities"
-                label="Amenities"
-                control={control}
-                register={register}
-                error={errors.amenities}
-                isMulti={true}
-                options={amenitiesList}
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                type="number"
-                name="numberOfRooms"
-                label="Number of room"
-                placeholder="Number of room"
-                register={register}
-                error={errors.numberOfRooms}
-              />
-              <FormField
-                type="number"
-                name="numberOfBathRooms"
-                label="Number Of BathRooms"
-                placeholder="Number Of BathRooms"
-                register={register}
-                error={errors.numberOfBathRooms}
-              />
-            </div>
+                <FormField
+                  type="text"
+                  name="title"
+                  label="Homestay title"
+                  placeholder="Enter homestay title"
+                  register={register}
+                  error={errors.title}
+                />
+                <FormField
+                  type="textarea"
+                  name="description"
+                  label="Description"
+                  placeholder="Enter home stay description"
+                  register={register}
+                  error={errors.description}
+                />
+                <FormField
+                  type="select"
+                  name="category"
+                  label="Category"
+                  control={control}
+                  register={register}
+                  error={errors.category}
+                  options={categoryList}
+                />
+                <FormField
+                  type="select"
+                  name="amenities"
+                  label="Amenities"
+                  control={control}
+                  register={register}
+                  error={errors.amenities}
+                  isMulti={true}
+                  options={amenitiesList}
+                />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    type="number"
+                    name="numberOfRooms"
+                    label="Number of room"
+                    placeholder="Number of room"
+                    register={register}
+                    error={errors.numberOfRooms}
+                  />
+                  <FormField
+                    type="number"
+                    name="numberOfBathRooms"
+                    label="Number Of BathRooms"
+                    placeholder="Number Of BathRooms"
+                    register={register}
+                    error={errors.numberOfBathRooms}
+                  />
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                type="number"
-                name="price"
-                label="Price details"
-                placeholder="Enter Price details"
-                register={register}
-                error={errors.price}
-              />
-              <FormField
-                type="number"
-                name="maxGuests"
-                label="Number Of Guests"
-                placeholder="Number Of Guest"
-                register={register}
-                error={errors.maxGuests}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                type="text"
-                name="street"
-                label="Street"
-                placeholder="Enter street details"
-                register={register}
-                error={errors.street}
-              />
-              <FormField
-                type="text"
-                name="city"
-                label="City"
-                placeholder="Enter city details"
-                register={register}
-                error={errors.city}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                type="text"
-                name="district"
-                label="District"
-                placeholder="Enter district details"
-                register={register}
-                error={errors.district}
-              />
-              <FormField
-                type="text"
-                name="state"
-                label="State"
-                placeholder="Enter State details"
-                register={register}
-                error={errors.state}
-              />
-            </div>
-            <FormField
-                type="text"
-                name="zip"
-                label="Zip"
-                placeholder="Enter Zip details"
-                register={register}
-                error={errors.zip}
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                type="text"
-                name="latitude"
-                label="Latitude"
-                placeholder="Enter latitude details"
-                register={register}
-                error={errors.latitude}
-              />
-              <FormField
-                type="text"
-                name="longitude"
-                label="Longitude"
-                placeholder="Enter longitude details"
-                register={register}
-                error={errors.latitude}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                type="text"
-                name="checkInTime"
-                label="Checkout Time"
-                placeholder="Enter latitude details"
-                register={register}
-                error={errors.latitude}
-              />
-              <FormField
-                type="text"
-                name="checkOutTime"
-                label="Checkout Time"
-                placeholder="Enter longitude details"
-                register={register}
-                error={errors.latitude}
-              />
-            </div>
-            <InputList
-              lists={guestPolicyList}
-              setLists={setGuestPolicyList}
-            />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    type="number"
+                    name="price"
+                    label="Price details"
+                    placeholder="Enter Price details"
+                    register={register}
+                    error={errors.price}
+                  />
+                  <FormField
+                    type="number"
+                    name="maxGuests"
+                    label="Number Of Guests"
+                    placeholder="Number Of Guest"
+                    register={register}
+                    error={errors.maxGuests}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    type="text"
+                    name="street"
+                    label="Street"
+                    placeholder="Enter street details"
+                    register={register}
+                    error={errors.street}
+                  />
+                  <FormField
+                    type="text"
+                    name="city"
+                    label="City"
+                    placeholder="Enter city details"
+                    register={register}
+                    error={errors.city}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    type="text"
+                    name="district"
+                    label="District"
+                    placeholder="Enter district details"
+                    register={register}
+                    error={errors.district}
+                  />
+                  <FormField
+                    type="text"
+                    name="state"
+                    label="State"
+                    placeholder="Enter State details"
+                    register={register}
+                    error={errors.state}
+                  />
+                </div>
+                <FormField
+                  type="text"
+                  name="zip"
+                  label="Zip"
+                  placeholder="Enter Zip details"
+                  register={register}
+                  error={errors.zip}
+                />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    type="text"
+                    name="latitude"
+                    label="Latitude"
+                    placeholder="Enter latitude details"
+                    register={register}
+                    error={errors.latitude}
+                  />
+                  <FormField
+                    type="text"
+                    name="longitude"
+                    label="Longitude"
+                    placeholder="Enter longitude details"
+                    register={register}
+                    error={errors.latitude}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    type="text"
+                    name="checkInTime"
+                    label="Checkout Time"
+                    placeholder="Enter latitude details"
+                    register={register}
+                    error={errors.latitude}
+                  />
+                  <FormField
+                    type="text"
+                    name="checkOutTime"
+                    label="Checkout Time"
+                    placeholder="Enter longitude details"
+                    register={register}
+                    error={errors.latitude}
+                  />
+                </div>
+                <InputList
+                  lists={guestPolicyList}
+                  setLists={setGuestPolicyList}
+                />
                 {
                   isEditing ? <ImageList
-                    images={homeStayImages} 
+                    images={homeStayImages}
                     setImages={removeImages}
-                    /> : null
+                  /> : null
                 }
-            <MultipleFileUpload
-              onChange={handleFileUpload}
-              value={files}
-                  multiple={true} 
+                <MultipleFileUpload
+                  onChange={handleFileUpload}
+                  value={files}
+                  multiple={true}
                   maxFiles={!isEditing ? 5 : 5 - homeStayImages.length}
                 />
                 {fileError ?
-              <p className="text-xs text-red-500">{fileError}</p>
-              :
-              null
-            }
+                  <p className="text-xs text-red-500">{fileError}</p>
+                  :
+                  null
+                }
                 <Button
                   type="submit"
                   fullWidth
@@ -581,27 +590,27 @@ const RoomsPage = () => {
                       editHomeStayLoading
                   }
                 >
-              Submit
-            </Button>
-              </form> :  <ViewHomeStay
+                  Submit
+                </Button>
+              </form> : <ViewHomeStay
                 data={chosenHomestay}
-                onClose={handleClose} 
+                onClose={handleClose}
               />
           }
-          </Modal>
+        </Modal>
       </div>
       <div className="min-h-screen my-4">
-          {allHomeStays?.data ? (
-            <Table
-              title="Homestay Management"
-              subtitle="Manage your Homestay"
-              columns={homestayColumn}
-              data={allHomeStays?.data}
-              actions={getActions}
-              onSearch={handleSearch}
-              initialSort={{ field: "title", direction: "asc" }}
-            />
-          ) : null}
+        {allHomeStays?.data ? (
+          <Table
+            title="Homestay Management"
+            subtitle="Manage your Homestay"
+            columns={homestayColumn}
+            data={allHomeStays?.data}
+            actions={getActions}
+            onSearch={handleSearch}
+            initialSort={{ field: "title", direction: "asc" }}
+          />
+        ) : null}
       </div>
     </>
   );
