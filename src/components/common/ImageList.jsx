@@ -1,10 +1,12 @@
 import React from 'react';
 import { X } from 'lucide-react';
 const ImageList = ({ images, setImages }) => {
-  const removeImage = (index) => {
-    images.splice(index, 1);
-    setImages(images)
+  const imageRemove = (index) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
   };
+  
   return (
       <div className="max-w-4xl mx-auto">    
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -17,7 +19,7 @@ const ImageList = ({ images, setImages }) => {
                 />
                     <button
                         type='button'
-                  onClick={() => removeImage(index)}
+                  onClick={() => imageRemove(index)}
                   className="absolute top-3 right-3 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-opacity duration-200 backdrop-blur-sm"
                   aria-label="Remove image"
                 >
