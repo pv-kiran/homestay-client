@@ -13,11 +13,13 @@ export function Table({
   onSearch,
   sortable = true,
   initialSort,
+  currentPage,
+  pageSize,
+  onPageChange,
+  onPageSizeChange,
+  totalItems
 }) {
-  const [pageSize, setPageSize] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState(initialSort);
-
   const handleSort = (field) => {
     if (!sortable) return;
 
@@ -93,11 +95,11 @@ export function Table({
       </div>
 
       <TablePagination
+        totalItems={totalItems}
         currentPage={currentPage}
-        totalItems={data.length}
         pageSize={pageSize}
-        onPageChange={setCurrentPage}
-        onPageSizeChange={setPageSize}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
       />
     </div>
   );

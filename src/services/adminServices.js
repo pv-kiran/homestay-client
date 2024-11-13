@@ -72,10 +72,11 @@ const adminService = {
       throw error;
     }
   },
-  adminGetAllCategory: async () => {
+  adminGetAllCategory: async (pagination) => {
     try {
-      const response = await axiosInstance.get(
-        apiEndpoints.Bestays_Admin_Category_Get_All
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Category_Get_All,
+        JSON.stringify(pagination)
       );
       return response;
     } catch (error) {
@@ -126,10 +127,11 @@ const adminService = {
       throw error;
     }
   },
-  adminGetAllAmenities: async () => {
+  adminGetAllAmenities: async (pagination) => {
     try {
-      const response = await axiosInstance.get(
-        apiEndpoints.Bestays_Admin_Amenities_Get_All
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Amenities_Get_All,
+        JSON.stringify(pagination)
       );
       return response;
     } catch (error) {
@@ -163,7 +165,7 @@ const adminService = {
     } catch (error) {
       throw error;
     }
-  }, 
+  },
   adminGetAllUsers: async () => {
     try {
       const response = await axiosInstance.get(
@@ -200,10 +202,11 @@ const adminService = {
       throw error;
     }
   },
-  adminGetAllHomestays: async () => {
+  adminGetAllHomestays: async (pagination) => {
     try {
-      const response = await axiosInstance.get(
-        apiEndpoints.Bestays_Admin_Get_Homestays
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_Homestays,
+        pagination
       );
       return response;
     } catch (error) {
