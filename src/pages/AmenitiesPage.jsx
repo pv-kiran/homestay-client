@@ -23,7 +23,7 @@ export default function AmenitiesPage() {
   const [file, setFile] = useState(null);
   const [amenityId, setamenityId] = useState(null);
   const [fileError, setFileError] = useState(null);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
@@ -130,6 +130,12 @@ export default function AmenitiesPage() {
         pageNumber: currentPage,
         searchParams: ""
       });
+      if(result.success) {
+        toast.success(result.message);
+      }
+      else {
+        toast.error('Please try again later');
+      }
     }
   };
 

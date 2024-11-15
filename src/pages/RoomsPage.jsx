@@ -14,6 +14,7 @@ import { homeStayFormData } from '../utils/formData';
 import { Table } from '../components/common/table/Table';
 import { ViewHomeStay } from '../components/VeiwHomeStay';
 import ImageList from '../components/common/ImageList';
+import { toast } from 'react-toastify';
 
 
 const schema = yup.object({
@@ -78,7 +79,7 @@ const RoomsPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [homeStayImages, setHomeStayImages] = useState([]);
   const [fileError, setFileError] = useState(false);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
@@ -172,22 +173,22 @@ const RoomsPage = () => {
 
   useEffect(() => {
     if (getAmenitiesError) {
-      alert(getAmenitiesError?.message);
+      toast.error(getAmenitiesError?.message);
     }
     if (getCategoriesError) {
-      alert(getCategoriesError?.message);
+      toast.error(getCategoriesError?.message);
     }
     if (addHomeStayError) {
-      alert(addHomeStayError?.message);
+      toast.error(addHomeStayError?.message);
     }
     if (allHomeStaysError) {
-      alert(allHomeStaysError?.message);
+      toast.error(allHomeStaysError?.message);
     }
     if (toggleHomeStayError) {
-      alert(toggleHomeStayError?.message);
+      toast.error(toggleHomeStayError?.message);
     }
     if (editHomeStayError) {
-      alert(editHomeStayError?.message);
+      toast.error(editHomeStayError?.message);
     }
   }, [
     getAmenitiesError,
@@ -240,7 +241,7 @@ const RoomsPage = () => {
     if (!isEditing) {
       const result = await addHomeStay(formData);
       if (result) {
-        alert(result?.message);
+        toast.success(result?.message);
         addHomeStayReset();
       }
     } else {
@@ -253,7 +254,7 @@ const RoomsPage = () => {
       }
       const result = await editHomeStay({ formData, homeStayId });
       if (result) {
-        alert(result?.message);
+        toast.success(result?.message);
         editHomeStayReset();
       }
     }
@@ -389,7 +390,7 @@ const RoomsPage = () => {
     {
       icon: "view",
       onClick: () => handleView(item._id),
-      title: "Edit",
+      title: "View",
     },
     {
       icon: "edit",

@@ -22,7 +22,7 @@ export default function CategoriesPage() {
   const [file, setFile] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
   const [fileError, setFileError] = useState(null);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);

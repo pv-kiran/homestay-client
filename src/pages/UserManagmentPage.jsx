@@ -25,6 +25,13 @@ export default function UserManagementPage() {
     const result = await toggleUser(id);
     if (result) {
       await getAllUsers();
+
+      if(result?.success) {
+        toast.success(result?.message);
+      }
+      else {
+        toast.error("Please try again later");
+      }
     }
   };
 
