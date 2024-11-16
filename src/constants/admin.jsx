@@ -1,4 +1,4 @@
-import { Home, BedDouble, Grid, Package, UserCircle } from 'lucide-react';
+import { Home, BedDouble, Grid, Package, UserCircle, Users, Component } from 'lucide-react';
 
 export const routes = [
   {
@@ -14,21 +14,21 @@ export const routes = [
   {
     path: '/admin/amenities',
     title: 'Amenities',
-    icon: <Grid className="w-5 h-5" />
+    icon: <Component className="w-5 h-5" />
   },
   {
     path: '/admin/users',
     title: 'Users',
-    icon: <Grid className="w-5 h-5" />
+    icon: <Users className="w-5 h-5" />
   },
   {
     path: '/admin/rooms',
-    title: 'Rooms',
+    title: 'Homestays',
     icon: <BedDouble className="w-5 h-5" />
   },
   {
     path: '/admin/add-ons',
-    title: 'Add Ons',
+    title: 'Add-ons',
     icon: <Package className="w-5 h-5" />
   },
   {

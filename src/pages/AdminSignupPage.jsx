@@ -5,6 +5,7 @@ import AdminSignupForm from "../components/forms/AdminSignupForm";
 import { OtpForm } from "../components/forms/OtpForm";
 import { useNavigate } from "react-router-dom";
 import getOtpExpiryInSeconds from "../utils/otpExpiry";
+import { toast } from "react-toastify";
 
 export function AdminSignupPage() {
   const [showFlow, setShowFlow] = useState({
@@ -86,14 +87,14 @@ export function AdminSignupPage() {
   useEffect(() => {
     if (adminError) {
       if (adminError?.isVerified) {
-        alert(`Account is already in use, u can signin ${adminError?.message}`);
+        toast.error(`Account is already in use, u can signin ${adminError?.message}`);
         navigate("/admin/signin");
       } else {
-        alert(adminError?.message);
+        toast.error(adminError?.message);
       }
     }
     if (otpError) {
-      alert(otpError?.message);
+      toast.error(otpError?.message);
     }
   }, [adminError, otpError]);
 

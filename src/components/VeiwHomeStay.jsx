@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, MapPin, Users, Bed, Bath, Clock } from 'lucide-react';
+import { X, MapPin, Users, Bed, Bath, Clock, ShieldX } from 'lucide-react';
 import { ImageSlider } from './ImageSlider';
 
 export function ViewHomeStay({ data, onClose }) {
@@ -97,6 +97,25 @@ export function ViewHomeStay({ data, onClose }) {
                   <p className="text-2xl font-bold text-gray-900">
                     ₹{data[0].pricePerNight.toLocaleString()}
                   </p>
+                </div>
+              </div>
+            </div>
+            <div className="border-t pt-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <ShieldX className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="text-sm text-gray-500">Guest Policies</p>
+                    <p className="font-semibold">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {data[0].hotelPolicies.guestPolicies.map((policy) => (
+                        <div key={policy._id} className="flex items-center gap-2">
+                          <span className="text-gray-600">{policy}</span>
+                        </div>
+                      ))}
+                    </div>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

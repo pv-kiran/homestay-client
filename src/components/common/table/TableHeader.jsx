@@ -16,7 +16,7 @@ export const TableHeader = ({
         <div className="relative w-full md:w-72">
           <input
             type="text"
-            placeholder="Search anything..."
+            placeholder="Search here..."
             onChange={(e) => onSearch(e.target.value)}
             className="w-full bg-white border-2 border-gray-200 rounded-lg pl-12 pr-4 py-2.5 text-sm focus:outline-none focus:border-turquoise-400 focus:ring-2 focus:ring-turquoise-100 transition-all duration-200"
           />
