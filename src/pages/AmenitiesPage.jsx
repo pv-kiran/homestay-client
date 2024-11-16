@@ -9,6 +9,7 @@ import { FormField } from "../components/common/FormField";
 import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
+import { toast } from "react-toastify";
 
 
 const amenitySchema = yup.object({
@@ -22,7 +23,7 @@ export default function AmenitiesPage() {
   const [file, setFile] = useState(null);
   const [amenityId, setamenityId] = useState(null);
   const [fileError, setFileError] = useState(null);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
@@ -82,14 +83,14 @@ export default function AmenitiesPage() {
       } else {
         const result = await addAmenity(formData);
         if (result) {
-          alert(result?.message);
+          toast.success(result?.message);
           addAmenityReset();
         }
       }
     } else {
       const result = await amenityEdit({ formData, amenityId });
       if (result) {
-        alert(result?.message);
+        toast.success(result?.message);
         aditAmenityReset();
       }
     }
@@ -129,6 +130,12 @@ export default function AmenitiesPage() {
         pageNumber: currentPage,
         searchParams: ""
       });
+      if(result.success) {
+        toast.success(result.message);
+      }
+      else {
+        toast.error('Please try again later');
+      }
     }
   };
 
@@ -218,16 +225,16 @@ export default function AmenitiesPage() {
 
   useEffect(() => {
     if (addAmenityError) {
-      alert(addAmenityError?.message);
+      toast.error(addAmenityError?.message);
     }
     if (getAmenitiesError) {
-      alert(getAmenitiesError?.message);
+      toast.error(getAmenitiesError?.message);
     }
     if (toggledamenityError) {
-      alert(toggledamenityError?.message);
+      toast.error(toggledamenityError?.message);
     }
     if (amenityEditError) {
-      alert(amenityEditError?.message);
+      toast.error(amenityEditError?.message);
     }
   }, [
     addAmenityError,

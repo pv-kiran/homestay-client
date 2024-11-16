@@ -9,6 +9,7 @@ import adminService from "../../services/adminServices";
 import useApi from "../../hooks/useApi";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../../app/features/users/authSlice";
+import { toast } from "react-toastify";
 
 const adminSigninSchema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -57,7 +58,7 @@ const AdminSigninForm = () => {
       navigate("/admin");
     }
     if (adminError) {
-      alert(adminError?.errorInfo);
+      toast.error(adminError?.errorInfo);
     }
   }, [signInSuccess, adminError]);
 

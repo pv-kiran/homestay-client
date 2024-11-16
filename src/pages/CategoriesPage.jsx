@@ -9,6 +9,7 @@ import { FormField } from "../components/common/FormField";
 import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
+import { toast } from "react-toastify";
 
 const categorySchema = yup.object({
   category: yup.string().required("Category title is required"),
@@ -21,7 +22,7 @@ export default function CategoriesPage() {
   const [file, setFile] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
   const [fileError, setFileError] = useState(null);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
@@ -80,14 +81,14 @@ export default function CategoriesPage() {
       } else {
         const result = await addCategory(formData);
         if (result) {
-          alert(result?.message);
+          toast.success(result?.message);
           addCategoryReset();
         }
       }
     } else {
       const result = await categoryEdit({ formData, categoryId });
       if (result) {
-        alert(result?.message);
+        toast.success(result?.message);
         editCategoryReset();
       }
     }
@@ -125,6 +126,13 @@ export default function CategoriesPage() {
         pageNumber: currentPage,
         searchParams: ""
       });
+      if (result.success === true) {
+        toast.success(result.message);
+      }
+      else {
+        toast.error(result.message);
+      }
+
     }
   };
 
@@ -214,16 +222,16 @@ export default function CategoriesPage() {
 
   useEffect(() => {
     if (addCategoryError) {
-      alert(addCategoryError?.message);
+      toast.error(addCategoryError?.message);
     }
     if (getCategoriesError) {
-      alert(getCategoriesError?.message);
+      toast.error(getCategoriesError?.message);
     }
     if (toggledCategoryError) {
-      alert(toggledCategoryError?.message);
+      toast.error(toggledCategoryError?.message);
     }
     if (categoryEditError) {
-      alert(categoryEditError?.message);
+      toast.error(categoryEditError?.message);
     }
   }, [
     addCategoryError,
