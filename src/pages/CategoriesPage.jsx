@@ -95,7 +95,7 @@ export default function CategoriesPage() {
     getAllCategories({
       pagePerData: pageSize,
       pageNumber: currentPage,
-      searchParams: ""
+      searchParams: searchKey
     })
     handleClose();
   };
@@ -216,7 +216,7 @@ export default function CategoriesPage() {
     getAllCategories({
       pagePerData: pageSize,
       pageNumber: currentPage,
-      searchParams: ""
+      searchParams: searchKey
     });
   }, [pageSize, currentPage]);
 
