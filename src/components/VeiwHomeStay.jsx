@@ -89,9 +89,9 @@ export function ViewHomeStay({ data, onClose }) {
                     <p className="font-semibold">
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                         {data[0].hotelPolicies.guestPolicies.map((policy) => (
-                          <div key={policy._id} className="flex items-center gap-2 p-1 text-center">
-                            <span className=" font-normal text-gray-600">{policy}</span>
-                          </div>
+                          <ul key={policy._id} className="flex items-center gap-2 p-1 text-center pl-4">
+                            <li className=" list-disc font-normal text-gray-600">{policy}</li>
+                          </ul>
                         ))}
                       </div>
                     </p>
