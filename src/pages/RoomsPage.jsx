@@ -33,15 +33,31 @@ const schema = yup.object({
     .min(1, "Please select at least one interest"),
   numberOfRooms: yup
     .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? null : value
+    )
+    .nullable()
     .required("Please add number of rooms"),
   numberOfBathRooms: yup
     .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? null : value
+    )
+    .nullable()
     .required("Please add number of bath rooms"),
   price: yup
     .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? null : value
+    )
+    .nullable()
     .required("Please add the price"),
   maxGuests: yup
     .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? null : value
+    )
+    .nullable()
     .required("Please add number of guests"),
   street: yup
     .string()
@@ -163,6 +179,7 @@ const RoomsPage = () => {
     setIsEditing(false);
     setFiles([]);
     setFileError('');
+    setGuestPolicyList([])
     reset();
   };
 
@@ -271,7 +288,7 @@ const RoomsPage = () => {
     getAllHomeStays({
       pagePerData: pageSize,
       pageNumber: currentPage,
-      searchParams: ""
+      searchParams: searchKey
     });
   }, [pageSize, currentPage])
 
