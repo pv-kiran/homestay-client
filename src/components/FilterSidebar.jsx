@@ -14,10 +14,7 @@ export default function FilterSidebar({
     closeModal
 }) {
     return (
-        <div className="w-full lg:w-72 p-6 rounded-lg sm:shadow-md sm:h-[calc(100vh-2rem)]  sm:top-4 overflow-y-auto">
-            {/* <h2 className="text-xl font-bold mb-6">Filters</h2> */}
-
-            {/* Categories */}
+        <div className="w-full md:w-72 p-6 rounded-lg sm:shadow-md sm:h-[80vh]  sm:top-4 overflow-y-scroll">
             <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-3">Categories</h3>
                 <div className="space-y-2">
