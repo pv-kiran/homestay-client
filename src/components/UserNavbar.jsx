@@ -13,9 +13,6 @@ export default function UserNavbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
-    data,
-    error,
-    loading,
     execute: signOutUser,
     success: signOutSuccess,
     reset,
@@ -54,7 +51,7 @@ export default function UserNavbar() {
             <div className="flex items-center">
               <a
                 href="/"
-                className="flex items-center space-x-2 text-rose-500 hover:text-rose-600">
+                className="flex items-center space-x-2 text-turquoise-300 hover:text-turquoise-600">
                 <Home className="h-8 w-8" />
                 <span className="font-bold text-xl hidden sm:block">
                   StayHub
