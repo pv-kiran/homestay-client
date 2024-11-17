@@ -1,16 +1,19 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import Hero from "../components/Hero";
+import Categories from "../components/Categories";
+import HomestayList from "../components/HomeStayList";
+import Footer from "../components/Footer";
 
 const LandingPage = () => {
-  const { authState } = useSelector((state) => state?.userAuth);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
-    <div className="flex justify-center items-center h-[95vh]">
-      {!authState ? (
-        <span>Login and Continue</span>
-      ) : (
-        <span>{authState?.name}</span>
-      )}
+    <div className="min-h-screen">
+      <Hero />
+      <Categories />
+      <HomestayList />
+      <Footer />
     </div>
   );
 };

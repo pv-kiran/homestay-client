@@ -15,6 +15,8 @@ import PublicRoutesAdmin from "./utils/PublicRoutesAdmin";
 import PrivateRoutesAdmin from "./utils/PrivateRoutesAdmin";
 import AmenitiesPage from "./pages/AmenitiesPage";
 import UserManagementPage from "./pages/UserManagmentPage";
+import HomeStayPage from "./pages/HomeStayPage";
+import AllHomeStaysPage from "./pages/AllHomeStaysPage";
 
 function AppRoutes() {
   return (
@@ -22,6 +24,8 @@ function AppRoutes() {
       {/* User layout and its nested routes */}
       <Route path="/" element={<UserLayout />}>
         <Route index element={<LandingPage />} />
+        <Route path="/homestays/all" element={<AllHomeStaysPage />} />
+        <Route path="/homestay/view/:id" element={<HomeStayPage />} />
       </Route>
 
       <Route element={<PublicRoutesAdmin />}>

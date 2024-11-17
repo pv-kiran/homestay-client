@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
@@ -7,6 +7,11 @@ import { toast } from "react-toastify";
 
 
 export default function UserManagementPage() {
+
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchKey, setSearchKey] = useState('');
+  const timer = useRef(null);
 
   const {
     data: allUsers,
@@ -24,9 +29,13 @@ export default function UserManagementPage() {
     console.log("Toggle clicked for id:", id);
     const result = await toggleUser(id);
     if (result) {
-      await getAllUsers();
+      await getAllUsers({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
 
-      if(result?.success) {
+      if (result?.success) {
         toast.success(result?.message);
       }
       else {
@@ -45,11 +54,10 @@ export default function UserManagementPage() {
       header: "Status",
       accessor: (user) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            !user?.isDisabled
-              ? "bg-turquoise-200 text-turquoise-500"
-              : "bg-gray-100 text-gray-800"
-          }`}>
+          className={`px-3 py-1 rounded-full text-xs font-medium ${!user?.isDisabled
+            ? "bg-turquoise-200 text-turquoise-500"
+            : "bg-gray-100 text-gray-800"
+            }`}>
           {!user?.isDisabled ? "Active" : "Disabled"}
         </span>
       ),
@@ -68,14 +76,25 @@ export default function UserManagementPage() {
   ];
 
   const handleSearch = (query) => {
-    console.log("Search query:", query);
+    setSearchKey(query);
   };
-    
+
+  const handlePageNumber = (page) => {
+    setCurrentPage(page);
+  }
+
+  const handlePageSize = (size) => {
+    setPageSize(size);
+  }
 
 
   useEffect(() => {
-    getAllUsers();
-  }, []);
+    getAllUsers({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: searchKey
+    });
+  }, [pageSize, currentPage]);
 
   useEffect(() => {
     if (getUserError) {
@@ -89,6 +108,25 @@ export default function UserManagementPage() {
     toggleUserError
   ]);
 
+  useEffect(() => {
+    if (!timer.current) {
+      getAllUsers({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(() => {
+      getAllUsers({
+        pagePerData: pageSize,
+        pageNumber: currentPage,
+        searchParams: searchKey
+      });
+    }, 500);
+  }, [searchKey]);
 
   return (
     <>
@@ -107,6 +145,11 @@ export default function UserManagementPage() {
             actions={getActions}
             onSearch={handleSearch}
             initialSort={{ field: "title", direction: "asc" }}
+            currentPage={currentPage}
+            onPageChange={handlePageNumber}
+            onPageSizeChange={handlePageSize}
+            pageSize={pageSize}
+            totalItems={allUsers?.totalPages}
           />
         ) : null}
       </div>
