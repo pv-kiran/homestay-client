@@ -7,10 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
+
   return (
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <AppRoutes />
-        <ToastContainer
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <AppRoutes />
+      <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
@@ -22,9 +23,9 @@ function App() {
         pauseOnHover
         theme="light" // Can be 'light', 'dark', or 'colored'
       />
-      </GoogleOAuthProvider>
+    </GoogleOAuthProvider>
   )
-  
+
 }
 
 export default App
