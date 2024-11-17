@@ -100,7 +100,7 @@ const SAMPLE_HOMESTAYS = [
 
 const CATEGORIES = ["Beachfront", "Mountain", "City", "Countryside", "Lake", "Desert"];
 
-function HomeStays() {
+function AllHomeStaysPage() {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 1000]);
     const [selectedRooms, setSelectedRooms] = useState([]);
@@ -110,6 +110,10 @@ function HomeStays() {
     useEffect(() => {
         console.log(selectedCategories, priceRange, selectedRooms, selectedGuests);
     }, [selectedCategories, priceRange, selectedRooms, selectedGuests]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className="min-h-screen mt-16">
@@ -220,4 +224,4 @@ function HomeStays() {
     );
 }
 
-export default HomeStays;
+export default AllHomeStaysPage;

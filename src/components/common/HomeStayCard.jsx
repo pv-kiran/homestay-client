@@ -1,9 +1,14 @@
 import React from 'react';
 import { Star } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 const HomeStayCard = ({ homestay }) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="group">
+        <div
+            className="group"
+            role='button'
+            onClick={() => navigate('/homestay/view/33')}>
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
                 <img
                     src={homestay.image}

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HomeStayCard from './common/HomeStayCard';
+import { useNavigate } from 'react-router-dom';
 
 const homestays = [
     {
@@ -37,11 +38,18 @@ const homestays = [
 ];
 
 export default function HomestayList() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+    const navigate = useNavigate();
     return (
-        <div className="py-12 px-4 max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
+        <div className="py-8 px-4 max-w-7xl mx-auto">
+            <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Featured Homestays</h2>
-                <button className="text-indigo-600 hover:text-indigo-700 font-medium">
+                <button
+                    className=" text-turquoise-400 hover:text-turquoise-600 font-medium"
+                    onClick={() => navigate('/homestays/all')}
+                >
                     View all →
                 </button>
             </div>

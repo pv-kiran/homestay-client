@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mountain, Palmtree, Building, Tent, Trees, Waves } from 'lucide-react';
+import { Mountain, Palmtree, Building, Tent } from 'lucide-react';
 
 const categories = [
     {
@@ -48,9 +48,9 @@ const categories = [
 
 export default function Categories() {
     return (
-        <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
+        <section className="py-10 px-4 bg-gradient-to-b from-gray-50 to-white">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-8">
+                <div className="text-center mb-4">
                     <h2 className="text-2xl font-bold text-left text-gray-900">
                         Discover Your Perfect Stay
                     </h2>

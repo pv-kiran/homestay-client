@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Wifi, Car, Coffee, Users } from 'lucide-react';
 import { ImageGallery } from '../components/ImageGallery';
 import { PropertyDetails } from '../components/HomeStayDetails';
@@ -19,9 +19,11 @@ const amenities = [
 ];
 
 function HomeStayPage() {
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
+
 
     const nextImage = () => {
         setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -30,6 +32,10 @@ function HomeStayPage() {
     const prevImage = () => {
         setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
     };
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className="min-h-screen mt-[65px] bg-gray-50">
