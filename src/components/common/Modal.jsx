@@ -23,11 +23,11 @@ export function Modal({
           <div className="relative">
             <button
               onClick={onClose}
-              className="absolute right-0 top-0 rounded-full p-1 hover:bg-gray-100"
+              className="fixed right-6  top-5 rounded-full  bg-turquoise-300 hover:bg-turquoise-800 p-1"
             >
               <X className="h-5 w-5 text-gray-500" />
             </button>
-            
+
             {(title || description) && (
               <div className="mb-6 text-center">
                 {title && (

@@ -3,7 +3,7 @@ import { X, MapPin, Users, Bed, Bath, Clock, ShieldX } from 'lucide-react';
 import { ImageSlider } from './ImageSlider';
 
 export function ViewHomeStay({ data, onClose }) {
-    console.log(data)
+  console.log(data)
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -12,7 +12,7 @@ export function ViewHomeStay({ data, onClose }) {
           <h2 className="text-2xl font-bold text-gray-800">{data[0].title}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition"
+            className="p-1 hover:bg-turquoise-300 bg-turquoise-200 rounded-full transition"
           >
             <X className="h-6 w-6" />
           </button>
@@ -35,27 +35,27 @@ export function ViewHomeStay({ data, onClose }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="flex items-center gap-2 bg-gray-50 p-4 rounded-lg">
+              <div className="flex justify-center items-center gap-2 bg-gray-50 p-4 rounded-lg">
                 <Users className="h-5 w-5 text-gray-500" />
                 <div>
                   <p className="text-sm text-gray-500">Max Guests</p>
-                  <p className="font-semibold">{data[0].maxGuests}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-2 bg-gray-50 p-4 rounded-lg">
-                <Bed className="h-5 w-5 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-500">Rooms</p>
-                  <p className="font-semibold">{data[0].noOfRooms}</p>
+                  <p className="font-semibold text-xl text-center">{data[0].maxGuests}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 bg-gray-50 p-4 rounded-lg">
+              <div className="flex justify-center items-center gap-2 bg-gray-50 p-4 rounded-lg">
+                <Bed className="h-5 w-5 text-gray-500" />
+                <div>
+                  <p className="text-sm text-gray-500">Rooms</p>
+                  <p className="font-semibold text-xl text-center">{data[0]?.noOfRooms}</p>
+                </div>
+              </div>
+
+              <div className="flex justify-center items-center gap-2 bg-gray-50 p-4 rounded-lg">
                 <Bath className="h-5 w-5 text-gray-500" />
                 <div>
                   <p className="text-sm text-gray-500">Bathrooms</p>
-                  <p className="font-semibold">{data[0].noOfBathRooms}</p>
+                  <p className="font-semibold text-xl text-center">{data[0]?.noOfBathRooms}</p>
                 </div>
               </div>
             </div>
@@ -80,7 +80,25 @@ export function ViewHomeStay({ data, onClose }) {
                 ))}
               </div>
             </div>
-
+            <div className="my-">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <ShieldX className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="font-semibold text-gray-700">Guest Policies</p>
+                    <p className="font-semibold">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {data[0].hotelPolicies.guestPolicies.map((policy) => (
+                          <ul key={policy._id} className="flex items-center gap-2 p-1 text-center pl-4">
+                            <li className=" list-disc font-normal text-gray-600">{policy}</li>
+                          </ul>
+                        ))}
+                      </div>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="border-t pt-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -97,25 +115,6 @@ export function ViewHomeStay({ data, onClose }) {
                   <p className="text-2xl font-bold text-gray-900">
                     ₹{data[0].pricePerNight.toLocaleString()}
                   </p>
-                </div>
-              </div>
-            </div>
-            <div className="border-t pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <ShieldX className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="text-sm text-gray-500">Guest Policies</p>
-                    <p className="font-semibold">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {data[0].hotelPolicies.guestPolicies.map((policy) => (
-                        <div key={policy._id} className="flex items-center gap-2">
-                          <span className="text-gray-600">{policy}</span>
-                        </div>
-                      ))}
-                    </div>
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>

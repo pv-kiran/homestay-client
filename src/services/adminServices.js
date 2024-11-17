@@ -166,10 +166,11 @@ const adminService = {
       throw error;
     }
   },
-  adminGetAllUsers: async () => {
+  adminGetAllUsers: async (pagination) => {
     try {
-      const response = await axiosInstance.get(
-        apiEndpoints.Bestays_Admin_User_Get_All
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_User_Get_All,
+        JSON.stringify(pagination)
       );
       return response;
     } catch (error) {
