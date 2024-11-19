@@ -163,11 +163,10 @@ function AllHomeStaysPage() {
     return (
         <div className="min-h-screen mt-16">
             <div className="max-w-7xl mx-auto px-4 py-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Find Your Perfect Stay</h1>
+                {/* <h1 className="text-3xl font-bold text-gray-900 mb-8">Find Your Perfect Stay</h1> */}
 
                 <div className="flex gap-8">
-                    {/* Filter Sidebar for Larger Screens */}
-                    <div className="hidden sticky top-10 lg:block"
+                    <div className="hidden fixed top-[100px] md:block"
                     >
                         <FilterSidebar
                             categories={categories?.data ? categories.data : []}
@@ -198,9 +197,7 @@ function AllHomeStaysPage() {
                         />
                     </div>
 
-                    {/* Main Content */}
-                    <div className="flex-1">
-                        {/* Button to Open Filter Modal on Small Screens */}
+                    <div className=' md:w-9/12 md:ml-auto'>
                         <button
                             className="lg:hidden mb-4 bg-blue-600 text-white py-2 px-4 rounded"
                             onClick={() => setIsFilterModalOpen(true)}
