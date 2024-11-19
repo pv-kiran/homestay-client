@@ -2,118 +2,163 @@ import React, { useEffect, useState } from 'react';
 import FilterSidebar from '../components/FilterSidebar';
 import HomeStayCard from '../components/common/HomeStayCard';
 import { Modal } from '../components/common/Modal';
+import useApi from '../hooks/useApi';
+import userService from '../services/userServices';
+
 
 
 // Sample data
-const SAMPLE_HOMESTAYS = [
-    {
-        id: 1,
-        title: "Mountain View Cabin",
-        location: "Aspen, Colorado",
-        price: 250,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233",
-        rooms: 3,
-        guests: 6
-    },
-    {
-        id: 2,
-        title: "Oceanfront Villa",
-        location: "Malibu, California",
-        price: 400,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
-        rooms: 4,
-        guests: 8
-    },
-    {
-        id: 3,
-        title: "Downtown Loft",
-        location: "New York City",
-        price: 300,
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-        rooms: 2,
-        guests: 4
-    },
-    {
-        id: 1,
-        title: "Mountain View Cabin",
-        location: "Aspen, Colorado",
-        price: 250,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233",
-        rooms: 3,
-        guests: 6
-    },
-    {
-        id: 2,
-        title: "Oceanfront Villa",
-        location: "Malibu, California",
-        price: 400,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
-        rooms: 4,
-        guests: 8
-    },
-    {
-        id: 3,
-        title: "Downtown Loft",
-        location: "New York City",
-        price: 300,
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-        rooms: 2,
-        guests: 4
-    },
-    {
-        id: 1,
-        title: "Mountain View Cabin",
-        location: "Aspen, Colorado",
-        price: 250,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233",
-        rooms: 3,
-        guests: 6
-    },
-    {
-        id: 2,
-        title: "Oceanfront Villa",
-        location: "Malibu, California",
-        price: 400,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
-        rooms: 4,
-        guests: 8
-    },
-    {
-        id: 3,
-        title: "Downtown Loft",
-        location: "New York City",
-        price: 300,
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
-        rooms: 2,
-        guests: 4
-    }
-];
+// const SAMPLE_HOMESTAYS = [
+//     {
+//         id: 1,
+//         title: "Mountain View Cabin",
+//         location: "Aspen, Colorado",
+//         price: 250,
+//         rating: 4.8,
+//         image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233",
+//         rooms: 3,
+//         guests: 6
+//     },
+//     {
+//         id: 2,
+//         title: "Oceanfront Villa",
+//         location: "Malibu, California",
+//         price: 400,
+//         rating: 4.9,
+//         image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
+//         rooms: 4,
+//         guests: 8
+//     },
+//     {
+//         id: 3,
+//         title: "Downtown Loft",
+//         location: "New York City",
+//         price: 300,
+//         rating: 4.7,
+//         image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+//         rooms: 2,
+//         guests: 4
+//     },
+//     {
+//         id: 1,
+//         title: "Mountain View Cabin",
+//         location: "Aspen, Colorado",
+//         price: 250,
+//         rating: 4.8,
+//         image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233",
+//         rooms: 3,
+//         guests: 6
+//     },
+//     {
+//         id: 2,
+//         title: "Oceanfront Villa",
+//         location: "Malibu, California",
+//         price: 400,
+//         rating: 4.9,
+//         image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
+//         rooms: 4,
+//         guests: 8
+//     },
+//     {
+//         id: 3,
+//         title: "Downtown Loft",
+//         location: "New York City",
+//         price: 300,
+//         rating: 4.7,
+//         image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+//         rooms: 2,
+//         guests: 4
+//     },
+//     {
+//         id: 1,
+//         title: "Mountain View Cabin",
+//         location: "Aspen, Colorado",
+//         price: 250,
+//         rating: 4.8,
+//         image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233",
+//         rooms: 3,
+//         guests: 6
+//     },
+//     {
+//         id: 2,
+//         title: "Oceanfront Villa",
+//         location: "Malibu, California",
+//         price: 400,
+//         rating: 4.9,
+//         image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
+//         rooms: 4,
+//         guests: 8
+//     },
+//     {
+//         id: 3,
+//         title: "Downtown Loft",
+//         location: "New York City",
+//         price: 300,
+//         rating: 4.7,
+//         image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+//         rooms: 2,
+//         guests: 4
+//     }
+// ];
 
 const CATEGORIES = ["Beachfront", "Mountain", "City", "Countryside", "Lake", "Desert"];
 
 function AllHomeStaysPage() {
+
+
+    const {
+        loading,
+        data: categories,
+        execute: getAllCategories,
+        reset,
+        error
+    } = useApi(userService.userGetAllCategory);
+
+    const {
+        loading: homeStayLoading,
+        data: homeStays,
+        execute: getAllHomeStays,
+        reset: homeStayReset,
+        error: homeStayError
+    } = useApi(userService.userGetAllHomestays);
+
+
+
+
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [priceRange, setPriceRange] = useState([0, 1000]);
-    const [selectedRooms, setSelectedRooms] = useState([]);
-    const [selectedGuests, setSelectedGuests] = useState([]);
+    const [priceRange, setPriceRange] = useState([0, 15000]);
+    const [selectedRooms, setSelectedRooms] = useState([0]);
+    const [selectedGuests, setSelectedGuests] = useState([0]);
+    const [selectedBathrooms, setselectedBathrooms] = useState([0]);
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
     useEffect(() => {
-        console.log(selectedCategories, priceRange, selectedRooms, selectedGuests);
-    }, [selectedCategories, priceRange, selectedRooms, selectedGuests]);
+        getAllHomeStays({
+            category: selectedCategories,
+            price: priceRange,
+            numberOfGuest: selectedGuests[0],
+            numberOfRooms: selectedRooms[0],
+            numberOfBathrooms: selectedBathrooms[0]
+        })
+    }, [
+        selectedCategories,
+        priceRange,
+        selectedRooms,
+        selectedGuests,
+        selectedBathrooms
+    ]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    useEffect(() => {
+        console.log(homeStays)
+    }, [homeStays])
+
+    useEffect(() => {
+        getAllCategories();
+    }, [])
 
     return (
         <div className="min-h-screen mt-16">
@@ -124,11 +169,12 @@ function AllHomeStaysPage() {
                     <div className="hidden fixed top-[100px] md:block"
                     >
                         <FilterSidebar
-                            categories={CATEGORIES}
+                            categories={categories?.data ? categories.data : []}
                             selectedCategories={selectedCategories}
                             priceRange={priceRange}
                             rooms={selectedRooms}
                             guests={selectedGuests}
+                            bathRooms={selectedBathrooms}
                             onCategoryChange={(category) => {
                                 setSelectedCategories(prev =>
                                     prev.includes(category)
@@ -138,18 +184,14 @@ function AllHomeStaysPage() {
                             }}
                             onPriceChange={setPriceRange}
                             onRoomsChange={(room) => {
-                                setSelectedRooms(prev =>
-                                    prev.includes(room)
-                                        ? prev.filter(r => r !== room)
-                                        : [...prev, room]
-                                );
+                                setSelectedRooms([room])
                             }}
+
                             onGuestsChange={(guest) => {
-                                setSelectedGuests(prev =>
-                                    prev.includes(guest)
-                                        ? prev.filter(g => g !== guest)
-                                        : [...prev, guest]
-                                );
+                                setSelectedGuests([guest])
+                            }}
+                            onBathRoomsChange={(room) => {
+                                setselectedBathrooms([room])
                             }}
                             isApply={false}
                         />
@@ -164,11 +206,17 @@ function AllHomeStaysPage() {
                         </button>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {SAMPLE_HOMESTAYS.map((homestay) => (
+                            {/* {SAMPLE_HOMESTAYS.map((homestay) => (
                                 <HomeStayCard
                                     key={homestay?.id} homestay={homestay}
                                 />
-                            ))}
+                            ))} */}
+                            {
+                                homeStays ?
+                                    homeStays?.data?.map((homestay) => (
+                                        <HomeStayCard key={homestay?.id} homestay={homestay} />
+                                    )) : null
+                            }
                         </div>
                     </div>
                 </div>

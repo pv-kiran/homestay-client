@@ -6,6 +6,8 @@ const apiEndpoints = {
   Bestays_User_GoogleSignIn: "/user/auth/google/signin",
   Bestays_User_AccountSetUp: `user/account/setup/complete/:$userId`,
   Bestays_User_LogOut: "/user/auth/signout",
+  Bestays_User_All_Categories: "/user/get-allcategories",
+  Bestays_User_All_Homestays: "/user/get-allhomestays",
 
   // admin api
   Bestays_Admin_Signup: "/admin/auth/signup",

@@ -74,6 +74,27 @@ const userService = {
       throw error;
     }
   },
+  userGetAllCategory: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_All_Categories
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetAllHomestays: async (filterData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_All_Homestays,
+        JSON.stringify(filterData)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userService;
