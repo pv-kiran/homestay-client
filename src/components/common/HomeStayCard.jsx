@@ -8,7 +8,7 @@ const HomeStayCard = ({ homestay }) => {
         <div
             className="group"
             role='button'
-            onClick={() => navigate('/homestay/view/33')}>
+            onClick={() => navigate(`/homestay/view/${homestay?._id}`)}>
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
                 <img
                     src={homestay?.images[0]}
