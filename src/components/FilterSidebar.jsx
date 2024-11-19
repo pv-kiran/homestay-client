@@ -6,13 +6,16 @@ export default function FilterSidebar({
     priceRange,
     rooms,
     guests,
+    bathRooms,
     onCategoryChange,
     onPriceChange,
     onRoomsChange,
     onGuestsChange,
+    onBathRoomsChange,
     isApply,
     closeModal
 }) {
+    console.log(priceRange[1])
     return (
         <div className="w-full lg:w-72 p-6 rounded-lg sm:shadow-md sm:h-[calc(100vh-2rem)]  sm:top-4 overflow-y-auto">
             {/* <h2 className="text-xl font-bold mb-6">Filters</h2> */}
@@ -22,14 +25,14 @@ export default function FilterSidebar({
                 <h3 className="text-lg font-semibold mb-3">Categories</h3>
                 <div className="space-y-2">
                     {categories.map((category) => (
-                        <label key={category} className="flex items-center space-x-2 cursor-pointer">
+                        <label key={category?._id} className="flex items-center space-x-2 cursor-pointer">
                             <input
                                 type="checkbox"
-                                checked={selectedCategories.includes(category)}
-                                onChange={() => onCategoryChange(category)}
+                                checked={selectedCategories.includes(category?._id)}
+                                onChange={() => onCategoryChange(category?._id)}
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                             />
-                            <span className="text-gray-700">{category}</span>
+                            <span className="text-gray-700">{category?.categoryName}</span>
                         </label>
                     ))}
                 </div>
@@ -43,7 +46,7 @@ export default function FilterSidebar({
                         <input
                             type="range"
                             min="0"
-                            max="1000"
+                            max="15000"
                             value={priceRange[1]}
                             onChange={(e) => onPriceChange([priceRange[0], parseInt(e.target.value)])}
                             className="w-full"
@@ -65,6 +68,24 @@ export default function FilterSidebar({
                             key={num}
                             onClick={() => onRoomsChange(num)}
                             className={`px-3 py-1 rounded-full text-sm ${rooms.includes(num)
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                        >
+                            {num}+
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="mb-8">
+                <h3 className="text-lg font-semibold mb-3">Number of BathRooms</h3>
+                <div className="grid grid-cols-3 gap-2">
+                    {[1, 2, 3, 4, 5].map((num) => (
+                        <button
+                            key={num}
+                            onClick={() => onBathRoomsChange(num)}
+                            className={`px-3 py-1 rounded-full text-sm ${bathRooms.includes(num)
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
