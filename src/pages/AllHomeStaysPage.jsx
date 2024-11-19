@@ -231,7 +231,7 @@ function AllHomeStaysPage() {
                 <div className="inset-0 bg-black bg-opacity-25"></div>
                 <div className="inset-0 flex items-center justify-center px-0 py-4 sm:p-4 ">
                     <div className="w-full max-w-md bg-white rounded-lg p-6">
-                        <FilterSidebar
+                        {/* <FilterSidebar
                             categories={CATEGORIES}
                             selectedCategories={selectedCategories}
                             priceRange={priceRange}
@@ -261,6 +261,33 @@ function AllHomeStaysPage() {
                             }}
                             isApply={isFilterModalOpen}
                             closeModal={() => { setIsFilterModalOpen(false) }}
+                        /> */}
+                        <FilterSidebar
+                            categories={categories?.data ? categories.data : []}
+                            selectedCategories={selectedCategories}
+                            priceRange={priceRange}
+                            rooms={selectedRooms}
+                            guests={selectedGuests}
+                            bathRooms={selectedBathrooms}
+                            onCategoryChange={(category) => {
+                                setSelectedCategories(prev =>
+                                    prev.includes(category)
+                                        ? prev.filter(c => c !== category)
+                                        : [...prev, category]
+                                );
+                            }}
+                            onPriceChange={setPriceRange}
+                            onRoomsChange={(room) => {
+                                setSelectedRooms([room])
+                            }}
+
+                            onGuestsChange={(guest) => {
+                                setSelectedGuests([guest])
+                            }}
+                            onBathRoomsChange={(room) => {
+                                setselectedBathrooms([room])
+                            }}
+                            isApply={false}
                         />
                     </div>
                 </div>
