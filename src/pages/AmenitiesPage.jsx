@@ -108,6 +108,7 @@ export default function AmenitiesPage() {
     setIsEditing(false);
     setamenityId(null);
     setFileError(null);
+    setValue("amenity", "")
   };
 
 
@@ -130,7 +131,7 @@ export default function AmenitiesPage() {
         pageNumber: currentPage,
         searchParams: ""
       });
-      if(result.success) {
+      if (result.success) {
         toast.success(result.message);
       }
       else {

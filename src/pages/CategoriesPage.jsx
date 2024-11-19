@@ -106,6 +106,7 @@ export default function CategoriesPage() {
     setIsEditing(false);
     setCategoryId(null);
     setFileError(null);
+    setValue("category", "")
   };
 
 
