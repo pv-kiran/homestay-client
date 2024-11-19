@@ -1,52 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Mountain, Palmtree, Building, Tent } from 'lucide-react';
+import useApi from '../hooks/useApi';
+import userService from '../services/userServices';
 
 const categories = [
     {
-        name: 'Mountain Retreats',
-        icon: Mountain,
         description: 'Escape to serene heights and experience breathtaking views',
         image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&q=80',
         gradient: 'from-blue-900/80 to-blue-900/90'
     },
     {
-        name: 'Beach Paradise',
-        icon: Palmtree,
         description: 'Relax by crystal waters with perfect sandy beaches',
         image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80',
         gradient: 'from-orange-900/80 to-orange-900/90'
     },
     {
-        name: 'Urban Explorer',
-        icon: Building,
         description: 'Discover city adventures and cultural experiences',
         image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80',
         gradient: 'from-gray-900/80 to-gray-900/90'
     },
     {
-        name: 'Camping Adventure',
-        icon: Tent,
         description: 'Connect with nature in the most authentic way',
         image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80',
         gradient: 'from-green-900/80 to-green-900/90'
-    },
-    // {
-    //     name: 'Forest Hideaway',
-    //     icon: Trees,
-    //     description: 'Find peace in the woods surrounded by nature',
-    //     image: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80',
-    //     gradient: 'from-emerald-900/80 to-emerald-900/90'
-    // },
-    // {
-    //     name: 'Coastal Living',
-    //     icon: Waves,
-    //     description: 'Experience oceanfront views and sea breezes',
-    //     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80',
-    //     gradient: 'from-cyan-900/80 to-cyan-900/90'
-    // },
+    }
 ];
 
 export default function Categories() {
+    const [listCategory, setListCategory] = useState([]);
+    const {
+        loading,
+        data,
+        execute: getAllCategories,
+        reset,
+        error
+    } = useApi(userService.userGetAllCategory);
+
+
+    useEffect(() => {
+        if (error) {
+            toast.error(error?.message);
+        }
+    }, [
+        error
+    ]);
+
+    useEffect(() => {
+        getAllCategories();
+    }, [])
+
+    useEffect(() => {
+        if (data) {
+            const combined = data?.data?.map((category, index) => ({
+                ...category,
+                ...(categories[index] || {}) // Merge corresponding data if exists
+            }));
+            setListCategory(combined)
+        }
+
+    }, [data])
     return (
         <section className="py-10 px-4 bg-gradient-to-b from-gray-50 to-white">
             <div className="max-w-7xl mx-auto">
@@ -60,9 +72,9 @@ export default function Categories() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {categories.map((category) => (
+                    {listCategory.map((category) => (
                         <button
-                            key={category.name}
+                            key={category._id}
                             className="group relative overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
                         >
                             {/* Background Image */}
@@ -79,7 +91,7 @@ export default function Categories() {
                                 {/* Icon Container */}
                                 <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
                                     <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm border border-white/30">
-                                        <category.icon className="w-10 h-10 text-white" />
+                                        <img src={category?.iconUrl} alt="text" className='h-10 w-10' />
                                     </div>
                                 </div>
 
