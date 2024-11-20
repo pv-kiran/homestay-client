@@ -7,7 +7,7 @@ export const ImageGallery = ({ images, currentIndex, onNext, onPrev }) => {
             <img
                 src={images[currentIndex]}
                 alt="Homestay"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-fit"
             />
             <button
                 onClick={onPrev}

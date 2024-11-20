@@ -27,10 +27,6 @@ const HomeStayCard = ({ homestay }) => {
                     </div>
                 </div>
                 <p className="text-gray-600 text-sm leading-relaxed">{homestay?.address?.city}, {homestay?.address?.state}</p>
-                {/* <p className="mt-1">
-                    <span className="font-medium">${homestay?.pricePerNight}</span>
-                    <span className="text-gray-600"> / night</span>
-                </p> */}
             </div>
         </div>
     );

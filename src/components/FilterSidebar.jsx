@@ -17,7 +17,7 @@ export default function FilterSidebar({
 }) {
     console.log(priceRange[1])
     return (
-        <div className="w-full md:w-72 p-6 rounded-lg sm:shadow-md sm:h-[80vh]  sm:top-4 overflow-y-scroll">
+        <div className="w-full md:w-72 p-6 rounded-lg sm:shadow-sm sm:top-4 ">
             <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-3">Categories</h3>
                 <div className="space-y-2">
