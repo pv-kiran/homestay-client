@@ -37,7 +37,7 @@ export default function FilterSidebar({
 
             {/* Price Range */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-3">Price Range</h3>
+                <h3 className="text-lg font-semibold mb-3">Price range</h3>
                 <div className="space-y-4">
                     <div className="flex items-center space-x-4">
                         <input
@@ -58,7 +58,7 @@ export default function FilterSidebar({
 
             {/* Rooms */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-3">Number of Rooms</h3>
+                <h3 className="text-lg font-semibold mb-3">Number of rooms</h3>
                 <div className="grid grid-cols-3 gap-2">
                     {[1, 2, 3, 4, 5].map((num) => (
                         <button
@@ -76,7 +76,7 @@ export default function FilterSidebar({
             </div>
 
             <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-3">Number of BathRooms</h3>
+                <h3 className="text-lg font-semibold mb-3">Number of bathrooms</h3>
                 <div className="grid grid-cols-3 gap-2">
                     {[1, 2, 3, 4, 5].map((num) => (
                         <button
@@ -95,7 +95,7 @@ export default function FilterSidebar({
 
             {/* Guests */}
             <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-3">Number of Guests</h3>
+                <h3 className="text-lg font-semibold mb-3">Number of guests</h3>
                 <div className="grid grid-cols-3 gap-2">
                     {[2, 4, 6, 8, 10].map((num) => (
                         <button
