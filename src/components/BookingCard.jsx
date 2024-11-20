@@ -2,12 +2,12 @@ import React from 'react';
 
 
 
-export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange }) => {
+export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price }) => {
     return (
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 sticky top-[88px]">
             <div className="mb-4 sm:mb-6">
                 <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                    $299 <span className="text-base sm:text-lg font-normal text-gray-600">/ night</span>
+                    ${price} <span className="text-base sm:text-lg font-normal text-gray-600">/ night</span>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
             <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t text-sm sm:text-base">
                 <div className="flex justify-between mb-2">
-                    <span className="text-gray-600">$299 × 5 nights</span>
+                    <span className="text-gray-600">${price} × 5 nights</span>
                     <span>$1,495</span>
                 </div>
                 <div className="flex justify-between mb-2">

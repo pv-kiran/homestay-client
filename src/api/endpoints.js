@@ -8,6 +8,7 @@ const apiEndpoints = {
   Bestays_User_LogOut: "/user/auth/signout",
   Bestays_User_All_Categories: "/user/get-allcategories",
   Bestays_User_All_Homestays: "/user/get-allhomestays",
+  Bestays_User_Homestay_Id: "/user/homestay/:$homestayId",
 
   // admin api
   Bestays_Admin_Signup: "/admin/auth/signup",

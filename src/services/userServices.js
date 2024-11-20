@@ -95,6 +95,16 @@ const userService = {
       throw error;
     }
   },
+  userGetHomeStayById: async (homeStayId) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Id.replace(":$homestayId", homeStayId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default userService;
