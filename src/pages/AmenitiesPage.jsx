@@ -10,6 +10,7 @@ import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
 import { toast } from "react-toastify";
+import { CirclePlus } from "lucide-react";
 
 
 const amenitySchema = yup.object({
@@ -267,11 +268,11 @@ export default function AmenitiesPage() {
 
   return (
     <>
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-800">
+      <div className="flex justify-end">
+        {/* <h1 className="text-2xl font-semibold text-gray-800">
           Amenities Management
-        </h1>
-        <Button onClick={() => setIsModalOpen(true)}>Add amenity</Button>
+        </h1> */}
+        <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add amenity</Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
@@ -309,7 +310,7 @@ export default function AmenitiesPage() {
         {allAmenities?.data ? (
           <Table
             title="Amenity Management"
-            subtitle="Manage your product Amenities"
+            subtitle="Manage your homestay amenities"
             columns={amenityColumns}
             data={allAmenities?.data}
             actions={getActions}

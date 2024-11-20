@@ -25,7 +25,7 @@ export default function Navbar({ onMenuClick }) {
               <Menu className="h-6 w-6" />
             </button>
             <div className="flex items-center space-x-3 ml-2 lg:ml-0">
-              <Hotel className="h-8 w-8 text-blue-600" />
+              <Hotel color="#14B8A6" className="h-8 w-8 text-blue-600" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
                   BeStays Admin

@@ -5,6 +5,7 @@ import useApi from '../hooks/useApi';
 import { FormField } from '../components/common/FormField';
 import { useForm } from 'react-hook-form';
 import * as yup from "yup";
+import {CirclePlus} from 'lucide-react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
@@ -458,11 +459,11 @@ const RoomsPage = () => {
 
   return (
     <>
-      <div className='flex justify-between items-center'>
-        <h1 className="text-2xl font-semibold text-gray-800">
+      <div className='flex justify-end'>
+        {/* <h1 className="text-2xl font-semibold text-gray-800">
           Amenities Management
-        </h1>
-        <Button onClick={() => setIsModalOpen(true)}>Add Homestays</Button>
+        </h1> */}
+        <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add homestay</Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
@@ -487,7 +488,7 @@ const RoomsPage = () => {
                   type="textarea"
                   name="description"
                   label="Description"
-                  placeholder="Enter home stay description"
+                  placeholder="Enter homestay description"
                   register={register}
                   error={errors.description}
                 />
@@ -514,16 +515,16 @@ const RoomsPage = () => {
                   <FormField
                     type="number"
                     name="numberOfRooms"
-                    label="Number of room"
-                    placeholder="Number of room"
+                    label="Number of rooms"
+                    placeholder="Number of rooms"
                     register={register}
                     error={errors.numberOfRooms}
                   />
                   <FormField
                     type="number"
                     name="numberOfBathRooms"
-                    label="Number Of BathRooms"
-                    placeholder="Number Of BathRooms"
+                    label="Number of bathrooms"
+                    placeholder="Number of bathrooms"
                     register={register}
                     error={errors.numberOfBathRooms}
                   />
@@ -534,15 +535,15 @@ const RoomsPage = () => {
                     type="number"
                     name="price"
                     label="Price details"
-                    placeholder="Enter Price details"
+                    placeholder="Enter price details"
                     register={register}
                     error={errors.price}
                   />
                   <FormField
                     type="number"
                     name="maxGuests"
-                    label="Number Of Guests"
-                    placeholder="Number Of Guest"
+                    label="Number of guests"
+                    placeholder="Number of guests"
                     register={register}
                     error={errors.maxGuests}
                   />
@@ -587,7 +588,7 @@ const RoomsPage = () => {
                   type="text"
                   name="zip"
                   label="Zip"
-                  placeholder="Enter Zip details"
+                  placeholder="Enter zip code"
                   register={register}
                   error={errors.zip}
                 />
@@ -613,16 +614,16 @@ const RoomsPage = () => {
                   <FormField
                     type="text"
                     name="checkInTime"
-                    label="Checkout Time"
-                    placeholder="Enter latitude details"
+                    label="Check-in time"
+                    placeholder="Enter check-in time"
                     register={register}
                     error={errors.latitude}
                   />
                   <FormField
                     type="text"
                     name="checkOutTime"
-                    label="Checkout Time"
-                    placeholder="Enter longitude details"
+                    label="Checkout time"
+                    placeholder="Enter checkout time"
                     register={register}
                     error={errors.latitude}
                   />

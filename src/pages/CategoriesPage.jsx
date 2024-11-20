@@ -10,6 +10,7 @@ import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
 import { toast } from "react-toastify";
+import { CirclePlus } from "lucide-react";
 
 const categorySchema = yup.object({
   category: yup.string().required("Category title is required"),
@@ -264,11 +265,11 @@ export default function CategoriesPage() {
 
   return (
     <>
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-800">
+      <div className="flex justify-end">
+        {/* <h1 className="text-2xl font-semibold text-gray-800">
           Categories Management
-        </h1>
-        <Button onClick={() => setIsModalOpen(true)}>Add Category</Button>
+        </h1> */}
+        <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add category</Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
@@ -304,7 +305,7 @@ export default function CategoriesPage() {
         {allCategories?.data ? (
           <Table
             title="Category Management"
-            subtitle="Manage your product categories"
+            subtitle="Manage your homestay categories"
             columns={categoryColumns}
             data={allCategories?.data}
             actions={getActions}
