@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import HomeStayCard from './common/HomeStayCard';
+import {MoveRight} from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
@@ -64,10 +65,11 @@ export default function HomestayList() {
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Featured Homestays</h2>
                 <button
-                    className=" text-turquoise-400 hover:text-turquoise-600 font-medium"
+                    className="group inline-flex items-center gap-2 px-6 py-3 text-lg font-medium text-white bg-gradient-to-r from-turquoise-400 to-turquoise-500 rounded-full transition-all duration-300 hover:from-turquoise-500 hover:to-turquoise-600 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-turquoise-400 focus:ring-offset-2"
                     onClick={() => navigate('/homestays/all')}
                 >
-                    View all →
+                    <span>View all </span>
+                    <MoveRight size={24} className="transition-transform duration-300 group-hover:translate-x-1"/>
                 </button>
             </div>
 
