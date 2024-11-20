@@ -3,7 +3,6 @@ import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 const HomeStayCard = ({ homestay }) => {
     const navigate = useNavigate();
-    console.log(homestay)
     return (
         <div
             className="group"
@@ -20,8 +19,6 @@ const HomeStayCard = ({ homestay }) => {
                 <div className="flex justify-between items-start gap-3">
                     <h3 className="font-semibold text-lg">{homestay?.title}</h3>
                     <div className="flex items-center gap-1 whitespace-nowrap">
-                        {/* <Star className="w-4 h-4 fill-yellow-400 stroke-yellow-400" />
-                        <span className="text-sm">{homestay.rating}</span> */}
                         <span className="font-semibold text-lg">₹{homestay?.pricePerNight?.toLocaleString('en-IN')}</span>
                         <span className="text-gray-500 text-sm"> night</span>
                     </div>

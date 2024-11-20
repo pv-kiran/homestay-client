@@ -5,7 +5,7 @@ import { Modal } from '../components/common/Modal';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 import NoResults from '../components/common/NoResults';
-
+import HomestayCardSkeleton from '../components/HomestayCardSkeleton';
 
 function AllHomeStaysPage() {
 
@@ -53,8 +53,6 @@ function AllHomeStaysPage() {
     ]);
 
     const resetFilters = () => {
-        console.log("hey");
-        
         setSelectedCategories([]);
         setPriceRange([0, 15000]);
         setSelectedRooms([0]);
@@ -74,8 +72,8 @@ function AllHomeStaysPage() {
         getAllCategories();
     }, [])
 
-    if(homeStayError) {
-        return <NoResults resetfilter={resetFilters}/>
+    if (homeStayError) {
+        return <NoResults resetfilter={resetFilters} />
     }
 
     return (
@@ -112,6 +110,7 @@ function AllHomeStaysPage() {
                                 setselectedBathrooms([room])
                             }}
                             isApply={false}
+                            resetFilters={resetFilters}
                         />
                     </div>
 
@@ -128,7 +127,9 @@ function AllHomeStaysPage() {
                                 homeStays ?
                                     homeStays?.data?.map((homestay) => (
                                         <HomeStayCard key={homestay?.id} homestay={homestay} />
-                                    )) : null
+                                    )) : [...Array(12)].map((_, index) => (
+                                        <HomestayCardSkeleton key={index} />
+                                    ))
                             }
                         </div>
                     </div>
