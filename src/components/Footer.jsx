@@ -3,11 +3,11 @@ import { Home, Mail, Phone, Instagram, Twitter, Facebook } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="bg-gray-900 text-white">
-            <div className="max-w-7xl mx-auto px-4 py-12">
+        <footer className="bg-black text-white">
+            <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
-                        <h3 className="text-xl font-bold mb-4">StayHome</h3>
+                        <h3 className="text-xl font-bold mb-4">BeStays</h3>
                         <p className="text-gray-400">
                             Discover unique homes and experiences around the world.
                         </p>
@@ -22,7 +22,7 @@ export default function Footer() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <Mail size={16} />
-                                <span>hello@stayhome.com</span>
+                                <span>hello@bestays.com</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Phone size={16} />
@@ -58,7 +58,7 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                    <p>© 2024 StayHome. All rights reserved.</p>
+                    <p>© 2024 BeStays. All rights reserved.</p>
                 </div>
             </div>
         </footer>

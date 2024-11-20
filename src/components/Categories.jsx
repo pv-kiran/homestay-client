@@ -62,8 +62,10 @@ export default function Categories() {
     return (
         <section className="py-10 px-4 bg-gradient-to-b from-gray-50 to-white">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-4">
-                    <h2 className="text-2xl font-bold text-left text-gray-900">
+                <div className="text-left mb-5">
+                    <h2 className="text-3xl pb-1 md:text-4xl font-bold text-turquoise-400 
+                                    bg-gradient-to-r from-turquoise-600 to-black text-transparent 
+                                    bg-clip-text animate-pulse">
                         Discover Your Perfect Stay
                     </h2>
                     {/* <p className="text-lg text-gray-600 max-w-2xl mx-auto">

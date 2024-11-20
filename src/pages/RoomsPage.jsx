@@ -356,6 +356,12 @@ const RoomsPage = () => {
         pageNumber: currentPage,
         searchParams: ""
       });
+      if(result?.success) {
+        toast.success(result?.message);
+      }
+      else {
+        toast.error("Please try again later");
+      }
     }
   };
 

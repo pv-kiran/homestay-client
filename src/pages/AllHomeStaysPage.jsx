@@ -199,7 +199,7 @@ function AllHomeStaysPage() {
 
                     <div className=' md:w-9/12 md:ml-auto'>
                         <button
-                            className="lg:hidden mb-4 bg-blue-600 text-white py-2 px-4 rounded"
+                            className="lg:hidden mb-4 bg-turquoise-600 text-white py-2 px-4 rounded"
                             onClick={() => setIsFilterModalOpen(true)}
                         >
                             Open Filters

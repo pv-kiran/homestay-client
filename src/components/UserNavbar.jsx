@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Home, User, LogIn, LogOut, Menu } from "lucide-react";
+import { Home, User, LogIn, LogOut, Menu, CircleUserRound } from "lucide-react";
 import { SignupModal } from "./SignupModal";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { googleLogout } from "@react-oauth/google";
 import useApi from "../hooks/useApi";
@@ -18,6 +19,9 @@ export default function UserNavbar() {
     reset,
   } = useApi(userService.UserLogout);
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const isHomepage = location.pathname === "/";
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -44,17 +48,21 @@ export default function UserNavbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
+      <nav className={isHomepage ? 
+                      "fixed top-0 left-0 right-0 z-50 backdrop-filter backdrop-blur-md bg-opacity-50 bg-gray-600"
+                      :
+                      "fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50"
+                      }>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
               <a
                 href="/"
-                className="flex items-center space-x-2 text-turquoise-300 hover:text-turquoise-600">
+                className="flex items-center space-x-2 text-turquoise-400 hover:text-turquoise-600">
                 <Home className="h-8 w-8" />
                 <span className="font-bold text-xl hidden sm:block">
-                  StayHub
+                  BeStays
                 </span>
               </a>
             </div>
@@ -63,9 +71,14 @@ export default function UserNavbar() {
             <div className="relative">
               <button
                 onClick={toggleMenu}
-                className="flex items-center space-x-2 rounded-full border border-gray-300 p-2 hover:shadow-md transition-all">
-                <Menu className="h-4 w-4" />
-                <User className="h-5 w-5 text-gray-600" />
+                className={`flex items-center space-x-2 rounded-full p-2 hover:shadow-md transition-all ${
+                            isHomepage ? "" : "border border-gray-300"
+                          }`}
+                          style={{
+                          background: isHomepage ? "#6A6B68" : "transparent",
+                          }}>
+                <Menu className={isHomepage ? "h-6 w-6 text-white" : "h-6 w-6"} />
+                <CircleUserRound size={28} color={isHomepage ? "#D3D3D3" : "gray"} />
               </button>
 
               {/* Dropdown Menu */}

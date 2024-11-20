@@ -27,7 +27,7 @@ export default function FilterSidebar({
                                 type="checkbox"
                                 checked={selectedCategories.includes(category?._id)}
                                 onChange={() => onCategoryChange(category?._id)}
-                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                className="rounded border-gray-300 text-turquoise-600 focus:ring-turquoise-500"
                             />
                             <span className="text-gray-700">{category?.categoryName}</span>
                         </label>
@@ -46,12 +46,12 @@ export default function FilterSidebar({
                             max="15000"
                             value={priceRange[1]}
                             onChange={(e) => onPriceChange([priceRange[0], parseInt(e.target.value)])}
-                            className="w-full"
+                            className="w-full accent-turquoise-500 hover:cursor-pointer"
                         />
                     </div>
-                    <div className="flex justify-between text-sm text-gray-600">
-                        <span>${priceRange[0]}</span>
-                        <span>${priceRange[1]}</span>
+                    <div className="flex justify-between text-sm text-gray-600 font-semibold">
+                        <span>₹{priceRange[0]}</span>
+                        <span>₹{priceRange[1]?.toLocaleString('en-IN')}</span>
                     </div>
                 </div>
             </div>
@@ -64,9 +64,9 @@ export default function FilterSidebar({
                         <button
                             key={num}
                             onClick={() => onRoomsChange(num)}
-                            className={`px-3 py-1 rounded-full text-sm ${rooms.includes(num)
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            className={`px-3 py-1 rounded-full font-semibold text-sm ${rooms.includes(num)
+                                ? 'bg-turquoise-600 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-300'
                                 }`}
                         >
                             {num}+
@@ -82,9 +82,9 @@ export default function FilterSidebar({
                         <button
                             key={num}
                             onClick={() => onBathRoomsChange(num)}
-                            className={`px-3 py-1 rounded-full text-sm ${bathRooms.includes(num)
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            className={`px-3 py-1 rounded-full font-semibold text-sm ${bathRooms.includes(num)
+                                ? 'bg-turquoise-600 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-300'
                                 }`}
                         >
                             {num}+
@@ -101,9 +101,9 @@ export default function FilterSidebar({
                         <button
                             key={num}
                             onClick={() => onGuestsChange(num)}
-                            className={`px-3 py-1 rounded-full text-sm ${guests.includes(num)
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            className={`px-3 py-1 rounded-full font-semibold text-sm ${guests.includes(num)
+                                ? 'bg-turquoise-600 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-300'
                                 }`}
                         >
                             {num}+
@@ -121,7 +121,7 @@ export default function FilterSidebar({
                 >
                     Apply filters
                 </button> : <button
-                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                    className="w-full bg-turquoise-600 text-white py-2 rounded-lg hover:bg-turquoise-700 transition-colors"
                     onClick={() => {
                         onPriceChange([0, 1000]);
                         onRoomsChange(0);

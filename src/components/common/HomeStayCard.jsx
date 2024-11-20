@@ -17,20 +17,16 @@ const HomeStayCard = ({ homestay }) => {
                 />
             </div>
             <div className="mt-3">
-                <div className="flex justify-between items-start">
-                    <h3 className="font-medium text-lg">{homestay?.title}</h3>
-                    <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 stroke-yellow-400" />
-                        <span className="text-sm">4.5</span>
-                        {/* <span className="font-medium">${homestay?.pricePerNight}</span>
-                        <span className="text-gray-600"> / night</span> */}
+                <div className="flex justify-between items-start gap-3">
+                    <h3 className="font-semibold text-lg">{homestay?.title}</h3>
+                    <div className="flex items-center gap-1 whitespace-nowrap">
+                        {/* <Star className="w-4 h-4 fill-yellow-400 stroke-yellow-400" />
+                        <span className="text-sm">{homestay.rating}</span> */}
+                        <span className="font-semibold text-lg">₹{homestay?.pricePerNight?.toLocaleString('en-IN')}</span>
+                        <span className="text-gray-500 text-sm"> night</span>
                     </div>
                 </div>
-                <p className="text-gray-600">{homestay?.address?.city}, {homestay?.address?.street}</p>
-                <p className="mt-1">
-                    <span className="font-medium">${homestay?.pricePerNight}</span>
-                    <span className="text-gray-600"> / night</span>
-                </p>
+                <p className="text-gray-600 text-sm leading-relaxed">{homestay?.address?.city}, {homestay?.address?.state}</p>
             </div>
         </div>
     );
