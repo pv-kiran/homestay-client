@@ -43,7 +43,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                     </select>
                 </div>
 
-                <button className="w-full bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm sm:text-base">
+                <button className="w-full bg-turquoise-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-turquoise-700 transition-colors text-sm sm:text-base">
                     Reserve Now
                 </button>
 
