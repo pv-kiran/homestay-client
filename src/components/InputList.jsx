@@ -32,7 +32,7 @@ function InputList({ lists, setLists }) {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Enter policies here..."
+          placeholder="Enter guest policies here..."
           className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-turquoise-500 focus:border-transparent outline-none transition-all duration-200"
         />
         <Plus className="absolute right-3 top-1/2 transform -translate-y-1/2 text-turquoise-400" size={20} />
