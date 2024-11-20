@@ -126,7 +126,7 @@ function AllHomeStaysPage() {
                             {
                                 homeStays ?
                                     homeStays?.data?.map((homestay) => (
-                                        <HomeStayCard key={homestay?.id} homestay={homestay} />
+                                        <HomeStayCard key={homestay?._id} homestay={homestay} />
                                     )) : [...Array(12)].map((_, index) => (
                                         <HomestayCardSkeleton key={index} />
                                     ))
