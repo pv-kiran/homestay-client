@@ -46,12 +46,12 @@ export default function FilterSidebar({
                             max="15000"
                             value={priceRange[1]}
                             onChange={(e) => onPriceChange([priceRange[0], parseInt(e.target.value)])}
-                            className="w-full accent-turquoise-400"
+                            className="w-full accent-turquoise-500 hover:cursor-pointer"
                         />
                     </div>
-                    <div className="flex justify-between text-sm text-gray-600">
-                        <span>${priceRange[0]}</span>
-                        <span>${priceRange[1]}</span>
+                    <div className="flex justify-between text-sm text-gray-600 font-semibold">
+                        <span>₹{priceRange[0]}</span>
+                        <span>₹{priceRange[1]?.toLocaleString('en-IN')}</span>
                     </div>
                 </div>
             </div>
@@ -64,9 +64,9 @@ export default function FilterSidebar({
                         <button
                             key={num}
                             onClick={() => onRoomsChange(num)}
-                            className={`px-3 py-1 rounded-full text-sm ${rooms.includes(num)
+                            className={`px-3 py-1 rounded-full font-semibold text-sm ${rooms.includes(num)
                                 ? 'bg-turquoise-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-300'
                                 }`}
                         >
                             {num}+
@@ -82,9 +82,9 @@ export default function FilterSidebar({
                         <button
                             key={num}
                             onClick={() => onBathRoomsChange(num)}
-                            className={`px-3 py-1 rounded-full text-sm ${bathRooms.includes(num)
+                            className={`px-3 py-1 rounded-full font-semibold text-sm ${bathRooms.includes(num)
                                 ? 'bg-turquoise-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-300'
                                 }`}
                         >
                             {num}+
@@ -101,9 +101,9 @@ export default function FilterSidebar({
                         <button
                             key={num}
                             onClick={() => onGuestsChange(num)}
-                            className={`px-3 py-1 rounded-full text-sm ${guests.includes(num)
+                            className={`px-3 py-1 rounded-full font-semibold text-sm ${guests.includes(num)
                                 ? 'bg-turquoise-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-300'
                                 }`}
                         >
                             {num}+
