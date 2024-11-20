@@ -166,7 +166,7 @@ function AllHomeStaysPage() {
                 {/* <h1 className="text-3xl font-bold text-gray-900 mb-8">Find Your Perfect Stay</h1> */}
 
                 <div className="flex gap-8">
-                    <div className="hidden fixed top-[100px] md:block"
+                    <div className="hidden  top-[100px] md:block"
                     >
                         <FilterSidebar
                             categories={categories?.data ? categories.data : []}

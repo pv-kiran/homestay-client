@@ -3,6 +3,9 @@ import { Wifi, Car, Coffee, Users } from 'lucide-react';
 import { ImageGallery } from '../components/ImageGallery';
 import { PropertyDetails } from '../components/HomeStayDetails';
 import { BookingCard } from '../components/BookingCard';
+import { useParams } from 'react-router-dom';
+import useApi from '../hooks/useApi';
+import userService from '../services/userServices';
 
 const images = [
     'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&q=80&w=2070',
@@ -20,49 +23,80 @@ const amenities = [
 
 function HomeStayPage() {
 
+    const { id } = useParams();
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
 
+    const {
+        data: homeStay,
+        loading: homeStayLoading,
+        execute: getHomeStayById,
+        reset,
+        error: getHomeStayError,
+    } = useApi(userService.userGetHomeStayById);
+
 
     const nextImage = () => {
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+        setCurrentImageIndex((prev) => (prev + 1) % homeStay?.data?.images?.length);
     };
 
     const prevImage = () => {
-        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+        setCurrentImageIndex((prev) => (prev - 1 + images.length) % homeStay?.data?.images?.length);
     };
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
+    useEffect(() => {
+        getHomeStayById(id);
+    }, [id])
+
+    useEffect(() => {
+        console.log(homeStay);
+    }, [homeStay])
+
     return (
-        <div className="min-h-screen mt-[65px] bg-gray-50">
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-                <ImageGallery
-                    images={images}
-                    currentIndex={currentImageIndex}
-                    onNext={nextImage}
-                    onPrev={prevImage}
-                />
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-                    <div className="lg:col-span-2">
-                        <PropertyDetails amenities={amenities} />
-                    </div>
-
-                    <div>
-                        <BookingCard
-                            checkIn={checkIn}
-                            checkOut={checkOut}
-                            onCheckInChange={setCheckIn}
-                            onCheckOutChange={setCheckOut}
+        <>
+            {
+                homeStay?.data ? <div className="min-h-screen mt-[65px] bg-gray-50">
+                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+                        <ImageGallery
+                            images={homeStay?.data?.images}
+                            currentIndex={currentImageIndex}
+                            onNext={nextImage}
+                            onPrev={prevImage}
                         />
-                    </div>
-                </div>
-            </main>
-        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+                            <div className="lg:col-span-2">
+                                <PropertyDetails
+                                    name={homeStay?.data?.title}
+                                    address={homeStay?.data?.address}
+                                    amenities={homeStay?.data?.amenities}
+                                    description={homeStay?.data?.description}
+                                    policies={
+                                        homeStay?.data?.hotelPolicies?.guestPolicies
+                                    }
+                                />
+                            </div>
+
+                            <div>
+                                <BookingCard
+                                    checkIn={checkIn}
+                                    checkOut={checkOut}
+                                    onCheckInChange={setCheckIn}
+                                    onCheckOutChange={setCheckOut}
+                                    price={homeStay?.data?.pricePerNight}
+                                />
+                            </div>
+                        </div>
+                    </main>
+                </div> : null
+            }
+        </>
     );
 }
 
