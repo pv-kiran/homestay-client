@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Star, Bed, Bath, Clock, ScrollText } from 'lucide-react';
+import { MapPin, Star, Bed, Bath, Clock, ScrollText, ListCollapse, Blocks } from 'lucide-react';
 
 export const PropertyDetails = ({
     name,
@@ -24,7 +24,7 @@ export const PropertyDetails = ({
                     </div>
                 </div>
                 <div className="flex items-center text-gray-600">
-                    <MapPin className="w-5 h-5 mr-2" />
+                    <MapPin className="w-5 h-5 mr-1" />
                     <span>{address?.street}, {address?.district}, {address?.state}</span>
                 </div>
             </div>
@@ -51,7 +51,10 @@ export const PropertyDetails = ({
 
             {/* Amenities */}
             <div className="py-4 border-b">
-                <h2 className="text-xl font-semibold mb-4">Amenities</h2>
+                <div className="flex items-center gap-2 mb-4">
+                    <Blocks className="w-5 h-5 text-gray-600" />
+                    <h2 className="text-xl font-semibold">Amenities</h2>
+                </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {amenities.map((amenity) => (
                         <div key={amenity?._id} className="flex items-center gap-2">
@@ -68,7 +71,10 @@ export const PropertyDetails = ({
 
             {/* Description */}
             <div className="py-4 border-b">
-                <h2 className="text-xl font-semibold mb-4">About this place</h2>
+                <div className="flex items-center gap-2 mb-4">
+                    <ListCollapse className="w-5 h-5 text-gray-600" />
+                    <h2 className="text-xl font-semibold">About this place</h2>
+                </div>
                 <p className="text-gray-600 leading-relaxed">{description}</p>
             </div>
 
