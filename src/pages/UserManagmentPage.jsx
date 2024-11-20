@@ -131,9 +131,9 @@ export default function UserManagementPage() {
   return (
     <>
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-800">
+        {/* <h1 className="text-2xl font-semibold text-gray-800">
           User Management
-        </h1>
+        </h1> */}
       </div>
       <div className="min-h-screen my-4">
         {allUsers?.data ? (
