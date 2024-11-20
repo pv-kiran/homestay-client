@@ -13,11 +13,11 @@ export default function FilterSidebar({
     onGuestsChange,
     onBathRoomsChange,
     isApply,
-    closeModal
+    closeModal,
+    resetFilters
 }) {
-    console.log(priceRange[1])
     return (
-        <div className="w-full md:w-72 p-6 rounded-lg sm:shadow-sm sm:top-4 ">
+        <div className="w-full md:w-72 px-6 pb-6 rounded-lg sm:shadow-sm sm:top-4">
             <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-3">Categories</h3>
                 <div className="space-y-2">
@@ -123,9 +123,7 @@ export default function FilterSidebar({
                 </button> : <button
                     className="w-full bg-turquoise-600 text-white py-2 rounded-lg hover:bg-turquoise-700 transition-colors"
                     onClick={() => {
-                        onPriceChange([0, 1000]);
-                        onRoomsChange(0);
-                        onGuestsChange(0);
+                        resetFilters()
                     }}
                 >
                     Reset Filters

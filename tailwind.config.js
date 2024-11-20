@@ -26,10 +26,15 @@ export default {
           '0%': { transform: 'translate(-50%, -48%) scale(0.96)', opacity: '0' },
           '100%': { transform: 'translate(-50%, -50%) scale(1)', opacity: '1' },
         },
+        shimmer: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        }
       },
       animation: {
         overlayShow: 'overlayShow 150ms ease-out',
         modalSlide: 'modalSlide 150ms ease-out',
+        shimmer: 'shimmer 2s linear infinite',
       },
     },
   },
