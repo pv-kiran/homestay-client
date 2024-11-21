@@ -72,7 +72,6 @@ export default function AmenitiesPage() {
 
   const handleamenitySubmit = async (data) => {
     const formData = new FormData();
-    console.log(data);
     formData.append("amenityName", data.amenity);
     if (file) {
       formData.append("iconUrl", file);

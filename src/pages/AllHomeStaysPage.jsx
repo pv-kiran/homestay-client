@@ -6,27 +6,19 @@ import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 import NoResults from '../components/common/NoResults';
 import HomestayCardSkeleton from '../components/HomestayCardSkeleton';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 function AllHomeStaysPage() {
-
-
     const {
-        loading,
         data: categories,
         execute: getAllCategories,
-        reset,
-        error
     } = useApi(userService.userGetAllCategory);
 
     const {
-        loading: homeStayLoading,
         data: homeStays,
         execute: getAllHomeStays,
-        reset: homeStayReset,
         error: homeStayError
     } = useApi(userService.userGetAllHomestays);
-
-
 
 
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -36,6 +28,12 @@ function AllHomeStaysPage() {
     const [selectedBathrooms, setselectedBathrooms] = useState([0]);
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
+    const [searchParams] = useSearchParams();
+    const id = searchParams.get("id");
+    const name = searchParams.get("name");
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         getAllHomeStays({
             category: selectedCategories,
@@ -44,6 +42,7 @@ function AllHomeStaysPage() {
             numberOfRooms: selectedRooms[0],
             numberOfBathrooms: selectedBathrooms[0]
         })
+        console.log("hello")
     }, [
         selectedCategories,
         priceRange,
@@ -52,7 +51,11 @@ function AllHomeStaysPage() {
         selectedBathrooms
     ]);
 
+
     const resetFilters = () => {
+        if (id && name) {
+            navigate("/homestays/all")
+        }
         setSelectedCategories([]);
         setPriceRange([0, 15000]);
         setSelectedRooms([0]);
@@ -65,12 +68,14 @@ function AllHomeStaysPage() {
     }, []);
 
     useEffect(() => {
-        console.log(homeStays)
-    }, [homeStays])
-
-    useEffect(() => {
         getAllCategories();
     }, [])
+
+    useEffect(() => {
+        if (id && name) {
+            setSelectedCategories([id])
+        }
+    }, [searchParams, categories])
 
     if (homeStayError) {
         return <NoResults resetfilter={resetFilters} />
