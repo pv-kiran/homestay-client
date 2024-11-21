@@ -8,7 +8,6 @@ export const TablePagination = ({
   onPageChange,
   onPageSizeChange,
 }) => {
-  // console.log(totalItems);
   const totalPages = Math.ceil(totalItems / pageSize);
   const startItem = (currentPage - 1) * pageSize + 1;
   const endItem = Math.min(currentPage * pageSize, totalItems);
