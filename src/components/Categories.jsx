@@ -78,7 +78,7 @@ export default function Categories() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {
-                        listCategory.length > 0 ? listCategory?.map((category) => (
+                        listCategory.length > 0 ? listCategory?.slice(0, 4)?.map((category) => (
                             <div
                                 key={category._id}
                                 className="group relative overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"

@@ -8,8 +8,8 @@ export const TablePagination = ({
   onPageChange,
   onPageSizeChange,
 }) => {
-  const totalPages = Math.ceil(totalItems / pageSize);
-  const startItem = (currentPage - 1) * pageSize + 1;
+
+  const startItem = currentPage;
   const endItem = Math.min(currentPage * pageSize, totalItems);
 
   return (
@@ -30,7 +30,7 @@ export const TablePagination = ({
       </div>
       <div className="flex items-center">
         <span className="text-sm text-gray-700 mr-4">
-          Showing {startItem} to {endItem} of {totalItems} entries
+          Showing {startItem} to {endItem} of {totalItems} pages
         </span>
         <div className="flex space-x-2">
           <button
@@ -41,7 +41,7 @@ export const TablePagination = ({
           </button>
           <button
             onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalItems}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
             <ChevronRight className="h-5 w-5 text-gray-600" />
           </button>
