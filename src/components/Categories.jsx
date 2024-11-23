@@ -118,7 +118,7 @@ export default function Categories() {
                                     >
                                         <span className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-white bg-white/20 rounded-full backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all duration-300 group-hover:scale-105"
                                         >
-                                            Exploe →
+                                            Explore →
                                         </span>
                                     </button>
                                 </div>
