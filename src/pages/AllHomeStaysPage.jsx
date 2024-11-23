@@ -77,9 +77,9 @@ function AllHomeStaysPage() {
         }
     }, [searchParams, categories])
 
-    if (homeStayError) {
-        return <NoResults resetfilter={resetFilters} />
-    }
+    // if (homeStayError) {
+    //     return <NoResults resetfilter={resetFilters} />
+    // }
 
     return (
         <div className="min-h-screen mt-16">
@@ -129,12 +129,15 @@ function AllHomeStaysPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {
-                                homeStays ?
-                                    homeStays?.data?.map((homestay) => (
-                                        <HomeStayCard key={homestay?._id} homestay={homestay} />
-                                    )) : [...Array(12)].map((_, index) => (
-                                        <HomestayCardSkeleton key={index} />
-                                    ))
+                                homeStayError ? 
+                                    <NoResults resetfilter={resetFilters} />
+                                        :
+                                    homeStays ?
+                                        homeStays?.data?.map((homestay) => (
+                                            <HomeStayCard key={homestay?._id} homestay={homestay} />
+                                        )) : [...Array(12)].map((_, index) => (
+                                            <HomestayCardSkeleton key={index} />
+                                        ))
                             }
                         </div>
                     </div>
