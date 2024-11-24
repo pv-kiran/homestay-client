@@ -4,7 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoutesAdmin = () => {
   const { authState } = useSelector((state) => {
-    return state.userAuth;
+    return state?.userAuth;
   });
 
 
