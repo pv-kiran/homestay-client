@@ -17,6 +17,7 @@ import AmenitiesPage from "./pages/AmenitiesPage";
 import UserManagementPage from "./pages/UserManagmentPage";
 import HomeStayPage from "./pages/HomeStayPage";
 import AllHomeStaysPage from "./pages/AllHomeStaysPage";
+import NotFound404 from "./pages/NotFound404";
 
 function AppRoutes() {
   return (
@@ -47,6 +48,9 @@ function AppRoutes() {
           <Route path="sample" element={<SamplePage />} />
         </Route>
       </Route>
+
+      {/*404 page*/}
+      <Route path="*" element={<NotFound404 />} />
     </Routes>
   );
 }
