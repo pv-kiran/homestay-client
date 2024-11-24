@@ -150,7 +150,7 @@ function AllHomeStaysPage() {
                                     <HomestayCardSkeleton key={index} />
                                 )) :
                                     homeStayError ?
-                                        <div className='bg-red-300 mt-[-50px]'>
+                                        <div className='bg-white-300 mt-28'>
                                             <NoResults
                                                 resetfilter={resetFilters}
                                             />

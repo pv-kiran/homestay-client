@@ -4,7 +4,7 @@ import { SearchX, Bed, Home, UtensilsCrossed, Sofa, Bath } from 'lucide-react';
 function NoResults({resetfilter}) {
 
   return (
-        <div className="min-h-screen bg-gradient-to-br from-white via-[#f9ffff] to-[#f9ffff] flex items-center justify-center p-4">
+        
             <div className="bg-white rounded-xl shadow-lg p-8 max-w-sm w-full relative overflow-hidden animate-fade-in">
             {/* Floating homestay-themed icons */}
             <div className="absolute top-3 right-4 animate-float-slow">
@@ -45,7 +45,6 @@ function NoResults({resetfilter}) {
                 </button>
             </div>
             </div>
-    </div>
   )
 }
 
