@@ -7,7 +7,8 @@ const PrivateRoutesAdmin = () => {
     return state.userAuth;
   });
 
-  return authState ? <Outlet /> : <Navigate to={"/admin/signin"} />;
+
+  return authState?.role === 'admin' ? <Outlet /> : <Navigate to={"/admin/signin"} />;
 };
 
 export default PrivateRoutesAdmin;

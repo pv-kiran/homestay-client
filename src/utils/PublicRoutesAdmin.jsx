@@ -7,7 +7,7 @@ function PublicRoutesAdmin() {
     return state.userAuth;
   });
 
-  return !authState ? <Outlet /> : <Navigate to={"/admin"} />;
+  return !authState.role ? <Outlet /> : <Navigate to={"/admin"} />;
 }
 
 export default PublicRoutesAdmin;
