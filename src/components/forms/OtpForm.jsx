@@ -52,7 +52,7 @@ export const OtpForm = ({ onSubmit, isLoading, timeLeft, onResendOtp }) => {
           <button
             type="button"
             onClick={onResendOtp}
-            className={`text-turquoise-500 hover:text-turquoise-600 ${
+            className={`text-turquoise-600 hover:text-turquoise-700 ${
               timeLeft > 0 ? 'cursor-not-allowed opacity-50' : ''
             }`}
             disabled={timeLeft > 0}
