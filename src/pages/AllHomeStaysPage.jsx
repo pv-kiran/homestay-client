@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import FilterSidebar from '../components/FilterSidebar';
 import HomeStayCard from '../components/common/HomeStayCard';
 import { Modal } from '../components/common/Modal';
@@ -22,6 +23,7 @@ function AllHomeStaysPage() {
         reset
     } = useApi(userService.userGetAllHomestays);
 
+    const { currency } = useSelector((state) => state?.currency);
 
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 15000]);
@@ -42,7 +44,8 @@ function AllHomeStaysPage() {
             price: priceRange,
             numberOfGuest: selectedGuests[0],
             numberOfRooms: selectedRooms[0],
-            numberOfBathrooms: selectedBathrooms[0]
+            numberOfBathrooms: selectedBathrooms[0],
+            currency
         };
         if (id && selectedCategories.length === 0) {
             filters.category = [id];
@@ -54,6 +57,7 @@ function AllHomeStaysPage() {
         selectedRooms,
         selectedGuests,
         selectedBathrooms,
+        currency
     ]);
 
     useEffect(() => {
@@ -66,7 +70,7 @@ function AllHomeStaysPage() {
         if (id && name) {
             navigate("/homestays/all")
         }
-        getAllHomeStays();
+        getAllHomeStays({ currency });
         setSelectedCategories([]);
         setPriceRange([0, 15000]);
         setSelectedRooms([0]);

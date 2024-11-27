@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import HomeStayCard from './common/HomeStayCard';
 import { MoveRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
@@ -12,11 +13,12 @@ export default function HomestayList() {
         execute: getAllHomeStays,
     } = useApi(userService.userGetAllHomestays);
 
+    const { currency } = useSelector((state) => state?.currency);
     const navigate = useNavigate();
 
     useEffect(() => {
-        getAllHomeStays();
-    }, [])
+        getAllHomeStays({ currency });
+    }, [currency])
 
     useEffect(() => {
         window.scrollTo(0, 0);
