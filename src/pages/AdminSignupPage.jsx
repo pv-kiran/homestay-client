@@ -87,7 +87,7 @@ export function AdminSignupPage() {
   useEffect(() => {
     if (adminError) {
       if (adminError?.isVerified) {
-        toast.error(`Account is already in use, u can signin ${adminError?.message}`);
+        toast.error(`${adminError?.message} You can signin`);
         navigate("/admin/signin");
       } else {
         toast.error(adminError?.message);
