@@ -1,7 +1,9 @@
 import React from 'react';
-import { Star } from 'lucide-react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 const HomeStayCard = ({ homestay }) => {
+    const { currency } = useSelector((state) => state?.currency);
     const navigate = useNavigate();
     return (
         <div
@@ -19,7 +21,9 @@ const HomeStayCard = ({ homestay }) => {
                 <div className="flex justify-between items-start gap-3">
                     <h3 className="font-semibold text-lg">{homestay?.title}</h3>
                     <div className="flex items-center gap-1 whitespace-nowrap">
-                        <span className="font-semibold text-lg">₹{homestay?.pricePerNight?.toLocaleString('en-IN')}</span>
+                        <span className='text-gray-800 text-lg'>{currency?.symbol}</span>
+                        <span className="font-semibold text-xl">
+                            {homestay?.pricePerNight?.toLocaleString('en-IN')}</span>
                         <span className="text-gray-500 text-sm"> night</span>
                     </div>
                 </div>

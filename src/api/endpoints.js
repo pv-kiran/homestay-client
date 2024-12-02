@@ -1,4 +1,6 @@
 const apiEndpoints = {
+
+  Currency_List: "https://restcountries.com/v3.1/all?fields=currencies",
   // user api
   Bestays_User_Signup: "/user/auth/signin",
   Bestays_User_OtpVerify: "/user/auth/otp/verify",
