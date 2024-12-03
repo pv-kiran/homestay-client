@@ -7,27 +7,15 @@ import { useParams } from 'react-router-dom';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 
-const images = [
-    'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&q=80&w=2070',
-    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2070',
-    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=2070',
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=2070'
-];
-
-const amenities = [
-    { icon: <Wifi className="w-5 h-5" />, name: 'Free WiFi' },
-    { icon: <Car className="w-5 h-5" />, name: 'Free Parking' },
-    { icon: <Coffee className="w-5 h-5" />, name: 'Breakfast Included' },
-    { icon: <Users className="w-5 h-5" />, name: 'Family Friendly' },
-];
 
 function HomeStayPage() {
 
     const { id } = useParams();
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [checkIn, setCheckIn] = useState('');
-    const [checkOut, setCheckOut] = useState('');
+    const [checkIn, setCheckIn] = useState(null);
+    const [checkOut, setCheckOut] = useState(null);
+    const [guests, setGuests] = useState(1);
 
     const {
         data: homeStay,
@@ -43,7 +31,7 @@ function HomeStayPage() {
     };
 
     const prevImage = () => {
-        setCurrentImageIndex((prev) => (prev - 1 + images.length) % homeStay?.data?.images?.length);
+        setCurrentImageIndex((prev) => (prev - 1 + homeStay?.data?.images?.length) % homeStay?.data?.images?.length);
     };
 
     useEffect(() => {
@@ -54,9 +42,7 @@ function HomeStayPage() {
         getHomeStayById(id);
     }, [id])
 
-    useEffect(() => {
-        console.log(homeStay);
-    }, [homeStay])
+
 
     return (
         <>
@@ -90,6 +76,8 @@ function HomeStayPage() {
                                     onCheckInChange={setCheckIn}
                                     onCheckOutChange={setCheckOut}
                                     price={homeStay?.data?.pricePerNight}
+                                    guests={guests}
+                                    setGuests={setGuests}
                                 />
                             </div>
                         </div>
