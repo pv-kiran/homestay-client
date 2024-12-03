@@ -105,6 +105,16 @@ const userService = {
       throw error;
     }
   },
+  userGetHomeStayByLocations: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Locations
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 export default userService;
