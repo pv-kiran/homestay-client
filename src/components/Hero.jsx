@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { Search, MapPin, Calendar, Users } from 'lucide-react';
+import React from 'react';
 import SearchBar from './SearchBar';
+import { useNavigate } from 'react-router-dom';
+
 
 function Hero() {
 
+    const navigate = useNavigate();
+
     const handleSearch = (searchParams) => {
-        // Handle search logic here
-        console.log(searchParams);
+        navigate(`/homestays/all?city=${searchParams?.location?.city}`)
     };
 
     return (

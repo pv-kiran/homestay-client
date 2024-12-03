@@ -11,7 +11,8 @@ const adminSignUpSchema = yup.object({
   name: yup
     .string()
     .required("Full name is required")
-    .matches(/^[A-Za-z\s]+$/, "Name should contain alphabets only"),
+    .matches(/^[A-Za-z\s]+$/, "Name should contain alphabets only")
+    .min(4, "Fullname length must be at least 4 characters long"),
 
   email: yup.string().email("Invalid email").required("Email is required"),
 

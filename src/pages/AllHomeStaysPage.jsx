@@ -35,6 +35,8 @@ function AllHomeStaysPage() {
     const [searchParams] = useSearchParams();
     const id = searchParams.get("id");
     const name = searchParams.get("name");
+    const city = searchParams.get("city");
+    console.log(city)
 
     const navigate = useNavigate();
 
@@ -49,6 +51,9 @@ function AllHomeStaysPage() {
         };
         if (id && selectedCategories.length === 0) {
             filters.category = [id];
+        }
+        if (city) {
+            filters.city = city;
         }
         getAllHomeStays(filters);
     }, [
@@ -67,7 +72,7 @@ function AllHomeStaysPage() {
     }, [id, name]);
 
     const resetFilters = () => {
-        if (id && name) {
+        if (id || name || city) {
             navigate("/homestays/all")
         }
         getAllHomeStays({ currency });
@@ -76,7 +81,6 @@ function AllHomeStaysPage() {
         setSelectedRooms([0]);
         setSelectedGuests([0]);
         setselectedBathrooms([0]);
-
     }
 
     useEffect(() => {
@@ -93,8 +97,6 @@ function AllHomeStaysPage() {
     return (
         <div className="min-h-screen mt-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 py-8">
-                {/* <h1 className="text-3xl font-bold text-gray-900 mb-8">Find Your Perfect Stay</h1> */}
-
                 <div className="flex gap-8">
                     <div className="hidden  top-[100px] md:block"
                     >
