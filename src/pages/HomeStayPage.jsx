@@ -17,6 +17,7 @@ function HomeStayPage() {
     const [checkOut, setCheckOut] = useState(null);
     const [guests, setGuests] = useState(1);
 
+
     const {
         data: homeStay,
         loading: homeStayLoading,
