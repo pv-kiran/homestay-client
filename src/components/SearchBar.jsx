@@ -37,8 +37,8 @@ export default function SearchBar({ handleSearch }) {
         e.preventDefault();
         handleSearch({
             location,
-            checkIn,
-            checkOut,
+            checkIn: checkIn?.$d,
+            checkOut: checkOut?.$d,
             guests
         })
     };
@@ -107,7 +107,7 @@ export default function SearchBar({ handleSearch }) {
                                             <DatePicker
                                                 value={checkIn}
                                                 onChange={(newValue) => setCheckIn(newValue)}
-                                                minDate={checkIn || dayjs()}
+                                                minDate={dayjs()}
                                                 format="MMM D, YYYY"
                                                 slotProps={{
                                                     textField: {
@@ -129,7 +129,7 @@ export default function SearchBar({ handleSearch }) {
                                             <DatePicker
                                                 value={checkOut}
                                                 onChange={(newValue) => setCheckOut(newValue)}
-                                                minDate={checkIn || dayjs()}
+                                                minDate={checkIn ? dayjs(checkIn).add(1, 'day') : dayjs()}
                                                 format="MMM D, YYYY"
                                                 slotProps={{
                                                     textField: {

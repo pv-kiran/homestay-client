@@ -40,7 +40,6 @@ export default function UserNavbar() {
   const handleLogout = () => {
     if (authState?.method === "google-auth") {
       googleLogout();
-      console.log("Hello");
     }
     signOutUser();
   };

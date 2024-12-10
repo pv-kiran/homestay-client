@@ -18,9 +18,9 @@ export const LocationBox = forwardRef(
                 <div className='max-h-[200px] overflow-y-auto'>
                     <h3 className="text-sm font-semibold text-gray-900 mb-4">Popular destinations</h3>
                     <div className="grid grid-cols-2">
-                        {locations.map((location) => (
+                        {locations.map((location, index) => (
                             <button
-                                key={location.id}
+                                key={index}
                                 onClick={() => onSelect(location)}
                                 className="w-full flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors duration-200"
                             >
