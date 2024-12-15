@@ -12,6 +12,9 @@ const apiEndpoints = {
   Bestays_User_All_Homestays: "/user/get-allhomestays",
   Bestays_User_Homestay_Id: "/user/homestay/:$homestayId",
   Bestays_User_Homestay_Locations: "/user/get-all-locations",
+  Bestays_User_Profile_Update: `/user/auth/update-profile`,
+  Bestays_User_Profile_View: `/user/auth/view-profile`,
+
 
 
   // admin api

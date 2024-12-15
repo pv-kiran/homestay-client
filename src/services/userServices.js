@@ -105,10 +105,43 @@ const userService = {
       throw error;
     }
   },
+  getUserById: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Profile_View
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   userGetHomeStayByLocations: async () => {
     try {
       const response = await axiosInstance.get(
         apiEndpoints.Bestays_User_Homestay_Locations
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userProfileUpdate: async (userData) => {
+    const {street, city, district, state, zip, country, gender, phone} = userData
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Profile_Update,
+        JSON.stringify({
+          address: {
+            street,
+            city,
+            district,
+            state,
+            zip,
+            country,
+          },      
+          gender,
+          phone
+        })
       );
       return response;
     } catch (error) {
