@@ -105,6 +105,16 @@ const userService = {
       throw error;
     }
   },
+  getUserById: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Profile_View
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   userGetHomeStayByLocations: async () => {
     try {
       const response = await axiosInstance.get(
@@ -115,17 +125,40 @@ const userService = {
       throw error;
     }
   },
-  userBookHomestay: async (bookingData) => {
+  userProfileUpdate: async (userData) => {
+    const {street, city, district, state, zip, country, gender, phone} = userData
     try {
       const response = await axiosInstance.post(
-        apiEndpoints.Bestays_User_Homestay_Booking,
-        JSON.stringify(bookingData)
-      );
-      return response;
-    } catch (error) {
-      throw error;
-    }
+        apiEndpoints.Bestays_User_Profile_Update,
+        JSON.stringify({
+          address: {
+            street,
+            city,
+            district,
+            state,
+            zip,
+            country,
+          },      
+          gender,
+          phone
+        })
+      )
+      return response
+  } catch (error) {
+    throw error;
+  }
   },
-};
+  userBookHomestay: async (bookingData) => {
+  try {
+    const response = await axiosInstance.post(
+      apiEndpoints.Bestays_User_Homestay_Booking,
+      JSON.stringify(bookingData)
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+  }
+}
 
 export default userService;

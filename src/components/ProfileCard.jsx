@@ -1,30 +1,108 @@
 import { Edit2, Upload, MapPin, Calendar, Phone, Mail, User2, Home, Globe } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import useApi from "../hooks/useApi";
+import userService from "../services/userServices";
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuth } from "../app/features/users/authSlice";
+import { Button } from './common/Button';
+import { Modal } from './common/Modal';
+import { FormField } from '../components/common/FormField';
+import { useForm } from 'react-hook-form';
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from 'react-toastify';
+
+
+const schema = yup.object({
+  street: yup
+    .string()
+    .required("Please enter street"),
+  city: yup
+    .string()
+    .required("Please enter city"),
+  district: yup
+    .string()
+    .required("Please enter district"),
+  state: yup
+    .string()
+    .required("Please enter state"),
+  zip: yup
+    .string()
+    .required("Please enter zip"),
+  country: yup
+    .string()
+    .required("Please enter country"),
+  gender: yup
+    .string()
+    .required("Please select gender"),
+  phone: yup
+    .string()
+    .required("Please enter phone number")
+    .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
+})
 
 function ProfileCard({ onEdit, onUpdatePicture }) {
 
-    const initialUserData = {
-        firstName: 'Sarah',
-        lastName: 'Wilson',
-        email: 'sarah.wilson@example.com',
-        phone: '+1 (555) 123-4567',
-        dob: '1992-06-15',
-        gender: 'Female',
-        street: '789 Pine Avenue',
-        city: 'San Francisco',
-        state: 'CA',
-        country: 'USA',
-        zip: '94105',
-        maritalStatus: 'Single',
-        memberSince: '2022',
-        bookings: 8,
-        verifiedStays: 6,
-        profilePicture: "https://content.api.news/v3/images/bin/2025fc8831028dc2daf64d4a69bfdc17" // Will be handled by file upload
-      };
+  const { authState } = useSelector((state) => state?.userAuth);
+  // const [userData, setUserData] = useState(initialUserData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-      const [userData, setUserData] = useState(initialUserData);
+  const dispatch = useDispatch();
+
+  const {
+    // error: userError,
+    loading: userUpdateLoading,
+    execute: userDataSubmit,
+    // reset: userDataReset,
+  } = useApi(userService.userProfileUpdate);
+
+  const {
+    data: userProfile,
+    error: userError,
+    loading: userProfileLoading,
+    execute: getUserProfile,
+    // reset: userDataReset,
+  } = useApi(userService.getUserById);
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset, setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const fileInputRef = useRef(null);
+
+  const populateFields = () => {
+    if(userProfile) {
+      setValue('fullName', userProfile?.user?.fullName   || '');
+      setValue('dob', userProfile?.user?.dob || '');
+      setValue('email', userProfile?.user?.email || '');
+      setValue('street', userProfile?.user?.address?.street || '');
+      setValue('city', userProfile?.user?.address?.city || '');
+      setValue('district', userProfile?.user?.address?.district || '');
+      setValue('state', userProfile?.user?.address?.state || '');
+      setValue('zip', userProfile?.user?.address?.zip || '');
+      setValue('country', userProfile?.user?.address?.country || '');
+      setValue('phone', userProfile?.user?.phone || '');
+      setValue('gender', userProfile?.user?.gender || '');
+    }
+  }
+  
+  useEffect(() => {
+    populateFields();
+  },[userProfile])
+
+  useEffect(() => {
+    dispatch(setAuth())
+  },[])
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  }
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -56,6 +134,24 @@ function ProfileCard({ onEdit, onUpdatePicture }) {
     );
   };
 
+  const onSubmit = async (data) => {
+    try {
+      const response = await userDataSubmit(data,authState?.userId);
+      if(response.success===true){
+        setIsModalOpen(false)
+        getUserProfile()
+      }
+    } catch (error) {
+      toast.error('Please try again later');
+    }  
+  }
+
+  useState(() => {
+    if(authState) {
+      getUserProfile(authState?.userId)
+    }
+  }, [authState])
+
   return (
     <div className="bg-white shadow-lg rounded-xl overflow-hidden">
       <div className="h-32 bg-gradient-to-r from-[#14B8A6] to-[#2BC0B4]"></div>
@@ -65,9 +161,9 @@ function ProfileCard({ onEdit, onUpdatePicture }) {
           <div className="md:w-1/3 flex flex-col items-center">
             <div className="relative">
               <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-100">
-                {userData.profilePicture ? (
+                {userProfile?.user?.profilePicture ? (
                   <img
-                    src={userData.profilePicture}
+                    src={userProfile?.user?.profilePicture}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -95,9 +191,9 @@ function ProfileCard({ onEdit, onUpdatePicture }) {
 
             {/* Stats Section */}
             <div className="mt-6 w-full bg-gray-50 rounded-lg overflow-hidden">
-              <Stat label="Bookings" value={userData.bookings} />
-              <Stat label="Member Since" value={userData.memberSince} />
-              <Stat label="Verified Stays" value={userData.verifiedStays} />
+              <Stat label="Bookings" value={userProfile?.user?.bookings} />
+              <Stat label="Member Since" value={new Date(userProfile?.user?.createdAt).getFullYear()} />
+              <Stat label="Verified Stays" value={userProfile?.user?.verifiedStays} />
             </div>
           </div>
 
@@ -106,36 +202,160 @@ function ProfileCard({ onEdit, onUpdatePicture }) {
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {userData.firstName} {userData.lastName}
+                  {userProfile?.user?.fullName}
                 </h2>
-                {userData.city && userData.country && (
+                {userProfile?.user?.address?.city && userProfile?.user?.address?.country && (
                   <p className="text-sm text-gray-500 flex items-center mt-1">
                     <MapPin className="w-4 h-4 mr-1" />
-                    {userData.city}, {userData.country}
+                    {userProfile?.user?.address?.city}, {userProfile?.user?.address?.country}
                   </p>
                 )}
               </div>
-              <button
+              {/* <button
                 onClick={onEdit}
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#24988F] hover:bg-[#1c9e94] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#24988F] transition-colors"
               >
                 <Edit2 className="w-4 h-4 mr-2" />
                 Edit Profile
-              </button>
+              </button> */}
+              <Button
+                variant='transparent'
+                onClick={() => setIsModalOpen(true)} size="sm">
+                  <Edit2 className='pr-1 pb-1' color="#FFFFFF"/>
+                <span color='#FFFFFF'>Edit Profile</span>
+              </Button>
+              <Modal
+                isOpen={isModalOpen}
+                onClose={handleClose}
+                title={"Edit Profile"}
+                description={
+                  "Add more details about you"
+                }
+              >
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
+                <FormField
+                    type="text"
+                    name="fullName"
+                    label="Fullname"
+                    placeholder="Enter fullname"
+                    register={register}
+                    error={errors.fullName}
+                    disabled={true}
+                  />
+                  <FormField
+                    type="text"
+                    name="email"
+                    label="Email"
+                    placeholder="Enter email"
+                    register={register}
+                    error={errors.email}
+                    disabled={true}
+                  />
+                  <FormField
+                    type="text"
+                    name="dob"
+                    label="Date of birth"
+                    placeholder="Enter date of birth"
+                    register={register}
+                    error={errors.dob}
+                    disabled={true}
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      type="text"
+                      name="street"
+                      label="Street"
+                      placeholder="Enter street"
+                      register={register}
+                      error={errors.street}
+                    />
+                    <FormField
+                      type="text"
+                      name="city"
+                      label="City"
+                      placeholder="Enter city"
+                      register={register}
+                      error={errors.city}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      type="text"
+                      name="district"
+                      label="District"
+                      placeholder="Enter district"
+                      register={register}
+                      error={errors.district}
+                    />
+                    <FormField
+                      type="text"
+                      name="state"
+                      label="State"
+                      placeholder="Enter state"
+                      register={register}
+                      error={errors.state}
+                    />
+                  </div>
+                  <FormField
+                    type="text"
+                    name="zip"
+                    label="Zip"
+                    placeholder="Enter zip code"
+                    register={register}
+                    error={errors.zip}
+                  />
+                  <FormField
+                    type="text"
+                    name="country"
+                    label="Country"
+                    placeholder="Enter country"
+                    register={register}
+                    error={errors.country}
+                  />
+                  <FormField
+                    type="text"
+                    name="phone"
+                    label="Phone number"
+                    placeholder="Enter phone number"
+                    register={register}
+                    error={errors.phone}
+                  />
+                  <FormField
+                    type="radio"
+                    name="gender"
+                    label="Gender"
+                    register={register}
+                    error={errors.gender}
+                    options={[
+                      { label: "Male", value: "Male" },
+                      { label: "Female", value: "Female" },
+                      { label: "Other", value: "Other" },
+                    ]}
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    isLoading={userUpdateLoading}
+                  >
+                    Submit
+                  </Button>
+              </form>
+              </Modal>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InfoRow icon={Mail} label="Email" value={userData.email} />
-              <InfoRow icon={Phone} label="Phone" value={userData.phone} />
-              <InfoRow icon={Calendar} label="Date of Birth" value={userData.dob} />
-              <InfoRow icon={User2} label="Gender" value={userData.gender} />
+              <InfoRow icon={Mail} label="Email" value={userProfile?.user?.email} />
+              <InfoRow icon={Phone} label="Phone" value={userProfile?.user?.phone} />
+              <InfoRow icon={Calendar} label="Year of Birth" value={userProfile?.user?.dob} />
+              <InfoRow icon={User2} label="Gender" value={userProfile?.user?.gender} />
               <InfoRow 
                 icon={Home} 
                 label="Address" 
-                value={userData.street && `${userData.street}${userData.city ? `, ${userData.city}` : ''}${userData.state ? `, ${userData.state}` : ''} ${userData.zip || ''}`} 
+                value={userProfile?.user?.address?.street && `${userProfile?.user?.address?.street}${userProfile?.user?.address?.city ? `, 
+                      ${userProfile?.user?.address?.city}` : ''}${userProfile?.user?.address?.state ? `, ${userProfile?.user?.address?.state}` : ''} ${userProfile?.user?.address?.zip || ''}`} 
               />
-              <InfoRow icon={Globe} label="Country" value={userData.country} />
-              <InfoRow icon={User2} label="Marital Status" value={userData.maritalStatus} />
+              <InfoRow icon={Globe} label="Country" value={userProfile?.user?.address?.country} />
+              {/* <InfoRow icon={User2} label="Marital Status" value={userProfile?.user?.maritalStatus} /> */}
             </div>
           </div>
         </div>
