@@ -36,7 +36,10 @@ function AllHomeStaysPage() {
     const id = searchParams.get("id");
     const name = searchParams.get("name");
     const city = searchParams.get("city");
-    console.log(city)
+    const checkIn = searchParams.get("checkIn");
+    const checkOut = searchParams.get("checkOut");
+    const guests = searchParams.get("guests");
+
 
     const navigate = useNavigate();
 
@@ -55,6 +58,12 @@ function AllHomeStaysPage() {
         if (city) {
             filters.city = city;
         }
+        if (checkIn) {
+            filters.checkIn = checkIn;
+        }
+        if (checkIn) {
+            filters.checkOut = checkOut;
+        }
         getAllHomeStays(filters);
     }, [
         selectedCategories,
@@ -69,7 +78,10 @@ function AllHomeStaysPage() {
         if (id && name) {
             setSelectedCategories([id]);
         }
-    }, [id, name]);
+        if (guests) {
+            setSelectedGuests([Number(guests)]);
+        }
+    }, [id, name, guests]);
 
     const resetFilters = () => {
         if (id || name || city) {
@@ -91,7 +103,6 @@ function AllHomeStaysPage() {
         getAllCategories();
     }, [])
 
-    console.log(homeStays);
 
 
     return (

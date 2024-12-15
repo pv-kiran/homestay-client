@@ -142,12 +142,22 @@ const userService = {
           gender,
           phone
         })
-      );
-      return response;
-    } catch (error) {
-      throw error;
-    }
+      )
+  } catch (error) {
+    throw error;
   }
-};
+  },
+  userBookHomestay: async (bookingData) => {
+  try {
+    const response = await axiosInstance.post(
+      apiEndpoints.Bestays_User_Homestay_Booking,
+      JSON.stringify(bookingData)
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+  }
+}
 
 export default userService;

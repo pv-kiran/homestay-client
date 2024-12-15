@@ -1,15 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { theme } from '../utils/theme';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { Users } from 'lucide-react';
-
-
+import { useSelector } from 'react-redux';
+import { SignupModal } from './SignupModal';
+import userService from '../services/userServices';
+import useApi from '../hooks/useApi';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Button } from './common/Button';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault('Asia/Kolkata');
 
 export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests }) => {
+    const { id } = useParams();
+    const {
+        data,
+        error,
+        loading,
+        execute: bookHomestay,
+        success,
+        reset,
+    } = useApi(userService.userBookHomestay);
+
+    const { authState } = useSelector((state) => state?.userAuth)
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const differenceInDays = checkOut && checkIn ? dayjs(checkOut).diff(dayjs(checkIn), 'day') : null;
+
+    const handleReserve = () => {
+        if (!authState) {
+            setIsModalOpen(true);
+            return;
+        } else {
+            bookHomestay({
+                homestayId: id,
+                checkIn: checkIn?.$d,
+                checkOut: checkOut?.$d
+            })
+        }
+    }
+
+    useEffect(() => {
+        if (error) {
+            toast.error(error?.message);
+        }
+    }, [error])
+
+    useEffect(() => {
+        if (success) {
+            toast.success("Reservation is Success");
+        }
+    }, [success])
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ThemeProvider theme={theme}>
@@ -23,12 +72,14 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                     <div className="space-y-4">
                         <div className="grid grid-cols-2 gap-3 sm:gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Check-in *</label>
                                 <div className='flex justify-between border p-2 rounded-xl'>
                                     <DatePicker
                                         value={checkIn}
-                                        onChange={(newValue) => onCheckInChange(newValue)}
-                                        minDate={checkIn || dayjs()}
+                                        onChange={(newValue) => {
+                                            onCheckInChange(newValue);;
+                                        }}
+                                        minDate={dayjs()}
                                         format="MMM D, YYYY"
                                         slotProps={{
                                             textField: {
@@ -42,13 +93,15 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Check-out *</label>
                                 <div className='flex justify-between border p-2 rounded-xl'>
                                     <DatePicker
                                         className='border'
                                         value={checkOut}
-                                        onChange={(newValue) => onCheckOutChange(newValue)}
-                                        minDate={checkIn || dayjs()}
+                                        onChange={(newValue) => {
+                                            onCheckOutChange(newValue);
+                                        }}
+                                        minDate={checkIn ? dayjs(checkIn).add(1, 'day') : dayjs()}
                                         format="MMM D, YYYY"
                                         slotProps={{
                                             textField: {
@@ -66,23 +119,29 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             </div>
                         </div>
 
-                        <div className="flex justify-between items-center gap-2 ">
-                            <Users className="h-4 w-4 text-gray-400" />
+                        <div className="flex justify-between items-center gap-2 border p-1 rounded-xl">
+                            <div className='flex gap-2 items-center pl-2'>
+                                <Users className="h-4 w-4 text-gray-400" />
+                                <span className="text-md text-gray-500">Guests</span>
+                            </div>
                             <input
                                 type="number"
                                 min="1"
                                 max="16"
-                                className="w-20 bg-transparent border outline-none text-gray-600 text-sm
-                                        focus:outline-none focus:ring-0 focus:border-gray-200"
+                                className="w-20 bg-transparent border-none outline-none text-gray-600 text-sm
+                                        focus:outline-none focus:ring-0 focus:border-none"
                                 value={guests}
                                 onChange={(e) => setGuests(parseInt(e.target.value))}
                             />
-                            <span className="text-sm text-gray-500">guests</span>
                         </div>
 
-                        <button className="w-full bg-turquoise-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-turquoise-700 transition-colors text-sm sm:text-base">
+                        <Button
+                            onClick={() => handleReserve()}
+                            className='w-full'
+                            isLoading={loading}
+                        >
                             Reserve Now
-                        </button>
+                        </Button>
 
                         <div className="text-center text-xs sm:text-sm text-gray-500">
                             You won't be charged yet
@@ -91,23 +150,36 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
                     <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t text-sm sm:text-base">
                         <div className="flex justify-between mb-2">
-                            <span className="text-gray-600">₹{price?.toLocaleString('en-IN')} × 5 nights</span>
-                            <span>₹1,495</span>
+                            <span className="text-gray-600">₹ {price} ×
+                                {differenceInDays ? differenceInDays : 1}    nights</span>
+                            <span>
+                                {
+                                    differenceInDays ? price * differenceInDays : price
+                                }
+                            </span>
                         </div>
-                        <div className="flex justify-between mb-2">
+                        {/* <div className="flex justify-between mb-2">
                             <span className="text-gray-600">Cleaning fee</span>
                             <span>₹85</span>
                         </div>
                         <div className="flex justify-between mb-2">
                             <span className="text-gray-600">Service fee</span>
                             <span>₹95</span>
-                        </div>
+                        </div> */}
                         <div className="flex justify-between pt-4 border-t font-semibold">
                             <span>Total</span>
-                            <span>₹1,675</span>
+                            <span>
+                                {
+                                    differenceInDays ? price * differenceInDays : price
+                                }
+                            </span>
                         </div>
                     </div>
                 </div>
+                <SignupModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                />
             </ThemeProvider>
         </LocalizationProvider>
     );
