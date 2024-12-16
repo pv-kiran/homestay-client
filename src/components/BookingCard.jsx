@@ -22,7 +22,6 @@ dayjs.tz.setDefault('Asia/Kolkata');
 export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests }) => {
     const { id } = useParams();
     const {
-        data,
         error,
         loading,
         execute: bookHomestay,
@@ -30,20 +29,104 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         reset,
     } = useApi(userService.userBookHomestay);
 
+    const {
+        error: bookingError,
+        loading: bookingLoading,
+        execute: bookHomestayComplete,
+        success: bookHomestaySuccess,
+    } = useApi(userService.userBookHomestayComplete);
+
     const { authState } = useSelector((state) => state?.userAuth)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const differenceInDays = checkOut && checkIn ? dayjs(checkOut).diff(dayjs(checkIn), 'day') : null;
 
-    const handleReserve = () => {
+
+    function loadScript(src) {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = src;
+            script.onload = () => {
+                resolve(true);
+            };
+            script.onerror = () => {
+                resolve(false);
+            };
+            document.body.appendChild(script);
+        });
+    }
+
+
+    const handleReserve = async () => {
         if (!authState) {
             setIsModalOpen(true);
             return;
         } else {
-            bookHomestay({
-                homestayId: id,
-                checkIn: checkIn?.$d,
-                checkOut: checkOut?.$d
-            })
+            try {
+                const response = await bookHomestay({
+                    homestayId: id,
+                    checkIn: checkIn?.$d,
+                    checkOut: checkOut?.$d
+                })
+
+                const { data } = response
+
+                if (response.success) {
+                    const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+                    if (!res) {
+                        alert("Razorpay SDK failed to load. Are you online?");
+                        return;
+                    }
+                    const options = {
+                        key: import.meta.env.VITE_APP_RZP_KEY,
+                        amount: data?.amount,
+                        currency: 'INR',
+                        name: "Soumya Corp.",
+                        description: "Test Transaction",
+                        // image: { logo },
+                        order_id: data?.id,
+                        handler: async function (response) {
+
+
+                            const requestBody = {
+                                homestayId: id,
+                                checkIn: checkIn?.$d,
+                                checkOut: checkOut?.$d,
+                                orderId: response?.razorpay_order_id,
+                                paymentId: response?.razorpay_payment_id
+                            }
+
+
+                            const bookingResponse = await bookHomestayComplete(requestBody)
+
+                            if (response.success === true) {
+                                console.log(bookingResponse)
+                            }
+
+                            // navigate(`/appointment/${data?.appointment?._id}/success`)
+
+                            console.log(bookingResponse);
+                        },
+                        prefill: {
+                            name: "Testing",
+                            email: "test@gmail.com",
+                            contact: "9999999999",
+                        },
+                        notes: {
+                            address: "Doccure",
+                        },
+                        theme: {
+                            color: "#61dafb",
+                        },
+                    };
+
+                    const paymentObject = new window.Razorpay(options);
+                    paymentObject.open();
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+
         }
     }
 
