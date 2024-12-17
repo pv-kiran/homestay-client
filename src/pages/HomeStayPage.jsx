@@ -40,7 +40,7 @@ function HomeStayPage() {
     }, []);
 
     useEffect(() => {
-        getHomeStayById(id);
+        getHomeStayById({ id, currency: JSON.parse(localStorage.getItem('currency')).code });
     }, [id])
 
 

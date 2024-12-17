@@ -10,12 +10,12 @@ const apiEndpoints = {
   Bestays_User_LogOut: "/user/auth/signout",
   Bestays_User_All_Categories: "/user/get-allcategories",
   Bestays_User_All_Homestays: "/user/get-allhomestays",
-  Bestays_User_Homestay_Id: "/user/homestay/:$homestayId",
+  Bestays_User_Homestay_Id: "/user/homestay/:$homestayId/:$currency",
   Bestays_User_Homestay_Locations: "/user/get-all-locations",
   Bestays_User_Profile_Update: `/user/auth/update-profile`,
   Bestays_User_Profile_View: `/user/auth/view-profile`,
   Bestays_User_Homestay_Booking: "/user/book/homestay",
-
+  Bestays_User_Homestay_Booking_Complete: "/user/book/homestay/complete",
 
   // admin api
   Bestays_Admin_Signup: "/admin/auth/signup",
