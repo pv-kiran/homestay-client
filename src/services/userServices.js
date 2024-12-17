@@ -95,10 +95,10 @@ const userService = {
       throw error;
     }
   },
-  userGetHomeStayById: async (homeStayId) => {
+  userGetHomeStayById: async ({ id, currency }) => {
     try {
       const response = await axiosInstance.get(
-        apiEndpoints.Bestays_User_Homestay_Id.replace(":$homestayId", homeStayId)
+        apiEndpoints.Bestays_User_Homestay_Id.replace(":$homestayId", id)?.replace(":$currency", currency)
       );
       return response;
     } catch (error) {

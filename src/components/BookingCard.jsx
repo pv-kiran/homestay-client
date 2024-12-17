@@ -65,7 +65,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                 const response = await bookHomestay({
                     homestayId: id,
                     checkIn: checkIn?.$d,
-                    checkOut: checkOut?.$d
+                    checkOut: checkOut?.$d,
+                    currency: JSON.parse(localStorage.getItem('currency'))
                 })
 
                 const { data } = response
@@ -79,7 +80,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                     const options = {
                         key: import.meta.env.VITE_APP_RZP_KEY,
                         amount: data?.amount,
-                        currency: 'INR',
+                        currency: JSON.parse(localStorage.getItem('currency'))?.code,
                         name: "Soumya Corp.",
                         description: "Test Transaction",
                         // image: { logo },
