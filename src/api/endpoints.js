@@ -16,6 +16,10 @@ const apiEndpoints = {
   Bestays_User_Profile_View: `/user/auth/view-profile`,
   Bestays_User_Homestay_Booking: "/user/book/homestay",
   Bestays_User_Homestay_Booking_Complete: "/user/book/homestay/complete",
+  Bestays_User_Homestay_Booking_List: "/user/homestay/my-bookings",
+  Bestays_User_Homestay_CheckIn: "/user/homestay/checkin/:$bookingId",
+  Bestays_User_Homestay_CheckOut: "/user/homestay/checkout/:$bookingId",
+  Bestays_User_Homestay_Cancel: "/user/homestay/cancel/:$bookingId",
 
   // admin api
   Bestays_Admin_Signup: "/admin/auth/signup",

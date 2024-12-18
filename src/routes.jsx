@@ -19,6 +19,7 @@ import HomeStayPage from "./pages/HomeStayPage";
 import AllHomeStaysPage from "./pages/AllHomeStaysPage";
 import NotFound404 from "./pages/NotFound404";
 import UserProfilePage from "./pages/UserProfilePage";
+import MyBookings from "./pages/MyBookings";
 
 function AppRoutes() {
   return (
@@ -29,6 +30,8 @@ function AppRoutes() {
         <Route path="/homestays/all" element={<AllHomeStaysPage />} />
         <Route path="/homestay/view/:id" element={<HomeStayPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
+        <Route path="/mybookings" element={<MyBookings />} />
+
       </Route>
 
       <Route element={<PublicRoutesAdmin />}>
