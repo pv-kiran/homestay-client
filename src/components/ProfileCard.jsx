@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from 'react-toastify';
+import axiosInstance from '../api/axiosInstance';
 
 
 const schema = yup.object({
@@ -41,15 +42,18 @@ const schema = yup.object({
     .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
 })
 
-function ProfileCard({ onEdit, onUpdatePicture }) {
+function ProfileCard() {
 
   const { authState } = useSelector((state) => state?.userAuth);
   // const [userData, setUserData] = useState(initialUserData);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
 
   const dispatch = useDispatch();
 
-  const {
+  const { 
     // error: userError,
     loading: userUpdateLoading,
     execute: userDataSubmit,
@@ -104,12 +108,70 @@ function ProfileCard({ onEdit, onUpdatePicture }) {
     setIsModalOpen(false);
   }
 
-  const handleFileChange = (event) => {
+  const triggerFileInput = () => {
+    // Programmatically click the hidden file input
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      onUpdatePicture(file);
+    
+    // Validate file
+    if (!file) {
+      toast.error("No file selected");
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Please upload an image (JPEG, PNG, or GIF)");
+      return;
+    }
+
+    // Validate file size (e.g., max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      toast.error("Please upload a file less than 5MB size");
+      return;
+    }
+
+    // Immediately start upload process
+    setIsUploading(true);
+    
+    try {
+      // Create preview
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append('profilePic', file);
+
+      // Upload to server
+      const response = await axiosInstance.put('/user/auth/update-propic', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      if (response.data.success) {
+        toast.success("Profile picture uploaded successfully");
+      } else {
+        toast.error(response.data.message || "Failed to upload profile picture");
+        // Revert preview if upload fails
+        setPreview(null);
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Failed to upload profile picture. Please try again.");
+      // Revert preview if upload fails
+      setPreview(null);
+    } finally {
+      setIsUploading(false);
     }
   };
+
 
   const InfoRow = ({ label, value, icon: Icon }) => {
     if (!value) return null;
@@ -161,9 +223,9 @@ function ProfileCard({ onEdit, onUpdatePicture }) {
           <div className="md:w-1/3 flex flex-col items-center">
             <div className="relative">
               <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-100">
-                {userProfile?.user?.profilePicture ? (
+                {preview || userProfile?.user?.profilePic ? (
                   <img
-                    src={userProfile?.user?.profilePicture}
+                    src={preview || userProfile?.user?.profilePic}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -172,9 +234,15 @@ function ProfileCard({ onEdit, onUpdatePicture }) {
                     <User2 className="w-12 h-12 text-gray-400" />
                   </div>
                 )}
+                {isUploading && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#14B8A6]"></div>
+                  </div>
+                )}
               </div>
               <button
-                onClick={() => fileInputRef.current?.click()}
+                onClick={triggerFileInput}
+                disabled={isUploading}
                 className="absolute bottom-0 right-0 bg-[#14B8A6] p-2 rounded-full text-white hover:bg-[#2BC0B4] transition-colors shadow-lg"
                 title="Upload photo"
               >
