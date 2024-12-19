@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Wifi, Car, Coffee, Users } from 'lucide-react';
 import { ImageGallery } from '../components/ImageGallery';
 import { PropertyDetails } from '../components/HomeStayDetails';
 import { BookingCard } from '../components/BookingCard';
 import { useParams } from 'react-router-dom';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
+import { useSelector } from 'react-redux';
 
 
 function HomeStayPage() {
 
+    const { currency } = useSelector((store) => store?.currency);
     const { id } = useParams();
+
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [checkIn, setCheckIn] = useState(null);
@@ -41,7 +43,7 @@ function HomeStayPage() {
 
     useEffect(() => {
         getHomeStayById({ id, currency: JSON.parse(localStorage.getItem('currency')).code });
-    }, [id])
+    }, [id, currency])
 
 
 

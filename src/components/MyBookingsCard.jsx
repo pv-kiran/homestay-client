@@ -15,7 +15,10 @@ const MyBookingCard = ({
     homestayImage,
     homestayAddress,
     createdAt,
-    getMyBookings
+    getMyBookings,
+    isCheckedIn,
+    isCheckedOut,
+    isCancelled,
 }) => {
 
     const {
@@ -138,7 +141,9 @@ const MyBookingCard = ({
                     onCheckIn={handleCheckIn}
                     onCheckOut={handleCheckOut}
                     onCancel={handleCancel}
-
+                    isCheckedIn={isCheckedIn}
+                    isCheckedOut={isCheckedOut}
+                    isCancelled={isCancelled}
                 />
             </div>
         </div>
