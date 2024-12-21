@@ -242,6 +242,17 @@ const adminService = {
       throw error;
     }
   },
+  adminGetAllBookings: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_All_Bookings,
+        pagination
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

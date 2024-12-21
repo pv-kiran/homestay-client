@@ -5,7 +5,7 @@ import useApi from '../hooks/useApi';
 import { FormField } from '../components/common/FormField';
 import { useForm } from 'react-hook-form';
 import * as yup from "yup";
-import {CirclePlus} from 'lucide-react';
+import { CirclePlus } from 'lucide-react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
@@ -357,7 +357,7 @@ const RoomsPage = () => {
         pageNumber: currentPage,
         searchParams: ""
       });
-      if(result?.success) {
+      if (result?.success) {
         toast.success(result?.message);
       }
       else {
@@ -437,6 +437,9 @@ const RoomsPage = () => {
     setHomeStayImages([...images])
   }
 
+
+
+
   useEffect(() => {
     if (!timer.current) {
       getAllHomeStays({
@@ -457,20 +460,17 @@ const RoomsPage = () => {
     }, 500);
   }, [searchKey]);
 
+
   return (
     <>
       <div className='flex justify-end'>
-        {/* <h1 className="text-2xl font-semibold text-gray-800">
-          Amenities Management
-        </h1> */}
         <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add homestay</Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
-          title={"Create Your Perfect Escape"}
-          description={
-            "Share your unique homestay with the world – where comfort meets unforgettable experiences"
-          }
+          title={`${isViewDetail ? "" : "Create Your Perfect Escape"}`}
+          description={`${isViewDetail ? "" : "Share your unique homestay with the world – where comfort meets unforgettable experiences"
+            }`}
           maxWidth={!isViewDetail ? "600px" : "700px"}
         >
           {

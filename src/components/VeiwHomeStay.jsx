@@ -2,23 +2,16 @@ import React from 'react';
 import { X, MapPin, Users, Bed, Bath, Clock, ShieldX } from 'lucide-react';
 import { ImageSlider } from './ImageSlider';
 
-export function ViewHomeStay({ data, onClose }) {
-  console.log(data)
+export function ViewHomeStay({ data }) {
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white z-10 p-4 border-b flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">{data[0].title}</h2>
-          <button
-            onClick={onClose}
-            className="p-1 hover:bg-turquoise-300 bg-turquoise-200 rounded-full transition"
-          >
-            <X className="h-6 w-6" />
-          </button>
+    <div className="bg-opacity-50  flex items-center justify-center px-4">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] ">
+        <div className="top-0 bg-white z-10 px-4">
+          <h2 className="text-4xl font-bold text-gray-800 text-center capitalize">{data[0].title}</h2>
         </div>
 
-        <div className="p-6">
+        <div className="p-6 mt-2">
           <ImageSlider images={data[0].images} />
 
           <div className="mt-6">
@@ -86,15 +79,15 @@ export function ViewHomeStay({ data, onClose }) {
                   <ShieldX className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="font-semibold text-gray-700">Guest Policies</p>
-                    <p className="font-semibold">
+                    <div className="font-semibold">
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {data[0].hotelPolicies.guestPolicies.map((policy) => (
-                          <ul key={policy._id} className="flex items-center gap-2 p-1 text-center pl-4">
+                        {data[0].hotelPolicies.guestPolicies.map((policy, index) => (
+                          <ul key={index} className="flex items-center gap-2 p-1 text-center pl-4">
                             <li className=" list-disc font-normal text-gray-600">{policy}</li>
                           </ul>
                         ))}
                       </div>
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
