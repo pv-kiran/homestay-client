@@ -1,4 +1,4 @@
-import { Home, BedDouble, Grid, Package, UserCircle, Users, Component } from 'lucide-react';
+import { Home, BedDouble, Grid, Package, UserCircle, Users, Component, TicketPercent } from 'lucide-react';
 
 export const routes = [
   {
@@ -30,6 +30,11 @@ export const routes = [
     path: '/admin/add-ons',
     title: 'Add-ons',
     icon: <Package className="w-5 h-5" />
+  },
+  {
+    path: '/admin/coupons',
+    title: 'Coupons',
+    icon: <TicketPercent className="w-5 h-5" />
   },
   {
     path: '/admin/account',
