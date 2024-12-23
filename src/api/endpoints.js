@@ -43,6 +43,7 @@ const apiEndpoints = {
   Bestays_Admin_Homestays_Edit: "/admin/update-homestay/:$homestayId",
   Bestays_Admin_Homestays_Edit: "/admin/update-homestay/:$homestayId",
   Bestays_Admin_Get_All_Bookings: "/admin/get-allbookings",
+  Bestays_Admin_Image_Reordering: "/admin/homestay/:$homeStayId/images",
 };
 
 export default apiEndpoints;

@@ -253,6 +253,17 @@ const adminService = {
       throw error;
     }
   },
+  adminReorderHomeStayImages: async ({ images, homeStayId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Image_Reordering.replace(":$homeStayId", homeStayId),
+        images
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;
