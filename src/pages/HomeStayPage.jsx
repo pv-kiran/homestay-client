@@ -7,12 +7,15 @@ import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 import { useSelector } from 'react-redux';
 import MapView from '../components/MapView';
+import { calculateDifferenceInDays } from '../utils/dateDifference';
 
 
 function HomeStayPage() {
 
     const { currency } = useSelector((store) => store?.currency);
+    const { authState } = useSelector((store) => store?.userAuth);
     const { id } = useParams();
+
 
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -29,14 +32,35 @@ function HomeStayPage() {
         error: getHomeStayError,
     } = useApi(userService.userGetHomeStayById);
 
+    const {
+        data: bookingStatus,
+        loading: bookingStatusLoading,
+        execute: getbookingStatus,
+        reset: bookingStatusReset,
+        error: getbookingStatusError,
+    } = useApi(userService.userGetHomeStayBookingStatus);
+
+
+    // const nextImage = () => {
+    //     setCurrentImageIndex((prev) => (prev + 1) % homeStay?.data?.images?.length);
+    // };
+
+    // const prevImage = () => {
+    //     setCurrentImageIndex((prev) => (prev - 1 + homeStay?.data?.images?.length) % homeStay?.data?.images?.length);
+    // };
 
     const nextImage = () => {
-        setCurrentImageIndex((prev) => (prev + 1) % homeStay?.data?.images?.length);
+        if (homeStay?.data?.images?.length > 2) {
+            setCurrentImageIndex((prev) => (prev + 1) % homeStay.data.images.length);
+        }
     };
 
     const prevImage = () => {
-        setCurrentImageIndex((prev) => (prev - 1 + homeStay?.data?.images?.length) % homeStay?.data?.images?.length);
+        if (homeStay?.data?.images?.length > 2) {
+            setCurrentImageIndex((prev) => (prev - 1 + homeStay.data.images.length) % homeStay.data.images.length);
+        }
     };
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -45,6 +69,13 @@ function HomeStayPage() {
     useEffect(() => {
         getHomeStayById({ id, currency: JSON.parse(localStorage.getItem('currency')).code });
     }, [id, currency])
+
+    useEffect(() => {
+        if (authState) {
+            getbookingStatus({ homeStayId: id })
+        }
+    }, [])
+
 
 
     return (
@@ -84,17 +115,34 @@ function HomeStayPage() {
                                 />
                             </div>
                         </div>
-                        <div>
-                            <MapView
-                                position={
-                                    [
-                                        homeStay?.data?.address?.coordinates?.latitude,
-                                        homeStay?.data?.address?.coordinates?.longitude
-                                    ]}
-                                title={homeStay?.data?.title}
-                                address={homeStay?.data?.address}
-                            />
-                        </div>
+                        {
+                            (bookingStatus?.status && calculateDifferenceInDays(bookingStatus?.checkIn) <= 2) ? <div>
+                                <MapView
+                                    position={
+                                        [
+                                            homeStay?.data?.address?.coordinates?.latitude,
+                                            homeStay?.data?.address?.coordinates?.longitude
+                                        ]}
+                                    title={homeStay?.data?.title}
+                                    address={homeStay?.data?.address}
+                                />
+                            </div> : <div>
+                                {
+                                    (homeStay?.data?.address?.coordinates?.nearByLatitude && homeStay?.data?.address?.coordinates?.nearByLongitude) && <MapView
+                                        position={
+                                            [
+                                                homeStay?.data?.address?.coordinates?.nearByLatitude,
+                                                homeStay?.data?.address?.coordinates?.nearByLongitude
+                                            ]
+                                        }
+                                        title={homeStay?.data?.title}
+                                        address={homeStay?.data?.address}
+                                    />
+                                }
+                            </div>
+                        }
+
+
                     </main>
                 </div> : null
             }

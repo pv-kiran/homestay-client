@@ -76,6 +76,12 @@ const schema = yup.object({
   zip: yup
     .string()
     .required("Please add a zip"),
+  nearByLatitude: yup
+    .string()
+    .required("Please add a latitude"),
+  nearByLongitude: yup
+    .string()
+    .required("Please add a longitude"),
   latitude: yup
     .string()
     .required("Please add a latitude"),
@@ -249,6 +255,8 @@ const RoomsPage = () => {
         state: data?.state,
         zip: data?.zip,
         coordinates: {
+          nearByLatitude: data?.nearByLatitude,
+          nearByLongitude: data?.nearByLongitude,
           latitude: data?.latitude,
           longitude: data?.longitude
         }
@@ -416,7 +424,7 @@ const RoomsPage = () => {
     setValue('price', chosenHomeStay[0].pricePerNight)
     setValue('maxGuests', chosenHomeStay[0].maxGuests)
     const { street, city, state, district, zip,
-      coordinates: { latitude, longitude }
+      coordinates: { latitude, longitude, nearByLatitude, nearByLongitude }
     } = chosenHomeStay[0].address
     setValue('street', street)
     setValue('city', city)
@@ -425,6 +433,8 @@ const RoomsPage = () => {
     setValue('zip', zip)
     setValue('latitude', latitude)
     setValue('longitude', longitude)
+    setValue('nearByLatitude', nearByLatitude)
+    setValue('nearByLongitude', nearByLongitude)
     const { checkInTime, checkOutTime, guestPolicies } = chosenHomeStay[0]?.hotelPolicies
     setValue('checkInTime', checkInTime)
     setValue('checkOutTime', checkOutTime)
@@ -646,6 +656,24 @@ const RoomsPage = () => {
                 register={register}
                 error={errors.zip}
               />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  type="text"
+                  name="nearByLatitude"
+                  label="NearBy Latitude"
+                  placeholder="Enter latitude details"
+                  register={register}
+                  error={errors.nearByLatitude}
+                />
+                <FormField
+                  type="text"
+                  name="nearByLongitude"
+                  label="NearBy Longitude"
+                  placeholder="Enter longitude details"
+                  register={register}
+                  error={errors.nearByLongitude}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   type="text"
