@@ -169,7 +169,47 @@ const userService = {
     } catch (error) {
       throw error;
     }
-  }
+  },
+  userGetHomeStayBookings: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Booking_List
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayCheckIn: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        apiEndpoints.Bestays_User_Homestay_CheckIn.replace(":$bookingId", bookingId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayCheckOut: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        apiEndpoints.Bestays_User_Homestay_CheckOut.replace(":$bookingId", bookingId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayCancel: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        apiEndpoints.Bestays_User_Homestay_Cancel.replace(":$bookingId", bookingId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 }
 
 export default userService;

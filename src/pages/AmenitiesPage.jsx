@@ -15,6 +15,7 @@ import { CirclePlus } from "lucide-react";
 
 const amenitySchema = yup.object({
   amenity: yup.string().required("Amenity title is required"),
+  description: yup.string().required("Amenity title is required"),
 });
 
 export default function AmenitiesPage() {
@@ -73,6 +74,8 @@ export default function AmenitiesPage() {
   const handleamenitySubmit = async (data) => {
     const formData = new FormData();
     formData.append("amenityName", data.amenity);
+    formData.append("description", data.description);
+
     if (file) {
       formData.append("iconUrl", file);
     }
@@ -117,8 +120,9 @@ export default function AmenitiesPage() {
   const handleEdit = (id) => {
     const chosenamenity = allAmenities?.data.filter((amenity) => amenity._id === id);
     setIsModalOpen(true);
-    setValue('amenity', chosenamenity[0].amenityName)
-    setIsEditing(true)
+    setValue('amenity', chosenamenity[0].amenityName),
+      setValue('description', chosenamenity[0]?.description),
+      setIsEditing(true)
     setamenityId(id);
   };
 
@@ -152,6 +156,11 @@ export default function AmenitiesPage() {
     {
       header: "Title",
       accessor: "amenityName",
+      sortable: true,
+    },
+    {
+      header: "Description",
+      accessor: "description",
       sortable: true,
     },
     {
@@ -289,6 +298,14 @@ export default function AmenitiesPage() {
               placeholder="Enter amenity title"
               register={register}
               error={errors.amenity}
+            />
+            <FormField
+              type="textarea"
+              name="description"
+              label="Description"
+              placeholder="Enter amenties description"
+              register={register}
+              error={errors.description}
             />
             <FileUpload onChange={handleFileUpload} value={file} />
             {fileError ?

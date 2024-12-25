@@ -1,16 +1,19 @@
 import React from "react";
-import { Pencil, Trash2, Eye } from "lucide-react";
+import { Pencil, Trash2, Eye, ArrowRightLeft } from "lucide-react";
 
 const iconMap = {
   edit: Pencil,
   delete: Trash2,
-  view: Eye
+  view: Eye,
+  reorder: ArrowRightLeft
 };
+
 
 const defaultClassNames = {
   edit: "text-blue-600 hover:text-blue-800",
   toggle: "text-gray-600 hover:text-gray-800",
   delete: "text-red-600 hover:text-red-800",
+  reorder: "text-blue-600 hover:text-blue-800",
 };
 
 const ToggleSwitch = ({ isActive, onClick, title }) => {
@@ -55,9 +58,8 @@ export const TableActions = ({ actions }) => {
           <button
             key={index}
             onClick={action.onClick}
-            className={`transition-colors duration-200 ${
-              action.className || defaultClassNames[action.icon]
-            }`}
+            className={`transition-colors duration-200 ${action.className || defaultClassNames[action.icon]
+              }`}
             title={action.title}>
             <Icon className="h-5 w-5" />
           </button>
