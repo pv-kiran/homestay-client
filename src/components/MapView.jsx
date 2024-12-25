@@ -26,13 +26,13 @@ const MapView = ({ position, title, address }) => {
     const mapKey = `map-${position[0]}-${position[1]}-${Date.now()}`;
 
     return (
-        <div className=" w-11/12 mx-auto h-[400px] rounded-lg overflow-hidden shadow-lg">
+        <div className="my-4 w-11/12 mx-auto h-[400px] rounded-lg overflow-hidden shadow-lg">
             <MapContainer
                 key={mapKey}
                 center={position}
-                zoom={30}
+                zoom={15}
                 scrollWheelZoom={false}
-                className="w-full h-full"
+                className="w-full h-full z-10"
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

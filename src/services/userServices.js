@@ -1,3 +1,4 @@
+import { replace } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import apiEndpoints from "../api/endpoints";
 
@@ -207,6 +208,17 @@ const userService = {
       );
       return response;
     } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayBookingStatus: async ({ homeStayId }) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Booking_Status.replace(':$homeStayId', homeStayId)
+      );
+      return response;
+    } catch (error) {
+      console.log(error)
       throw error;
     }
   },
