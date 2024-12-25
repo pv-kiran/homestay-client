@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 import { useSelector } from 'react-redux';
+import MapView from '../components/MapView';
+import { initializeMapIcons } from '../utils/mapMarkerIcon';
 
 
 function HomeStayPage() {
@@ -82,6 +84,13 @@ function HomeStayPage() {
                                     setGuests={setGuests}
                                 />
                             </div>
+                        </div>
+                        <div>
+                            <MapView
+                                position={[8.495184605630698, 76.95159872382814]}
+                                title={homeStay?.data?.title}
+                                address={homeStay?.data?.address}
+                            />
                         </div>
                     </main>
                 </div> : null
