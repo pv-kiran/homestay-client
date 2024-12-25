@@ -30,7 +30,7 @@ const MapView = ({ position, title, address }) => {
             <MapContainer
                 key={mapKey}
                 center={position}
-                zoom={20}
+                zoom={30}
                 scrollWheelZoom={false}
                 className="w-full h-full"
             >
