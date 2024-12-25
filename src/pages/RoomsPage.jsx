@@ -82,6 +82,12 @@ const schema = yup.object({
   longitude: yup
     .string()
     .required("Please add a longitude"),
+  checkInTime: yup
+    .string()
+    .required("Please add a latitude"),
+  checkOutTime: yup
+    .string()
+    .required("Please add a longitude"),
 });
 
 
@@ -655,7 +661,7 @@ const RoomsPage = () => {
                   label="Longitude"
                   placeholder="Enter longitude details"
                   register={register}
-                  error={errors.latitude}
+                  error={errors.longitude}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -665,7 +671,7 @@ const RoomsPage = () => {
                   label="Check-in time"
                   placeholder="Enter check-in time"
                   register={register}
-                  error={errors.latitude}
+                  error={errors.checkInTime}
                 />
                 <FormField
                   type="text"
@@ -673,7 +679,7 @@ const RoomsPage = () => {
                   label="Checkout time"
                   placeholder="Enter checkout time"
                   register={register}
-                  error={errors.latitude}
+                  error={errors.checkOutTime}
                 />
               </div>
               <InputList
@@ -724,7 +730,11 @@ const RoomsPage = () => {
                 onReorder={setImages}
               />
               <div className='flex justify-center'>
-                <Button size='sm' onClick={() => handleReorder()}>
+                <Button
+                  size='sm'
+                  onClick={() => handleReorder()}
+                  isLoading={reorderLoading}
+                >
                   Reorder
                 </Button>
               </div>
