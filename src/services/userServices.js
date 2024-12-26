@@ -184,6 +184,16 @@ const userService = {
       throw error;
     }
   },
+  userGetLatestCoupon: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Latest_Coupon
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 }
 
 export default userService;

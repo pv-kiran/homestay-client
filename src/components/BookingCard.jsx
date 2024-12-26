@@ -50,7 +50,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
     const {
         // data,
-        // error,
+        error: couponError,
         // loading,
         execute: applyCoupon,
         // success,
@@ -107,14 +107,17 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             sessionStorage.setItem('appliedCoupon', JSON.stringify(couponDetails));
             // setIsCouponModalOpen(false);
             toast.success(response.message);
-        }        
+        } 
     }
 
     useEffect(() => {
         if (error) {
             toast.error(error?.message);
         }
-    }, [error])
+        if(couponError) {
+            toast.error(couponError?.message);
+        }
+    }, [error, couponError])
 
     useEffect(() => {
         if (success) {
@@ -133,14 +136,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             sessionStorage.removeItem('appliedCoupon');
         };
     }, []);
-
-    // useEffect(() => {
-    //     if(checkIn===null || checkOut===null) {
-    //         setAppliedCoupon(null);
-    //         setCouponCode('');
-    //         sessionStorage.removeItem('appliedCoupon');
-    //     }
-    // },[checkIn, checkOut])
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
