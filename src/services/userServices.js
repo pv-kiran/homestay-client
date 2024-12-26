@@ -158,7 +158,32 @@ const userService = {
   } catch (error) {
     throw error;
   }
-  }
+  },
+  userGetValidCoupons: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Get_Valid_Coupons
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userApplyCoupon: async (code, id, days) => {    
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Apply_Coupon,
+        {
+          couponCode:code,
+          homestayId: id,
+          numberOfDays: days
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 }
 
 export default userService;

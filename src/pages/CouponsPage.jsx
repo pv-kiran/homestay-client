@@ -179,6 +179,11 @@ export default function CouponsPage() {
       sortable: true,
     },
     {
+      header: "Discount",
+      accessor: "discountValue",
+      sortable: true,
+    },
+    {
       header: "Status",
       accessor: (coupon) => (
         <span

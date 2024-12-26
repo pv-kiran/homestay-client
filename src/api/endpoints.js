@@ -15,6 +15,8 @@ const apiEndpoints = {
   Bestays_User_Profile_Update: `/user/auth/update-profile`,
   Bestays_User_Profile_View: `/user/auth/view-profile`,
   Bestays_User_Homestay_Booking: "/user/book/homestay",
+  Bestays_User_Get_Valid_Coupons: "/user/get-coupons",
+  Bestays_User_Apply_Coupon: "/user/apply-coupon",
 
 
   // admin api
