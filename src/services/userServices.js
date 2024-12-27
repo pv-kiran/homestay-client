@@ -1,3 +1,4 @@
+import { replace } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import apiEndpoints from "../api/endpoints";
 
@@ -95,10 +96,10 @@ const userService = {
       throw error;
     }
   },
-  userGetHomeStayById: async (homeStayId) => {
+  userGetHomeStayById: async ({ id, currency }) => {
     try {
       const response = await axiosInstance.get(
-        apiEndpoints.Bestays_User_Homestay_Id.replace(":$homestayId", homeStayId)
+        apiEndpoints.Bestays_User_Homestay_Id.replace(":$homestayId", id)?.replace(":$currency", currency)
       );
       return response;
     } catch (error) {
@@ -126,7 +127,7 @@ const userService = {
     }
   },
   userProfileUpdate: async (userData) => {
-    const {street, city, district, state, zip, country, gender, phone} = userData
+    const { street, city, district, state, zip, country, gender, phone } = userData
     try {
       const response = await axiosInstance.post(
         apiEndpoints.Bestays_User_Profile_Update,
@@ -138,15 +139,15 @@ const userService = {
             state,
             zip,
             country,
-          },      
+          },
           gender,
           phone
         })
       )
       return response
-  } catch (error) {
-    throw error;
-  }
+    } catch (error) {
+      throw error;
+    }
   },
   userBookHomestay: async (bookingData) => {
   try {
@@ -188,9 +189,82 @@ const userService = {
     try {
       const response = await axiosInstance.get(
         apiEndpoints.Bestays_User_Latest_Coupon
+      )
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userBookHomestay: async (bookingData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Homestay_Booking,
+        JSON.stringify(bookingData)
       );
       return response;
     } catch (error) {
+      throw error;
+    }
+  },
+  userBookHomestayComplete: async (bookingData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Homestay_Booking_Complete,
+        JSON.stringify(bookingData)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayBookings: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Booking_List
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayCheckIn: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        apiEndpoints.Bestays_User_Homestay_CheckIn.replace(":$bookingId", bookingId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayCheckOut: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        apiEndpoints.Bestays_User_Homestay_CheckOut.replace(":$bookingId", bookingId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayCancel: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.patch(
+        apiEndpoints.Bestays_User_Homestay_Cancel.replace(":$bookingId", bookingId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userGetHomeStayBookingStatus: async ({ homeStayId }) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Booking_Status.replace(':$homeStayId', homeStayId)
+      );
+      return response;
+    } catch (error) {
+      console.log(error)
       throw error;
     }
   },

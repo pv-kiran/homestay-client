@@ -53,6 +53,8 @@ export default function SearchBar({ handleSearch }) {
     }, [])
 
 
+
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ThemeProvider theme={theme}>
@@ -179,29 +181,43 @@ export default function SearchBar({ handleSearch }) {
                         </div>
 
                         {/* Mobile View */}
-                        <div className="lg:hidden space-y-4">
-                            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                                {/* Location */}
-                                <div className={`p-4 border-b border-gray-200 ${activeInput === 'location' ? 'bg-gray-200 rounded-full' : ''}`}>
-                                    <div className="text-xs font-semibold text-gray-800 mb-1">Location</div>
+                        <div className="lg:hidden space-y-4" ref={inputWrapperRef}>
+                            <div className="bg-black/20 rounded-2xl shadow-lg overflow-hidden backdrop-blur-sm">
+
+                                <div className={`p-4 border-b border-white/20 ${activeInput === 'location' ? 'bg-black/30 rounded-full' : ''}`}>
+                                    <div className="text-xs font-semibold text-white mb-1">Location</div>
                                     <div className="flex items-center gap-3">
-                                        <MapPin className="h-5 w-5 text-gray-400" />
+                                        <MapPin className="h-5 w-5 text-white" />
                                         <input
                                             type="text"
                                             placeholder="Where to?"
-                                            className="w-full bg-transparent border-none outline-none text-gray-600 placeholder-gray-400
-                                    focus:outline-none focus:ring-0 focus:border-none"
+                                            className="w-full bg-transparent border-none outline-none text-white placeholder-white/70
+                focus:outline-none focus:ring-0 focus:border-none"
                                             value={location}
                                             onChange={(e) => setLocation(e.target.value)}
-                                            onFocus={() => setActiveInput('location')}
-                                            onBlur={() => setActiveInput(null)}
+                                            onFocus={() => {
+                                                setActiveInput('location');
+                                                setShowLocations(true)
+                                            }}
+                                            onBlur={() => {
+                                                setActiveInput(null)
+                                            }}
                                         />
+                                        {
+                                            showLocations && <LocationBox
+                                                ref={locationBoxRef}
+                                                locations={data?.data?.filter((_location) =>
+                                                    _location.city.includes(location)
+                                                )}
+                                                onSelect={handleLocationSelect}
+                                                position={position}
+                                            />
+                                        }
                                     </div>
                                 </div>
 
-                                {/* Check-in */}
-                                <div className={`p-4 border-b border-gray-200 ${activeInput === 'checkIn' ? 'bg-gray-200 rounded-full' : ''}`}>
-                                    <div className="text-xs font-semibold text-gray-800 mb-1">Check in</div>
+                                <div className={`p-4 border-b border-white/20 ${activeInput === 'checkIn' ? 'bg-black/30 rounded-full' : ''}`}>
+                                    <div className="text-xs font-semibold text-white mb-1">Check in</div>
                                     <div className="flex items-center gap-3">
                                         <DatePicker
                                             value={checkIn}
@@ -211,17 +227,17 @@ export default function SearchBar({ handleSearch }) {
                                             slotProps={{
                                                 textField: {
                                                     placeholder: "Add date",
+                                                    className: "w-full bg-transparent border-none outline-none text-white placeholder-white/70",
                                                     onFocus: () => setActiveInput('checkIn'),
-                                                    onBlur: () => setActiveInput(null)
+                                                    onBlur: () => setActiveInput(null),
                                                 }
                                             }}
                                         />
                                     </div>
                                 </div>
 
-                                {/* Check-out */}
-                                <div className={`p-4 border-b border-gray-200 ${activeInput === 'checkOut' ? 'bg-gray-200 rounded-full' : ''}`}>
-                                    <div className="text-xs font-semibold text-gray-800 mb-1">Check out</div>
+                                <div className={`p-4 border-b border-white/20 ${activeInput === 'checkOut' ? 'bg-black/30 rounded-full' : ''}`}>
+                                    <div className="text-xs font-semibold text-white mb-1">Check out</div>
                                     <div className="flex items-center gap-3">
                                         <DatePicker
                                             value={checkOut}
@@ -231,31 +247,30 @@ export default function SearchBar({ handleSearch }) {
                                             slotProps={{
                                                 textField: {
                                                     placeholder: "Add date",
+                                                    className: "w-full bg-transparent border-none outline-none text-white placeholder-white/70",
                                                     onFocus: () => setActiveInput('checkOut'),
-                                                    onBlur: () => setActiveInput(null)
+                                                    onBlur: () => setActiveInput(null),
                                                 }
                                             }}
                                         />
                                     </div>
                                 </div>
 
-                                {/* Guests */}
-                                <div className={`p-4 ${activeInput === 'guests' ? 'bg-gray-200 rounded-full' : ''}`}>
-                                    <div className="text-xs font-semibold text-gray-800 mb-1">Guests</div>
+                                <div className={`p-4 ${activeInput === 'guests' ? 'bg-black/30 rounded-full' : ''}`}>
+                                    <div className="text-xs font-semibold text-white mb-1">Guests</div>
                                     <div className="flex items-center gap-3">
-                                        <Users className="h-5 w-5 text-gray-400" />
+                                        <Users className="h-5 w-5 text-white" />
                                         <input
                                             type="number"
                                             min="1"
                                             max="16"
-                                            className="w-20 bg-transparent border-none outline-none text-gray-600
-                                    focus:outline-none focus:ring-0 focus:border-none"
+                                            className="w-20 bg-transparent border-none outline-none text-white focus:outline-none focus:ring-0 focus:border-none"
                                             value={guests}
                                             onChange={(e) => setGuests(parseInt(e.target.value))}
                                             onFocus={() => setActiveInput('guests')}
                                             onBlur={() => setActiveInput(null)}
                                         />
-                                        <span className="text-sm text-gray-500">guests</span>
+                                        <span className="text-sm text-white">guests</span>
                                     </div>
                                 </div>
                             </div>

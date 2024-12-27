@@ -41,9 +41,9 @@ export const routes = [
     title: 'Account',
     icon: <UserCircle className="w-5 h-5" />
   },
-  // {
-  //   path: '/admin/sample',
-  //   title: 'Sample',
-  //   icon: <UserCircle className="w-5 h-5" />
-  // }
+  {
+    path: '/admin/bookings',
+    title: 'Bookings',
+    icon: <UserCircle className="w-5 h-5" />
+  }
 ];
