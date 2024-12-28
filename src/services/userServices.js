@@ -268,6 +268,17 @@ const userService = {
       throw error;
     }
   },
+  userSubmitReview: async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Homestay_Submit_Review,
+        JSON.stringify(data)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 }
 
 export default userService;
