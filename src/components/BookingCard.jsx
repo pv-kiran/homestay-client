@@ -7,7 +7,7 @@ import { theme } from '../utils/theme';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { CheckCircle, Tag, Ticket, Users, X } from 'lucide-react';
+import { CheckCircle, Sparkles, Tag, Ticket, Users, X, } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { SignupModal } from './SignupModal';
 import userService from '../services/userServices';
@@ -15,10 +15,28 @@ import useApi from '../hooks/useApi';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from './common/Button';
+import { motion } from 'framer-motion';
 import { Modal } from "../components/common/Modal";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Kolkata');
+
+
+const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+};
+
+const wordAnimation = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.4
+        }
+    }
+};
 
 export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests }) => {
     const { id } = useParams();
@@ -28,10 +46,11 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         const storedCoupon = sessionStorage.getItem('appliedCoupon');
         return storedCoupon ? JSON.parse(storedCoupon) : null;
     });
+    const { currency } = useSelector((store) => store?.currency);
     const [couponCode, setCouponCode] = useState('');
     const [checkInError, setCheckInError] = useState(null);
     const [checkOutError, setCheckOutError] = useState(null);
-    const { currency } = useSelector((store) => store?.currency)
+
 
     const {
         error,
@@ -92,19 +111,18 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             return;
         }
         else if (!checkIn || !checkOut) {
-            setCheckInError("CheckIn date required")
-            setCheckOutError("CheckOut date required")
+            setCheckInError("CheckIn is required")
+            setCheckOutError("CheckOut is required")
             return;
         }
         else {
-            console.log(couponCode, "sasdss");
             try {
                 const response = await bookHomestay({
                     homestayId: id,
                     checkIn: checkIn?.$d,
                     checkOut: checkOut?.$d,
                     currency: JSON.parse(localStorage.getItem('currency')),
-                    couponCode: couponCode
+                    couponCode
                 })
 
                 const { data } = response
@@ -119,7 +137,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                         key: import.meta.env.VITE_APP_RZP_KEY,
                         amount: data?.amount,
                         currency: JSON.parse(localStorage.getItem('currency'))?.code,
-                        name: "BeStays",
+                        name: "Soumya Corp.",
                         description: "Test Transaction",
                         // image: { logo },
                         order_id: data?.id,
@@ -143,6 +161,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
                             // navigate(`/appointment/${data?.appointment?._id}/success`)
 
+                            console.log(bookingResponse);
                         },
                         prefill: {
                             name: "Testing",
@@ -186,11 +205,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
     const handleApplyCoupon = async (code = couponCode) => {
-        const currencyCode = JSON.parse(localStorage.getItem('currency'))?.code;
         const days = differenceInDays === null ? 1 : differenceInDays
-        setCouponCode(code);
+        setCouponCode(code)
+        const currencyCode = currency?.code;
         const response = await applyCoupon(code, id, days, currencyCode)
-
         if (response.success) {
             const couponDetails = {
                 discountAmount: response?.data?.discountAmount,
@@ -211,25 +229,15 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         if (error) {
             toast.error(error?.message);
         }
-        if (bookingError) {
-            toast.error(bookingError?.message);
-        }
         if (couponError) {
             toast.error(couponError?.message);
         }
     }, [error, couponError])
 
-    useEffect(() => {
-        if (success) {
-            toast.success("Reservation is Success");
-        }
-    }, [error, bookingError])
-
-
 
     useEffect(() => {
         getCoupons();
-    }, [])
+    }, [authState])
 
     useEffect(() => {
         return () => {
@@ -240,8 +248,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }, []);
 
     useEffect(() => {
-
-    }, [])
+        if (couponCode) {
+            handleRemoveCoupon()
+        }
+    }, [checkIn, checkOut, currency])
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -249,8 +259,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                 <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 sticky top-[88px]">
                     <div className="mb-4 sm:mb-6">
                         <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                            <span className='pr-2'>{currency?.symbol}</span>
-                            {price?.toLocaleString('en-IN')} <span className="text-base sm:text-lg font-normal text-gray-600">per night</span>
+                            ₹{price?.toLocaleString('en-IN')} <span className="text-base sm:text-lg font-normal text-gray-600">per night</span>
                         </div>
                     </div>
 
@@ -263,6 +272,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                         value={checkIn}
                                         onChange={(newValue) => {
                                             onCheckInChange(newValue);
+                                            onCheckOutChange(null)
                                             setCheckInError(null)
                                         }}
                                         minDate={dayjs()}
@@ -270,10 +280,11 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                         slotProps={{
                                             textField: {
                                                 placeholder: "Add date",
+                                                onFocus: () => setActiveInput('checkIn'),
+                                                onBlur: () => setActiveInput(null)
                                             }
                                         }}
                                     />
-
                                 </div>
                                 {checkInError && (
                                     <p className="mt-1 text-xs text-red-500">{checkInError}</p>
@@ -297,11 +308,12 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                     display: "flex",
                                                     justifyContent: "space-between"
                                                 },
-                                                placeholder: "Add date"
+                                                placeholder: "Add date",
+                                                onFocus: () => setActiveInput('checkOut'),
+                                                onBlur: () => setActiveInput(null)
                                             }
                                         }}
                                     />
-
                                 </div>
                                 {checkOutError && (
                                     <p className="mt-1 text-xs text-red-500">{checkOutError}</p>
@@ -342,18 +354,108 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                         <div className="pb-2">
                             {!appliedCoupon ? (
                                 (checkIn !== null && checkOut !== null) && (
-                                    <button
-                                        onClick={() => setIsCouponModalOpen(true)}
-                                        className="group flex items-center gap-2 w-full p-3 text-gray-700 hover:bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 hover:border-teal-500 transition-all duration-300"
-                                    >
-                                        <Ticket className="w-5 h-5 text-teal-600 group-hover:scale-110 transition-transform" />
-                                        <div className="flex flex-col items-start">
-                                            <span className="font-medium text-gray-900">
-                                                Apply Coupon
-                                            </span>
-                                            <span className="text-xs text-gray-500">Save more on your booking</span>
-                                        </div>
-                                    </button>
+                                    ((authState !== null) ? (
+                                        <button
+                                            onClick={() => setIsCouponModalOpen(true)}
+                                            className="group flex items-center gap-2 w-full p-3 text-gray-700 hover:bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 hover:border-teal-500 transition-all duration-300"
+                                        >
+                                            <Ticket className="w-5 h-5 text-teal-600 group-hover:scale-110 transition-transform" />
+                                            <div className="flex flex-col items-start">
+                                                <span className="font-medium text-gray-900">
+                                                    Apply Coupon
+                                                </span>
+                                                <span className="text-xs text-gray-500">Save more on your booking</span>
+                                            </div>
+                                        </button>
+                                    ) : (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="relative overflow-hidden group"
+                                        >
+                                            <motion.div
+                                                whileHover={{ scale: 1.02 }}
+                                                className="w-full p-3 rounded-lg border-2 border-dashed border-gray-200 bg-gradient-to-r from-gray-50 to-white"
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="relative">
+                                                        <motion.div
+                                                            animate={{ rotate: [0, 15, -15, 0] }}
+                                                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                                            className="bg-teal-50 p-2 rounded-full"
+                                                        >
+                                                            <Ticket className="w-5 h-5 text-teal-600" />
+                                                        </motion.div>
+                                                        <motion.div
+                                                            initial={{ scale: 0 }}
+                                                            animate={{ scale: [0, 1.2, 0] }}
+                                                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                                            className="absolute -top-1 -right-1"
+                                                        >
+                                                            <Sparkles className="w-3 h-3 text-yellow-400" />
+                                                        </motion.div>
+                                                    </div>
+
+                                                    <div className="flex-1">
+                                                        <motion.div
+                                                            initial="hidden"
+                                                            animate="visible"
+                                                            variants={{
+                                                                visible: {
+                                                                    transition: {
+                                                                        staggerChildren: 0.05
+                                                                    }
+                                                                }
+                                                            }}
+                                                            className="font-medium text-gray-900 flex flex-wrap gap-x-1"
+                                                        >
+                                                            {["Sign", "up", "to", "unlock", "exclusive", "coupons"].map((word, i) => (
+                                                                <motion.span
+                                                                    key={i}
+                                                                    variants={wordAnimation}
+                                                                    className="inline-block"
+                                                                >
+                                                                    {word}
+                                                                </motion.span>
+                                                            ))}
+                                                        </motion.div>
+                                                        <motion.div
+                                                            variants={textVariants}
+                                                            initial="hidden"
+                                                            animate="visible"
+                                                            transition={{ delay: 0.5 }}
+                                                            className="text-xs text-gray-500"
+                                                        >
+                                                            Save up to <motion.span
+                                                                animate={{ scale: [1, 1.1, 1] }}
+                                                                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                                                                className="inline-block font-semibold text-teal-600"
+                                                            >
+                                                                15% off
+                                                            </motion.span> on your stay booking
+                                                        </motion.div>
+                                                    </div>
+
+                                                    <motion.div
+                                                        initial={{ scale: 0 }}
+                                                        animate={{ scale: [0, 1.2, 0] }}
+                                                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                                        className="absolute -top-0.5 -right-0.5"
+                                                    >
+                                                        <Sparkles className="w-3 h-3 text-yellow-400" />
+                                                    </motion.div>
+                                                </div>
+
+                                                {/* Animated gradient overlay */}
+                                                <motion.div
+                                                    initial={{ x: '-100%' }}
+                                                    animate={{ x: '200%' }}
+                                                    transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+                                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                                                />
+                                            </motion.div>
+                                        </motion.div>
+                                    ))
                                 )
                             ) : (
                                 <div className="p-3 bg-gradient-to-r from-teal-50 to-emerald-50 rounded-lg border border-teal-200 shadow-sm">
@@ -368,8 +470,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                     <span className="text-xs px-2 py-1 bg-white text-green-500 rounded-full">Applied</span>
                                                 </div>
                                                 <p className="text-xs text-gray-500">
-                                                    You saved
-                                                    <span className='pr-2'>{currency?.symbol}</span>{appliedCoupon?.discountAmount}
+                                                    You saved ₹{appliedCoupon?.discountAmount}
                                                 </p>
                                             </div>
                                         </div>

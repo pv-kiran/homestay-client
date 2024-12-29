@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import BookingButtons from './BookingButtons';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 import { toast } from 'react-toastify';
+import { Modal } from './common/Modal';
+import ReviewForm from './reviewModal/ReviewForm';
 
 
 const MyBookingCard = ({
@@ -20,7 +23,10 @@ const MyBookingCard = ({
     isCheckedIn,
     isCheckedOut,
     isCancelled,
+    homestayId
 }) => {
+
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
     const {
         loading: checkInLoading,
@@ -63,6 +69,7 @@ const MyBookingCard = ({
     const handleCheckIn = async () => {
         const response = await checkInInitiate({ bookingId: _id });
         if (response.success) {
+            toast.success(response.message);
             getMyBookings();
             toast.success("Checkin is Sucessfull");
         }
@@ -71,14 +78,18 @@ const MyBookingCard = ({
     const handleCheckOut = async () => {
         const response = await checkOutInitiate({ bookingId: _id });
         if (response.success) {
-            getMyBookings();
             toast.success("Checkout is Sucessfull");
+            getMyBookings();
+            setTimeout(() => {
+                setIsReviewModalOpen(true);
+            }, 300);
         }
     };
 
     const handleCancel = async () => {
         const response = await cancelInitiate({ bookingId: _id });
         if (response.success) {
+            toast.success(response.message);
             getMyBookings();
             toast.success("Cancellation is Sucessfull");
         }
@@ -87,6 +98,11 @@ const MyBookingCard = ({
 
 
 
+
+
+    const handleClose = () => {
+        setIsReviewModalOpen(false);
+    }
 
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
@@ -153,6 +169,17 @@ const MyBookingCard = ({
                     isCheckedOut={isCheckedOut}
                     isCancelled={isCancelled}
                 />
+                <Modal
+                    isOpen={isReviewModalOpen}
+                    onClose={handleClose}
+                    title={"Rate your stay"}
+                >
+                    <ReviewForm
+                        stayName={homestayName}
+                        homestayId={homestayId}
+                        onClose={handleClose}
+                    />
+                </Modal>
             </div>
         </div>
     );
