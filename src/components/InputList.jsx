@@ -44,6 +44,7 @@ function InputList({ lists, setLists }) {
               Hotel policies
             </h2>
             <button
+              type='button'
               onClick={clearAll}
               className="flex items-center text-red-500 hover:text-red-700 transition-colors duration-200"
             >
@@ -61,6 +62,7 @@ function InputList({ lists, setLists }) {
             >
               <span className="text-sm font-medium">{skill}</span>
               <button
+                type='button'
                 onClick={() => removeSkill(skill)}
                 className="transition-opacity duration-200"
               >
