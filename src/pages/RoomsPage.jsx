@@ -205,6 +205,7 @@ const RoomsPage = () => {
     setGuestPolicyList([])
     setImages([]);
     setHomeStayId(null);
+    setIsReorder(false)
     reset();
   };
 
