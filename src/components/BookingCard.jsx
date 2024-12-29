@@ -7,7 +7,7 @@ import { theme } from '../utils/theme';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { CheckCircle, Tag, Ticket, Users, X } from 'lucide-react';
+import { CheckCircle, Sparkles, Tag, Ticket, Users, X, } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { SignupModal } from './SignupModal';
 import userService from '../services/userServices';
@@ -15,10 +15,27 @@ import useApi from '../hooks/useApi';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from './common/Button';
+import { motion } from 'framer-motion';
 import { Modal } from "../components/common/Modal";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Kolkata');
+
+const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+};
+  
+const wordAnimation = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+        duration: 0.4
+        }
+    }
+};
 
 export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests }) => {
     const { id } = useParams();
@@ -205,13 +222,13 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
     useEffect(() => {
         if (success) {
-            toast.success("Reservation is Success");
+            toast.success("Reservation is success");
         }
     }, [success])
 
     useEffect(() => {
         getCoupons();
-    },[])
+    },[authState])
 
     useEffect(() => {
         return () => {
@@ -314,6 +331,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                     <div className="pb-2">
                     {!appliedCoupon ? (
                         (checkIn!==null && checkOut!==null) && (
+                            ((authState!==null) ? (
                             <button 
                                 onClick={() => setIsCouponModalOpen(true)}           
                                 className="group flex items-center gap-2 w-full p-3 text-gray-700 hover:bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 hover:border-teal-500 transition-all duration-300"
@@ -326,6 +344,95 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                     <span className="text-xs text-gray-500">Save more on your booking</span>
                                 </div>
                             </button>
+                            ) : (
+                                <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="relative overflow-hidden group"
+                                >
+                                    <motion.div
+                                        whileHover={{ scale: 1.02 }}
+                                        className="w-full p-3 rounded-lg border-2 border-dashed border-gray-200 bg-gradient-to-r from-gray-50 to-white"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                        <div className="relative">
+                                            <motion.div
+                                            animate={{ rotate: [0, 15, -15, 0] }}
+                                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                            className="bg-teal-50 p-2 rounded-full"
+                                            >
+                                            <Ticket className="w-5 h-5 text-teal-600" />
+                                            </motion.div>
+                                            <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: [0, 1.2, 0] }}
+                                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                            className="absolute -top-1 -right-1"
+                                            >
+                                                <Sparkles className="w-3 h-3 text-yellow-400" />
+                                            </motion.div>
+                                        </div>
+
+                                        <div className="flex-1">
+                                            <motion.div
+                                            initial="hidden"
+                                            animate="visible"
+                                            variants={{
+                                                visible: {
+                                                transition: {
+                                                    staggerChildren: 0.05
+                                                }
+                                                }
+                                            }}
+                                            className="font-medium text-gray-900 flex flex-wrap gap-x-1"
+                                            >
+                                            {["Sign", "up", "to", "unlock", "exclusive", "coupons"].map((word, i) => (
+                                                <motion.span
+                                                key={i}
+                                                variants={wordAnimation}
+                                                className="inline-block"
+                                                >
+                                                {word}
+                                                </motion.span>
+                                            ))}
+                                            </motion.div>
+                                            <motion.div
+                                            variants={textVariants}
+                                            initial="hidden"
+                                            animate="visible"
+                                            transition={{ delay: 0.5 }}
+                                            className="text-xs text-gray-500"
+                                            >
+                                            Save up to <motion.span
+                                                animate={{ scale: [1, 1.1, 1] }}
+                                                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                                                className="inline-block font-semibold text-teal-600"
+                                            >
+                                                15% off
+                                            </motion.span> on your stay booking
+                                            </motion.div>
+                                        </div>
+
+                                        <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: [0, 1.2, 0] }}
+                                            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                                            className="absolute -top-0.5 -right-0.5"
+                                            >
+                                                <Sparkles className="w-3 h-3 text-yellow-400" />
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Animated gradient overlay */}
+                                        <motion.div
+                                        initial={{ x: '-100%' }}
+                                        animate={{ x: '200%' }}
+                                        transition={{ duration: 3, repeat: Infinity, repeatDelay: 1 }}
+                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                                        />
+                                    </motion.div>
+                                </motion.div>
+                            ))
                         )
                     ) : (
                         <div className="p-3 bg-gradient-to-r from-teal-50 to-emerald-50 rounded-lg border border-teal-200 shadow-sm">

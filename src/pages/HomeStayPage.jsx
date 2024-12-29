@@ -8,6 +8,7 @@ import userService from '../services/userServices';
 import { useSelector } from 'react-redux';
 import MapView from '../components/MapView';
 import { calculateDifferenceInDays } from '../utils/dateDifference';
+import ReviewsSection from '../components/displayReview/ReviewsSection';
 
 
 function HomeStayPage() {
@@ -115,6 +116,7 @@ function HomeStayPage() {
                                 />
                             </div>
                         </div>
+                        <ReviewsSection homeStayId= {id}/>
                         {
                             (bookingStatus?.status && calculateDifferenceInDays(bookingStatus?.checkIn) <= 2) ? <div>
                                 <MapView
