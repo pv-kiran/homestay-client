@@ -75,7 +75,7 @@ export default function SearchBar({ handleSearch }) {
                             <div className="bg-white rounded-full shadow-lg divide-x divide-gray-200 flex items-center transition-all duration-300 px-1 relative">
                                 {/* Location */}
                                 <div className={`group flex-1 p-3 rounded-full hover:bg-gray-200  transition-colors duration-200 cursor-pointer  ${activeInput === 'location' ? 'bg-gray-200 rounded-full' : ''}`}>
-                                    <div className="px-2">
+                                    {/* <div className="px-2">
                                         <div className="text-xs font-semibold text-gray-800">Location</div>
                                         <div className="flex items-center gap-2">
                                             <MapPin className="h-4 w-4 text-gray-400" />
@@ -108,6 +108,41 @@ export default function SearchBar({ handleSearch }) {
                                                 position={position}
                                             />
                                         }
+                                    </div> */}
+                                    <div className="px-2">
+                                        <div className="text-xs font-semibold text-gray-800">Location</div>
+                                        <div className="flex items-center gap-2">
+                                            <MapPin className="h-4 w-4 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Where to?"
+                                                className="w-full bg-transparent border-none outline-none text-gray-600 placeholder-gray-400 text-sm focus:outline-none focus:ring-0 focus:border-none"
+                                                value={location?.city || ''} // Ensure it's a string
+                                                onChange={(e) => {
+                                                    setLocation({ ...location, city: e.target.value }); // Update the city field in location object
+                                                }}
+                                                onFocus={() => {
+                                                    setActiveInput('location');
+                                                    setShowLocations(true);
+                                                }}
+                                                onBlur={() => {
+                                                    setActiveInput(null);
+                                                    setTimeout(() => {
+                                                        setShowLocations(false);
+                                                    }, 500);
+                                                }}
+                                            />
+                                        </div>
+                                        {showLocations && (
+                                            <LocationBox
+                                                ref={locationBoxRef}
+                                                locations={data?.data?.filter((_location) =>
+                                                    _location.city.toLowerCase().includes(location?.city?.toLowerCase() || '')
+                                                )}
+                                                onSelect={handleLocationSelect}
+                                                position={position}
+                                            />
+                                        )}
                                     </div>
                                 </div>
 
