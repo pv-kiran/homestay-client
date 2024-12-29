@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 
 const schema = yup.object({
-    reviewText: yup.string().required("Review is required").min(4, "Feedback is too short"),
+    reviewText: yup.string().required("Review is required").min(10, "Feedback is too short"),
 })
 
 function ReviewForm({stayName, homestayId, onClose}) {

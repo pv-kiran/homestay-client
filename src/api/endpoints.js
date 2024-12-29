@@ -25,6 +25,7 @@ const apiEndpoints = {
   Bestays_User_Homestay_Cancel: "/user/homestay/cancel/:$bookingId",
   Bestays_User_Homestay_Booking_Status: "/user/homestay/booking/:$homeStayId/status",
   Bestays_User_Homestay_Submit_Review: "/user/submit-review",
+  Bestays_User_Homestay_Get_Review: "/user/test/:$homeStayId",
 
   // admin api
   Bestays_Admin_Signup: "/admin/auth/signup",

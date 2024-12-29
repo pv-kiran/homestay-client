@@ -279,6 +279,16 @@ const userService = {
       throw error;
     }
   },
+  userGetHomestayReview: async ({homeStayId}) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Get_Review.replace(':$homeStayId', homeStayId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default userService;
