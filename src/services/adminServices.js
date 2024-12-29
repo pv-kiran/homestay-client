@@ -242,6 +242,73 @@ const adminService = {
       throw error;
     }
   },
+  adminCouponAdd: async (couponData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_Coupon,
+        couponData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminCouponEdit: async ({ data, couponId }) => {    
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Coupon_Edit.replace(
+          ":$id", couponId
+        ),
+        data,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminToggleCoupon: async (id) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Coupons_Toggle.replace(":$id", id)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllCoupons: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Coupons_Get_All,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  adminGetAllBookings: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_All_Bookings,
+        pagination
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminReorderHomeStayImages: async ({ images, homeStayId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Image_Reordering.replace(":$homeStayId", homeStayId),
+        images
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

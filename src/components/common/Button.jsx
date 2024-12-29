@@ -16,6 +16,7 @@ export function Button({
     primary: 'bg-turquoise-500 text-white hover:bg-turquoise-600 focus:ring-turquoise-500',
     secondary: 'bg-turquoise-100 text-turquoise-700 hover:bg-turquoise-200 focus:ring-turquoise-500',
     outline: 'border border-turquoise-500 text-turquoise-500 hover:bg-turquoise-50 focus:ring-turquoise-500',
+    transparent: 'border border-white-500 text-white hover:bg-white-100 focus:ring-white-500'
   };
 
   const sizes = {

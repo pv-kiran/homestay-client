@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
-import { Search, MapPin, Calendar, Users } from 'lucide-react';
+import React from 'react';
 import SearchBar from './SearchBar';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 function Hero() {
 
-    const handleSearch = (searchParams) => {
-        // Handle search logic here
-        console.log(searchParams);
+    const navigate = useNavigate();
+
+    const handleSearch = ({ location, checkIn, checkOut, guests }) => {
+        const queryParams = new URLSearchParams();
+
+        // Add query parameters only if they exist
+        if (location?.city) queryParams.append('city', location.city);
+        if (checkIn) queryParams.append('checkIn', dayjs(checkIn).format('YYYY-MM-DD'));
+        if (checkOut) queryParams.append('checkOut', dayjs(checkOut).format('YYYY-MM-DD'));
+        if (guests) queryParams.append('guests', guests);
+
+        // Navigate to the constructed URL
+        const queryString = queryParams.toString(); // Generates the query string
+        navigate(`/homestays/all${queryString ? `?${queryString}` : ''}`);
     };
 
     return (

@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Star, Bed, Bath, Clock, ScrollText, ListCollapse, Blocks } from 'lucide-react';
+import { Tooltip } from './common/Tooltip';
 
 export const PropertyDetails = ({
     name,
@@ -57,14 +58,16 @@ export const PropertyDetails = ({
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {amenities.map((amenity) => (
-                        <div key={amenity?._id} className="flex items-center gap-2">
-                            <img
-                                src={amenity?.iconUrl}
-                                alt={amenity?.amenityName}
-                                className="w-5 h-5"
-                            />
-                            <span className="text-gray-600">{amenity?.amenityName}</span>
-                        </div>
+                        <Tooltip key={amenity?._id} content={amenity?.description}>
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={amenity?.iconUrl}
+                                    alt={amenity?.amenityName}
+                                    className="w-5 h-5"
+                                />
+                                <span className="text-gray-600">{amenity?.amenityName}</span>
+                            </div>
+                        </Tooltip>
                     ))}
                 </div>
             </div>

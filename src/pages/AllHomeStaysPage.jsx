@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import FilterSidebar from '../components/FilterSidebar';
 import HomeStayCard from '../components/common/HomeStayCard';
 import { Modal } from '../components/common/Modal';
@@ -22,6 +23,7 @@ function AllHomeStaysPage() {
         reset
     } = useApi(userService.userGetAllHomestays);
 
+    const { currency } = useSelector((state) => state?.currency);
 
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [priceRange, setPriceRange] = useState([0, 15000]);
@@ -33,6 +35,11 @@ function AllHomeStaysPage() {
     const [searchParams] = useSearchParams();
     const id = searchParams.get("id");
     const name = searchParams.get("name");
+    const city = searchParams.get("city");
+    const checkIn = searchParams.get("checkIn");
+    const checkOut = searchParams.get("checkOut");
+    const guests = searchParams.get("guests");
+
 
     const navigate = useNavigate();
 
@@ -42,10 +49,20 @@ function AllHomeStaysPage() {
             price: priceRange,
             numberOfGuest: selectedGuests[0],
             numberOfRooms: selectedRooms[0],
-            numberOfBathrooms: selectedBathrooms[0]
+            numberOfBathrooms: selectedBathrooms[0],
+            currency
         };
         if (id && selectedCategories.length === 0) {
             filters.category = [id];
+        }
+        if (city) {
+            filters.city = city;
+        }
+        if (checkIn) {
+            filters.checkIn = checkIn;
+        }
+        if (checkIn) {
+            filters.checkOut = checkOut;
         }
         getAllHomeStays(filters);
     }, [
@@ -54,25 +71,28 @@ function AllHomeStaysPage() {
         selectedRooms,
         selectedGuests,
         selectedBathrooms,
+        currency
     ]);
 
     useEffect(() => {
         if (id && name) {
             setSelectedCategories([id]);
         }
-    }, [id, name]);
+        if (guests) {
+            setSelectedGuests([Number(guests)]);
+        }
+    }, [id, name, guests]);
 
     const resetFilters = () => {
-        if (id && name) {
+        if (id || name || city) {
             navigate("/homestays/all")
         }
-        getAllHomeStays();
+        getAllHomeStays({ currency });
         setSelectedCategories([]);
         setPriceRange([0, 15000]);
         setSelectedRooms([0]);
         setSelectedGuests([0]);
         setselectedBathrooms([0]);
-
     }
 
     useEffect(() => {
@@ -83,14 +103,11 @@ function AllHomeStaysPage() {
         getAllCategories();
     }, [])
 
-    console.log(homeStays);
 
 
     return (
         <div className="min-h-screen mt-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 py-8">
-                {/* <h1 className="text-3xl font-bold text-gray-900 mb-8">Find Your Perfect Stay</h1> */}
-
                 <div className="flex gap-8">
                     <div className="hidden  top-[100px] md:block"
                     >

@@ -1,4 +1,6 @@
 const apiEndpoints = {
+
+  Currency_List: "https://restcountries.com/v3.1/all?fields=currencies",
   // user api
   Bestays_User_Signup: "/user/auth/signin",
   Bestays_User_OtpVerify: "/user/auth/otp/verify",
@@ -8,7 +10,22 @@ const apiEndpoints = {
   Bestays_User_LogOut: "/user/auth/signout",
   Bestays_User_All_Categories: "/user/get-allcategories",
   Bestays_User_All_Homestays: "/user/get-allhomestays",
-  Bestays_User_Homestay_Id: "/user/homestay/:$homestayId",
+  Bestays_User_Homestay_Id: "/user/homestay/:$homestayId/:$currency",
+  Bestays_User_Homestay_Locations: "/user/get-all-locations",
+  Bestays_User_Profile_Update: `/user/auth/update-profile`,
+  Bestays_User_Profile_View: `/user/auth/view-profile`,
+  Bestays_User_Homestay_Booking: "/user/book/homestay",
+  Bestays_User_Get_Valid_Coupons: "/user/get-coupons",
+  Bestays_User_Apply_Coupon: "/user/apply-coupon",
+  Bestays_User_Latest_Coupon: "/user/get-latestcoupon",
+  Bestays_User_Homestay_Booking_Complete: "/user/book/homestay/complete",
+  Bestays_User_Homestay_Booking_List: "/user/homestay/my-bookings",
+  Bestays_User_Homestay_CheckIn: "/user/homestay/checkin/:$bookingId",
+  Bestays_User_Homestay_CheckOut: "/user/homestay/checkout/:$bookingId",
+  Bestays_User_Homestay_Cancel: "/user/homestay/cancel/:$bookingId",
+  Bestays_User_Homestay_Booking_Status: "/user/homestay/booking/:$homeStayId/status",
+  Bestays_User_Homestay_Submit_Review: "/user/submit-review",
+  Bestays_User_Homestay_Get_Review: "/user/test/:$homeStayId",
 
   // admin api
   Bestays_Admin_Signup: "/admin/auth/signup",
@@ -29,7 +46,14 @@ const apiEndpoints = {
   Bestays_Admin_Add_Homestay: "/admin/add-homestay",
   Bestays_Admin_Get_Homestays: "/admin/get-allhomestays",
   Bestays_Admin_Homestays_Toggle: "/admin/toggle-homestay/:$homestayId",
-  Bestays_Admin_Homestays_Edit: "/admin/update-homestay/:$homestayId"
+  Bestays_Admin_Homestays_Edit: "/admin/update-homestay/:$homestayId",
+  Bestays_Admin_Add_Coupon: "/admin/add-coupon",
+  Bestays_Admin_Coupon_Edit: "/admin/update-coupon/:$id",
+  Bestays_Admin_Coupons_Toggle: "/admin/toggle-coupon/:$id",
+  Bestays_Admin_Coupons_Get_All: "/admin/get-allcoupons",
+  Bestays_Admin_Homestays_Edit: "/admin/update-homestay/:$homestayId",
+  Bestays_Admin_Get_All_Bookings: "/admin/get-allbookings",
+  Bestays_Admin_Image_Reordering: "/admin/homestay/:$homeStayId/images",
 };
 
 export default apiEndpoints;
