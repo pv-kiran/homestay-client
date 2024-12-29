@@ -77,6 +77,9 @@ function HomeStayPage() {
     }, [])
 
 
+    useEffect(() => {
+        setGuests(homeStay?.data?.maxGuests)
+    }, [homeStay])
 
     return (
         <>

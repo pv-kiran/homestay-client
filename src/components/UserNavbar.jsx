@@ -10,7 +10,7 @@ import userService from "../services/userServices";
 import { clearAuth } from "../app/features/users/authSlice";
 import { processCurrencyData } from "../utils/currency";
 import { CurrencyDropdown } from "./common/CurrencyDropdown";
-
+import MenuItem from "./MenuItem";
 
 
 export default function UserNavbar() {
@@ -111,21 +111,9 @@ export default function UserNavbar() {
                   <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                     <div className="py-1" role="menu">
                       {authState ? (
+
                         <>
-                          <a
-                            href="/profile"
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            role="menuitem">
-                            <User className="h-4 w-4 mr-3" />
-                            Profile
-                          </a>
-                          <button
-                            onClick={handleLogout}
-                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            role="menuitem">
-                            <LogOut className="h-4 w-4 mr-3" />
-                            Sign out
-                          </button>
+                          <MenuItem setIsMenuOpen={setIsMenuOpen} />
                         </>
                       ) : (
                         <button

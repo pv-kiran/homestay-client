@@ -81,7 +81,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                         key: import.meta.env.VITE_APP_RZP_KEY,
                         amount: data?.amount,
                         currency: JSON.parse(localStorage.getItem('currency'))?.code,
-                        name: "Soumya Corp.",
+                        name: "BeStays",
                         description: "Test Transaction",
                         // image: { logo },
                         order_id: data?.id,
@@ -105,7 +105,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
                             // navigate(`/appointment/${data?.appointment?._id}/success`)
 
-                            console.log(bookingResponse);
                         },
                         prefill: {
                             name: "Testing",
@@ -135,13 +134,12 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         if (error) {
             toast.error(error?.message);
         }
-    }, [error])
-
-    useEffect(() => {
-        if (success) {
-            toast.success("Reservation is Success");
+        if (bookingError) {
+            toast.error(bookingError?.message);
         }
-    }, [success])
+    }, [error, bookingError])
+
+
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>

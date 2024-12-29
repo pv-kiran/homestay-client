@@ -16,12 +16,12 @@ const MyBookings = () => {
     }, [])
 
     return (
-        <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 mt-10">
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Bookings</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {data?.map((booking) => (
-                        <MyBookingCard key={booking._id} {...booking} getMyBookings={getMyBookings} />
+                        <MyBookingCard key={booking._id} {...booking} getMyBookings={getMyBookings} getBookings={getMyBookings} />
                     ))}
                 </div>
             </div>

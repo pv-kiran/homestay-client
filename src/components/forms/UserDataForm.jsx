@@ -18,7 +18,7 @@ const calculateAge = (dob) => {
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDiff = today.getMonth() - birthDate.getMonth();
-  
+
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
@@ -37,8 +37,8 @@ const schema = yup.object({
 });
 
 export const UserDataForm = ({ submitHandler, isLoading }) => {
-  const {authState} = useSelector((state) => {
-        return state.userAuth;
+  const { authState } = useSelector((state) => {
+    return state.userAuth;
   })
   const [dob, setDob] = useState({
     date: '',
@@ -62,29 +62,29 @@ export const UserDataForm = ({ submitHandler, isLoading }) => {
       [name]: value
     };
     setDob(newDob);
-    
+
     // Clear error when user starts modifying the fields
     setDobError('');
   };
 
   const validateDobAndSubmit = (formData) => {
     // Check if all DOB fields are filled
-    if (!isDobComplete(dob)) {
-      setDobError('Please fill in all date of birth fields');
-      return;
-    }
+    // if (!isDobComplete(dob)) {
+    //   setDobError('Please fill in all date of birth fields');
+    //   return;
+    // }
 
     // Check age restriction
-    const age = calculateAge(dob);
-    if (age < 18) {
-      setDobError('You must be at least 18 years old');
-      return;
-    }
+    // const age = calculateAge(dob);
+    // if (age < 18) {
+    //   setDobError('You must be at least 18 years old');
+    //   return;
+    // }
 
     // If all validations pass, submit the form with DOB data
     submitHandler({
       ...formData,
-      dob: `${dob.year}-${dob.month.padStart(2, '0')}-${dob.date.padStart(2, '0')}`,
+      // dob: `${dob.year}-${dob.month.padStart(2, '0')}-${dob.date.padStart(2, '0')}`,
       userId: authState?.userId
     });
   };
@@ -116,13 +116,13 @@ export const UserDataForm = ({ submitHandler, isLoading }) => {
         disabled
       />
       <div>
-        <DateOfBirth
+        {/* <DateOfBirth
           dob={dob}
           handleDob={handleDobChange}
         />
         {dobError && (
           <p className="mt-1 text-xs text-red-500">{dobError}</p>
-        )}
+        )} */}
       </div>
       <div className='ml-1'>
         <FormField

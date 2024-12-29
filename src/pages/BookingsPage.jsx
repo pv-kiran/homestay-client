@@ -99,7 +99,7 @@ const BookingsPage = () => {
                         ? "bg-turquoise-200 text-turquoise-500"
                         : "bg-gray-100 text-gray-800"
                         }`}>
-                    {!user?.isDisabled ? "Active" : "Disabled"}
+                    {!user?.isDisabled ? "Paid" : "Disabled"}
                 </span>
             ),
             sortable: true,

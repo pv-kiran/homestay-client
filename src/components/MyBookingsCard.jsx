@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import BookingButtons from './BookingButtons';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
+import { toast } from 'react-toastify';
 
 
 const MyBookingCard = ({
@@ -25,18 +26,21 @@ const MyBookingCard = ({
         loading: checkInLoading,
         execute: checkInInitiate,
         error: checkInError,
+        success: checkInSuccess
     } = useApi(userService.userGetHomeStayCheckIn);
 
     const {
         loading: checkOutLoading,
         execute: checkOutInitiate,
         error: checkOutError,
+        success: checkOutSuccess
     } = useApi(userService.userGetHomeStayCheckOut);
 
     const {
         loading: cancelLoading,
         execute: cancelInitiate,
         error: cancelError,
+        success: cancelSuccess
     } = useApi(userService.userGetHomeStayCancel);
 
     const formatDate = (dateString) => {
@@ -59,26 +63,30 @@ const MyBookingCard = ({
     const handleCheckIn = async () => {
         const response = await checkInInitiate({ bookingId: _id });
         if (response.success) {
-            alert("Done ... checkoin")
             getMyBookings();
+            toast.success("Checkin is Sucessfull");
         }
     };
 
     const handleCheckOut = async () => {
         const response = await checkOutInitiate({ bookingId: _id });
         if (response.success) {
-            alert("Done ... checkoout")
             getMyBookings();
+            toast.success("Checkout is Sucessfull");
         }
     };
 
     const handleCancel = async () => {
         const response = await cancelInitiate({ bookingId: _id });
         if (response.success) {
-            alert("Done ... cancel")
             getMyBookings();
+            toast.success("Cancellation is Sucessfull");
         }
     };
+
+
+
+
 
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
