@@ -19,8 +19,10 @@ import HomeStayPage from "./pages/HomeStayPage";
 import AllHomeStaysPage from "./pages/AllHomeStaysPage";
 import NotFound404 from "./pages/NotFound404";
 import UserProfilePage from "./pages/UserProfilePage";
+import CouponsPage from "./pages/CouponsPage";
 import MyBookings from "./pages/MyBookings";
 import BookingsPage from "./pages/BookingsPage";
+
 
 function AppRoutes() {
   return (
@@ -48,6 +50,7 @@ function AppRoutes() {
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="users" element={<UserManagementPage />} />
           <Route path="amenities" element={<AmenitiesPage />} />
+          <Route path="coupons" element={<CouponsPage />} />
           <Route path="add-ons" element={<AddOnsPage />} />
           <Route path="account" element={<AccountPage />} />
           <Route path="bookings" element={<BookingsPage />} />
