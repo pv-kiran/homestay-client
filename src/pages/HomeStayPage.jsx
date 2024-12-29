@@ -77,10 +77,6 @@ function HomeStayPage() {
     }, [])
 
 
-    useEffect(() => {
-        setGuests(homeStay?.data?.maxGuests)
-    }, [homeStay])
-
     return (
         <>
             {
@@ -115,6 +111,7 @@ function HomeStayPage() {
                                     price={homeStay?.data?.pricePerNight}
                                     guests={guests}
                                     setGuests={setGuests}
+                                    maxGuests={homeStay?.data?.maxGuests}
                                 />
                             </div>
                         </div>

@@ -20,7 +20,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Kolkata');
 
-export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests }) => {
+export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests }) => {
     const { id } = useParams();
     const [availableCoupons, setAvailableCoupons] = useState([{}]);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
@@ -29,6 +29,9 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         return storedCoupon ? JSON.parse(storedCoupon) : null;
     });
     const [couponCode, setCouponCode] = useState('');
+    const [checkInError, setCheckInError] = useState(null);
+    const [checkOutError, setCheckOutError] = useState(null);
+
 
     const {
         error,
@@ -87,7 +90,14 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         if (!authState) {
             setIsModalOpen(true);
             return;
-        } else {
+        }
+        else if (!checkIn || !checkOut) {
+            setCheckInError("CheckIn date required")
+            setCheckOutError("CheckOut date required")
+            return;
+        }
+        else {
+
             try {
                 const response = await bookHomestay({
                     homestayId: id,
@@ -243,20 +253,22 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                     <DatePicker
                                         value={checkIn}
                                         onChange={(newValue) => {
-                                            onCheckInChange(newValue);;
+                                            onCheckInChange(newValue);
+                                            setCheckInError(null)
                                         }}
                                         minDate={dayjs()}
                                         format="MMM D, YYYY"
                                         slotProps={{
                                             textField: {
                                                 placeholder: "Add date",
-                                                onFocus: () => setActiveInput('checkIn'),
-                                                onBlur: () => setActiveInput(null)
                                             }
                                         }}
                                     />
-                                </div>
 
+                                </div>
+                                {checkInError && (
+                                    <p className="mt-1 text-xs text-red-500">{checkInError}</p>
+                                )}
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Check-out<span className="text-red-500 pl-1">*</span></label>
@@ -266,6 +278,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                         value={checkOut}
                                         onChange={(newValue) => {
                                             onCheckOutChange(newValue);
+                                            setCheckOutError(null)
                                         }}
                                         minDate={checkIn ? dayjs(checkIn).add(1, 'day') : dayjs()}
                                         format="MMM D, YYYY"
@@ -275,13 +288,15 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                     display: "flex",
                                                     justifyContent: "space-between"
                                                 },
-                                                placeholder: "Add date",
-                                                onFocus: () => setActiveInput('checkOut'),
-                                                onBlur: () => setActiveInput(null)
+                                                placeholder: "Add date"
                                             }
                                         }}
                                     />
+
                                 </div>
+                                {checkOutError && (
+                                    <p className="mt-1 text-xs text-red-500">{checkOutError}</p>
+                                )}
                             </div>
                         </div>
 
@@ -293,7 +308,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             <input
                                 type="number"
                                 min="1"
-                                max="16"
+                                max={maxGuests}
                                 className="w-20 bg-transparent border-none outline-none text-gray-600 text-sm
                                         focus:outline-none focus:ring-0 focus:border-none"
                                 value={guests}
