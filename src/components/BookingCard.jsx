@@ -31,7 +31,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     const [couponCode, setCouponCode] = useState('');
     const [checkInError, setCheckInError] = useState(null);
     const [checkOutError, setCheckOutError] = useState(null);
-
+    const { currency } = useSelector((store) => store?.currency)
 
     const {
         error,
@@ -97,13 +97,14 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             return;
         }
         else {
-
+            console.log(couponCode, "sasdss");
             try {
                 const response = await bookHomestay({
                     homestayId: id,
                     checkIn: checkIn?.$d,
                     checkOut: checkOut?.$d,
-                    currency: JSON.parse(localStorage.getItem('currency'))
+                    currency: JSON.parse(localStorage.getItem('currency')),
+                    couponCode: couponCode
                 })
 
                 const { data } = response
@@ -185,8 +186,11 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
     const handleApplyCoupon = async (code = couponCode) => {
+        const currencyCode = JSON.parse(localStorage.getItem('currency'))?.code;
         const days = differenceInDays === null ? 1 : differenceInDays
-        const response = await applyCoupon(code, id, days)
+        setCouponCode(code);
+        const response = await applyCoupon(code, id, days, currencyCode)
+
         if (response.success) {
             const couponDetails = {
                 discountAmount: response?.data?.discountAmount,
@@ -235,13 +239,18 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         };
     }, []);
 
+    useEffect(() => {
+
+    }, [])
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ThemeProvider theme={theme}>
                 <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 sticky top-[88px]">
                     <div className="mb-4 sm:mb-6">
                         <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                            ₹{price?.toLocaleString('en-IN')} <span className="text-base sm:text-lg font-normal text-gray-600">per night</span>
+                            <span className='pr-2'>{currency?.symbol}</span>
+                            {price?.toLocaleString('en-IN')} <span className="text-base sm:text-lg font-normal text-gray-600">per night</span>
                         </div>
                     </div>
 
@@ -359,7 +368,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                     <span className="text-xs px-2 py-1 bg-white text-green-500 rounded-full">Applied</span>
                                                 </div>
                                                 <p className="text-xs text-gray-500">
-                                                    You saved ₹{appliedCoupon?.discountAmount}
+                                                    You saved
+                                                    <span className='pr-2'>{currency?.symbol}</span>{appliedCoupon?.discountAmount}
                                                 </p>
                                             </div>
                                         </div>

@@ -150,15 +150,15 @@ const userService = {
     }
   },
   userBookHomestay: async (bookingData) => {
-  try {
-    const response = await axiosInstance.post(
-      apiEndpoints.Bestays_User_Homestay_Booking,
-      JSON.stringify(bookingData)
-    );
-    return response;
-  } catch (error) {
-    throw error;
-  }
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Homestay_Booking,
+        JSON.stringify(bookingData)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
   },
   userGetValidCoupons: async () => {
     try {
@@ -170,14 +170,15 @@ const userService = {
       throw error;
     }
   },
-  userApplyCoupon: async (code, id, days) => {    
+  userApplyCoupon: async (code, id, days, currencyCode) => {
     try {
       const response = await axiosInstance.post(
         apiEndpoints.Bestays_User_Apply_Coupon,
         {
-          couponCode:code,
+          couponCode: code,
           homestayId: id,
-          numberOfDays: days
+          numberOfDays: days,
+          currencyCode
         }
       );
       return response;
