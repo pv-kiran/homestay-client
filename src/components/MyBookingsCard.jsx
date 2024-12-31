@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import BookingButtons from './BookingButtons';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
-import { Modal } from './common/Modal';
 import { toast } from 'react-toastify';
+import { Modal } from './common/Modal';
 import ReviewForm from './reviewModal/ReviewForm';
 
 
@@ -31,18 +32,21 @@ const MyBookingCard = ({
         loading: checkInLoading,
         execute: checkInInitiate,
         error: checkInError,
+        success: checkInSuccess
     } = useApi(userService.userGetHomeStayCheckIn);
 
     const {
         loading: checkOutLoading,
         execute: checkOutInitiate,
         error: checkOutError,
+        success: checkOutSuccess
     } = useApi(userService.userGetHomeStayCheckOut);
 
     const {
         loading: cancelLoading,
         execute: cancelInitiate,
         error: cancelError,
+        success: cancelSuccess
     } = useApi(userService.userGetHomeStayCancel);
 
     const formatDate = (dateString) => {
@@ -67,13 +71,14 @@ const MyBookingCard = ({
         if (response.success) {
             toast.success(response.message);
             getMyBookings();
+            toast.success("Checkin is Sucessfull");
         }
     };
 
     const handleCheckOut = async () => {
         const response = await checkOutInitiate({ bookingId: _id });
         if (response.success) {
-            toast.success(response.message);
+            toast.success("Checkout is Sucessfull");
             getMyBookings();
             setTimeout(() => {
                 setIsReviewModalOpen(true);
@@ -86,8 +91,14 @@ const MyBookingCard = ({
         if (response.success) {
             toast.success(response.message);
             getMyBookings();
+            toast.success("Cancellation is Sucessfull");
         }
     };
+
+
+
+
+
 
     const handleClose = () => {
         setIsReviewModalOpen(false);

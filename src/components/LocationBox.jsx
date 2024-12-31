@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { Building2, MapPin } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 
 
 
