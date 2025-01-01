@@ -288,7 +288,24 @@ const userService = {
     } catch (error) {
       throw error;
     }
-  }
+  },
+  userDownloadReceipt: async (id) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Download_Receipt.replace(':$bookingId', id),
+        {
+          responseType: 'blob',
+          headers: {
+            'Accept': 'application/pdf'
+          }
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('PDF download error:', error);
+      throw error;
+    }
+  },
 }
 
 export default userService;
