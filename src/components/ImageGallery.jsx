@@ -32,7 +32,7 @@ export const ImageGallery = ({
                         <div
                             key={index}
                             className={`transition-all duration-500 ease-in-out ${i === 1
-                                ? 'w-[50%] h-full z-20 opacity-100'
+                                ? 'w-[50%] h-full opacity-100 z-1'
                                 : 'w-[25%] h-[80%] opacity-70 hover:opacity-80'
                                 }`}
                         >
@@ -50,7 +50,7 @@ export const ImageGallery = ({
             {/* Navigation Buttons */}
             <button
                 onClick={onPrev}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-2 md:p-3 rounded-full bg-white/90 hover:bg-white shadow-lg z-30 transition-all duration-200 hover:scale-105"
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-2 md:p-3 rounded-full bg-white/90 hover:bg-white shadow-lg z-30 transition-all duration-200 hover:scale-105 "
                 aria-label="Previous image"
             >
                 <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
@@ -65,7 +65,7 @@ export const ImageGallery = ({
             </button>
 
             {/* Progress Indicators */}
-            <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-30">
+            <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-1">
                 {images.map((_, index) => (
                     <div
                         key={index}

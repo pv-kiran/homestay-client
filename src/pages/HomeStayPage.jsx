@@ -78,7 +78,6 @@ function HomeStayPage() {
     }, [])
 
 
-
     return (
         <>
             {
@@ -116,6 +115,7 @@ function HomeStayPage() {
                                     price={homeStay?.data?.pricePerNight}
                                     guests={guests}
                                     setGuests={setGuests}
+                                    maxGuests={homeStay?.data?.maxGuests}
                                 />
                             </div>
                         </div>
