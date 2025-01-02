@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, Calendar, CreditCard, Home, User, Clock } from 'lucide-react';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
@@ -24,6 +24,7 @@ function BookingSuccess() {
     const { data } = bookingResponse;    
 
     const [showPaymentId, setShowPaymentId] = useState(false);
+    const navigate = useNavigate();
 
     const formatDate = (dateString) => {
         try {
@@ -183,6 +184,7 @@ function BookingSuccess() {
                 <button 
                   className="px-4 py-2 bg-black text-white rounded-lg 
                   hover:bg-black/80 transition-colors"
+                  onClick={() => navigate("/mybookings")}
                 >
                   View Bookings
                 </button>

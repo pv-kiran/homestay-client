@@ -3,7 +3,7 @@ import { User, LogIn, LogOut, Menu, CircleUserRound, BedDouble } from "lucide-re
 export const routes = [
     {
         path: '/profile',
-        text: 'Profile',
+        text: 'My Profile',
         icon: <User className="w-5 h-5" />
     },
     {
