@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { SignupModal } from './SignupModal';
 import userService from '../services/userServices';
 import useApi from '../hooks/useApi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from './common/Button';
 import { motion } from 'framer-motion';
@@ -51,6 +51,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     const [checkInError, setCheckInError] = useState(null);
     const [checkOutError, setCheckOutError] = useState(null);
 
+    const navigate = useNavigate();
 
     const {
         error,
@@ -137,7 +138,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                         key: import.meta.env.VITE_APP_RZP_KEY,
                         amount: data?.amount,
                         currency: JSON.parse(localStorage.getItem('currency'))?.code,
-                        name: "Soumya Corp.",
+                        name: "BeStays",
                         description: "Test Transaction",
                         // image: { logo },
                         order_id: data?.id,
@@ -159,20 +160,21 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 console.log(bookingResponse)
                             }
 
-                            // navigate(`/appointment/${data?.appointment?._id}/success`)
-
+                            navigate(`/booking/${bookingResponse?.data?._id}/success`, {
+                                state: { bookingResponse },
+                            })
                             console.log(bookingResponse);
                         },
                         prefill: {
                             name: "Testing",
                             email: "test@gmail.com",
-                            contact: "9999999999",
+                            contact: "9876543210",
                         },
                         notes: {
-                            address: "Doccure",
+                            address: "BeStays",
                         },
                         theme: {
-                            color: "#61dafb",
+                            color: "#14b8a6",
                         },
                     };
 

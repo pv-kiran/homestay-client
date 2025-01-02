@@ -100,6 +100,9 @@ function HomeStayPage() {
                                     policies={
                                         homeStay?.data?.hotelPolicies?.guestPolicies
                                     }
+                                    checkIn={homeStay?.data?.hotelPolicies?.checkInTime}
+                                    checkOut={homeStay?.data?.hotelPolicies?.checkOutTime}
+                                    homeStayId={id}
                                 />
                             </div>
 

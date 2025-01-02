@@ -22,6 +22,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 import CouponsPage from "./pages/CouponsPage";
 import MyBookings from "./pages/MyBookings";
 import BookingsPage from "./pages/BookingsPage";
+import BookingSuccess from "./pages/BookingSuccess";
 
 
 function AppRoutes() {
@@ -34,6 +35,7 @@ function AppRoutes() {
         <Route path="/homestay/view/:id" element={<HomeStayPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/mybookings" element={<MyBookings />} />
+        <Route path="/booking/:id/success" element={<BookingSuccess />} />
       </Route>
 
       <Route element={<PublicRoutesAdmin />}>
