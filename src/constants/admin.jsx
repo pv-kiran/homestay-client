@@ -37,11 +37,6 @@ export const routes = [
     icon: <TicketPercent className="w-5 h-5" />
   },
   {
-    path: '/admin/account',
-    title: 'Account',
-    icon: <UserCircle className="w-5 h-5" />
-  },
-  {
     path: '/admin/bookings',
     title: 'Bookings',
     icon: <UserCircle className="w-5 h-5" />

@@ -181,6 +181,8 @@ export function SignupModal({ isOpen, onClose }) {
           isLoading={otpLoading}
           timeLeft={timeLeft}
           onResendOtp={handleResendOTP}
+          otpError={otpError}
+          resetError={resetOtpState}
         />
       )}
       {showFlow?.finishScreen && (

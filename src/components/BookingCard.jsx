@@ -261,7 +261,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                 <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 sticky top-[88px]">
                     <div className="mb-4 sm:mb-6">
                         <div className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                            ₹{price?.toLocaleString('en-IN')} <span className="text-base sm:text-lg font-normal text-gray-600">per night</span>
+                            <span className='mr-2'>{currency?.symbol}</span>
+                            {price?.toLocaleString('en-IN')} <span className="text-base sm:text-lg font-normal text-gray-600">per night</span>
                         </div>
                     </div>
 
@@ -472,7 +473,9 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                     <span className="text-xs px-2 py-1 bg-white text-green-500 rounded-full">Applied</span>
                                                 </div>
                                                 <p className="text-xs text-gray-500">
-                                                    You saved ₹{appliedCoupon?.discountAmount}
+                                                    You saved
+                                                    <span className='mr-2'>{currency?.symbol}</span>
+                                                    {appliedCoupon?.discountAmount}
                                                 </p>
                                             </div>
                                         </div>
@@ -521,7 +524,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                         <span className="text-xs px-2 py-1 bg-white text-green-500 rounded-full">Applied</span>
                                                     </div>
                                                     <p className="text-xs text-gray-500">
-                                                        You saved ₹{appliedCoupon?.discountAmount}
+                                                        You saved
+                                                        <span className='mr-2'>{currency?.symbol}</span>{appliedCoupon?.discountAmount}
                                                     </p>
                                                 </div>
                                             </div>
@@ -554,7 +558,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                                 {/* {new Date(coupon?.expiryDate).toLocaleDateString()} */}
                                                                 {coupon?.discountType === 'percentage' ?
                                                                     `${coupon?.discountValue}% off`
-                                                                    : `Flat ₹${coupon?.discountValue} off`
+                                                                    : `Flat ${currency?.symbol} ${coupon?.discountValue} off`
                                                                 }
                                                             </span>
                                                         </div>
@@ -581,7 +585,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             </Modal>
                         </div>
                         <div className="flex justify-between mb-2 mt-2">
-                            <span className="text-gray-600 text-md">{`₹ ${price} ×`}
+                            <span className="text-gray-600 text-md">{`${currency?.symbol} ${price} ×`}
                                 {differenceInDays ? ` ${differenceInDays} ` : ` ${1}`}    night(s)</span>
                             <span>
                                 {
@@ -599,15 +603,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             </div>
                         )}
 
-
-                        {/* <div className="flex justify-between mb-2">
-                            <span className="text-gray-600">Cleaning fee</span>
-                            <span>₹85</span>
-                        </div>
-                        <div className="flex justify-between mb-2">
-                            <span className="text-gray-600">Service fee</span>
-                            <span>₹95</span>
-                        </div> */}
                         <div className="flex justify-between pt-4 border-t font-semibold text-lg">
                             <span>Total</span>
                             <span>

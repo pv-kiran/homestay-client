@@ -5,7 +5,7 @@ import useApi from '../hooks/useApi';
 import { FormField } from '../components/common/FormField';
 import { useForm } from 'react-hook-form';
 import * as yup from "yup";
-import { CirclePlus } from 'lucide-react';
+import { BedDouble, CirclePlus } from 'lucide-react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
@@ -17,6 +17,8 @@ import { ViewHomeStay } from '../components/VeiwHomeStay';
 import ImageList from '../components/common/ImageList';
 import { toast } from 'react-toastify';
 import { ImageGrid } from '../components/ImageGrid';
+import { Loader } from '../components/common/Loader';
+import { EmptyState } from '../components/common/EmptyState';
 
 
 const schema = yup.object({
@@ -106,6 +108,7 @@ const RoomsPage = () => {
   const [guestPolicyList, setGuestPolicyList] = useState([]);
   const [chosenHomestay, setChosenHomeStay] = useState([]);
   const [homeStayId, setHomeStayId] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [homeStayImages, setHomeStayImages] = useState([]);
   const [fileError, setFileError] = useState(false);
@@ -145,6 +148,7 @@ const RoomsPage = () => {
   } = useApi(adminService.adminHomeStayAdd);
 
   const {
+    loading: homeStayLoading,
     data: allHomeStays,
     execute: getAllHomeStays,
     error: allHomeStaysError,
@@ -200,6 +204,7 @@ const RoomsPage = () => {
       setHomeStayImages([]);
     }
     setIsEditing(false);
+    setIsAdding(false);
     setFiles([]);
     setFileError('');
     setGuestPolicyList([])
@@ -447,6 +452,7 @@ const RoomsPage = () => {
     setIsModalOpen(true);
     setIsViewDetail(false);
     setIsEditing(false);
+    setIsAdding(false);
     setIsReorder(true);
     setImages(item?.images);
     setHomeStayId(item?._id)
@@ -529,7 +535,10 @@ const RoomsPage = () => {
   return (
     <>
       <div className='flex justify-end'>
-        <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add homestay</Button>
+        <Button onClick={() => {
+          setIsModalOpen(true)
+          setIsAdding(true);
+        }} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add homestay</Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
@@ -539,7 +548,7 @@ const RoomsPage = () => {
           maxWidth={!isViewDetail ? "600px" : "700px"}
         >
           {
-            isEditing &&
+            (isEditing || isAdding) &&
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
               <FormField
                 type="text"
@@ -725,7 +734,7 @@ const RoomsPage = () => {
                 onChange={handleFileUpload}
                 value={files}
                 multiple={true}
-                maxFiles={!isEditing ? 5 : 5 - homeStayImages.length}
+                maxFiles={!isEditing ? 10 : 10 - homeStayImages.length}
               />
               {fileError ?
                 <p className="text-xs text-red-500">{fileError}</p>
@@ -771,8 +780,13 @@ const RoomsPage = () => {
           }
         </Modal>
       </div>
-      <div className="min-h-screen my-4">
-        {allHomeStays?.data ? (
+      {
+        homeStayLoading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+          <Loader />
+        </div>
+      }
+      <div className="min-h-[70vh] my-4">
+        {allHomeStays?.data.length > 0 ? (
           <Table
             title="Homestay Management"
             subtitle="Manage your Homestay"
@@ -787,7 +801,17 @@ const RoomsPage = () => {
             pageSize={pageSize}
             totalItems={allHomeStays?.totalPages}
           />
-        ) : null}
+        ) :
+          <div>
+            {
+              !homeStayLoading && <EmptyState
+                title="Empty Homestays"
+                message="Your homestay list is currently empty."
+                icon={<BedDouble className="w-12 h-12 text-gray-400" />}
+              />
+            }
+          </div>
+        }
       </div>
     </>
   );

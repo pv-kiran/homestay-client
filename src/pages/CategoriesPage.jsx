@@ -10,7 +10,9 @@ import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
 import { toast } from "react-toastify";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Grid } from "lucide-react";
+import { EmptyState } from "../components/common/EmptyState";
+import { Loader } from "../components/common/Loader";
 
 const categorySchema = yup.object({
   category: yup.string().required("Category title is required"),
@@ -36,6 +38,7 @@ export default function CategoriesPage() {
   } = useApi(adminService.adminCategoryAdd);
 
   const {
+    loading: categoryLoading,
     data: allCategories,
     execute: getAllCategories,
     error: getCategoriesError,
@@ -301,8 +304,13 @@ export default function CategoriesPage() {
           </form>
         </Modal>
       </div>
+      {
+        categoryLoading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+          <Loader />
+        </div>
+      }
       <div className="min-h-screen my-4">
-        {allCategories?.data ? (
+        {allCategories?.data?.length > 0 ? (
           <Table
             title="Category Management"
             subtitle="Manage your homestay categories"
@@ -317,7 +325,16 @@ export default function CategoriesPage() {
             pageSize={pageSize}
             totalItems={allCategories?.totalPages}
           />
-        ) : null}
+        ) : <div>
+          {
+            !categoryLoading && <EmptyState
+              title="Empty Homestays"
+              message="Your category list is currently empty."
+              icon={<Grid className="w-12 h-12 text-gray-400" />}
+            />
+          }
+        </div>
+        }
       </div>
     </>
   );

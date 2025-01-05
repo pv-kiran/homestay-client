@@ -10,7 +10,9 @@ import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
 import { toast } from "react-toastify";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Component } from "lucide-react";
+import { Loader } from './../components/common/Loader';
+import { EmptyState } from "../components/common/EmptyState";
 
 
 const amenitySchema = yup.object({
@@ -38,6 +40,7 @@ export default function AmenitiesPage() {
   } = useApi(adminService.adminAmenitiesAdd);
 
   const {
+    loading: fetchAmenityLoading,
     data: allAmenities,
     execute: getAllAmenities,
     error: getAmenitiesError,
@@ -322,8 +325,13 @@ export default function AmenitiesPage() {
           </form>
         </Modal>
       </div>
+      {
+        fetchAmenityLoading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+          <Loader />
+        </div>
+      }
       <div className="min-h-screen my-4">
-        {allAmenities?.data ? (
+        {allAmenities?.data.length > 0 ? (
           <Table
             title="Amenity Management"
             subtitle="Manage your homestay amenities"
@@ -338,7 +346,15 @@ export default function AmenitiesPage() {
             pageSize={pageSize}
             totalItems={allAmenities?.totalPages}
           />
-        ) : null}
+        ) : <div>
+          {
+            !fetchAmenityLoading && <EmptyState
+              title="Empty Homestays"
+              message="Your homestay amenity list is currently empty."
+              icon={<Component className="w-12 h-12 text-gray-400" />}
+            />
+          }
+        </div>}
       </div>
     </>
   );
