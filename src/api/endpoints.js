@@ -19,7 +19,7 @@ const apiEndpoints = {
   Bestays_User_Apply_Coupon: "/user/apply-coupon",
   Bestays_User_Latest_Coupon: "/user/get-latestcoupon",
   Bestays_User_Homestay_Booking_Complete: "/user/book/homestay/complete",
-  Bestays_User_Homestay_Booking_List: "/user/homestay/my-bookings",
+  Bestays_User_Homestay_Booking_List: "/user/homestay/my-bookings?:query",
   Bestays_User_Homestay_CheckIn: "/user/homestay/checkin/:$bookingId",
   Bestays_User_Homestay_CheckOut: "/user/homestay/checkout/:$bookingId",
   Bestays_User_Homestay_Cancel: "/user/homestay/cancel/:$bookingId",

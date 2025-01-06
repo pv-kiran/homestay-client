@@ -544,7 +544,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 </div>
 
                                 {availableCoupons?.length !== 0 ? (
-                                    <div className="space-y-3 mt-4">
+                                    <div className="space-y-3 mt-4 ">
                                         {availableCoupons?.map((coupon, index) => (
                                             <div
                                                 key={`${coupon?.code || 'coupon'}-${index}`}
