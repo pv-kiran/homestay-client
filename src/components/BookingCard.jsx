@@ -38,7 +38,7 @@ const wordAnimation = {
     }
 };
 
-export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests }) => {
+export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests, setModal }) => {
     const { id } = useParams();
     const [availableCoupons, setAvailableCoupons] = useState([{}]);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
@@ -190,7 +190,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
     const getCoupons = async () => {
-        const response = await getValidCoupons();
+        const response = await getValidCoupons(currency?.code);
         if (response.success) {
             setAvailableCoupons(response?.data)
         }
@@ -198,6 +198,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
     const handleClose = () => {
         setIsCouponModalOpen(false);
+        setModal(false)
     }
 
     const handleRemoveCoupon = () => {
@@ -238,8 +239,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
 
     useEffect(() => {
-        getCoupons();
-    }, [authState])
+        if (authState) {
+            getCoupons();
+        }
+    }, [authState, currency])
 
     useEffect(() => {
         return () => {
@@ -359,7 +362,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 (checkIn !== null && checkOut !== null) && (
                                     ((authState !== null) ? (
                                         <button
-                                            onClick={() => setIsCouponModalOpen(true)}
+                                            onClick={() => {
+                                                setIsCouponModalOpen(true)
+                                                setModal(true)
+                                            }}
                                             className="group flex items-center gap-2 w-full p-3 text-gray-700 hover:bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 hover:border-teal-500 transition-all duration-300"
                                         >
                                             <Ticket className="w-5 h-5 text-teal-600 group-hover:scale-110 transition-transform" />
@@ -607,7 +613,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             <span>Total</span>
                             <span>
                                 {
-                                    appliedCoupon !== null ? (`${appliedCoupon?.newPrice}/-`) : (differenceInDays ? `${price * differenceInDays}/-` : `${price}/-`)
+                                    currency?.symbol
+                                }
+                                {
+                                    appliedCoupon !== null ? (`${appliedCoupon?.newPrice}/-`) : (differenceInDays ? `${price * differenceInDays}/-` : `${price}`)
                                 }
                             </span>
                         </div>

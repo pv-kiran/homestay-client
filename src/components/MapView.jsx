@@ -26,20 +26,21 @@ const MapView = ({ position, title, address }) => {
     const mapKey = `map-${position[0]}-${position[1]}-${Date.now()}`;
 
     return (
-        <div className="my-4 w-11/12 mx-auto h-[400px] rounded-lg overflow-hidden shadow-lg">
+        <div className="my-4 w-11/12 mx-auto h-[400px] rounded-lg overflow-hidden shadow-lg z-0" style={{ zIndex: 1 }}>
             <MapContainer
                 key={mapKey}
                 center={position}
                 zoom={15}
                 scrollWheelZoom={false}
-                className="w-full h-full z-10"
+                className="w-full h-full"
+                style={{ zIndex: 5 }}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={position}>
-                    <Popup className="text-sm">
+                <Marker position={position} >
+                    <Popup className="text-sm" >
                         <div className="flex flex-col gap-2">
                             <div className="flex items-center gap-2">
                                 <Home className="w-4 h-4" />

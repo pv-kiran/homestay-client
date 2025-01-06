@@ -160,10 +160,10 @@ const userService = {
       throw error;
     }
   },
-  userGetValidCoupons: async () => {
+  userGetValidCoupons: async (currency) => {
     try {
       const response = await axiosInstance.get(
-        apiEndpoints.Bestays_User_Get_Valid_Coupons
+        apiEndpoints.Bestays_User_Get_Valid_Coupons.replace(":query", `currency=${currency}`)
       );
       return response;
     } catch (error) {

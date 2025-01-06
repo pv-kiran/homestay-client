@@ -25,8 +25,6 @@ function ReviewsSection({ homeStayId }) {
             setReviews(limitedReviews);
             // setReviews(response.data);
         }
-        console.log(response.data);
-
     }
 
     useEffect(() => {
