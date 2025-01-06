@@ -32,6 +32,8 @@ export default function AmenitiesPage() {
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
 
+  const [isShowLoading, setIsShowLoading] = useState(true)
+
   const {
     loading: addAmenityLoading,
     execute: addAmenity,
@@ -47,6 +49,7 @@ export default function AmenitiesPage() {
   } = useApi(adminService.adminGetAllAmenities);
 
   const {
+    loading: toggleLoading,
     execute: toggleAmenity,
     error: toggledamenityError,
   } = useApi(adminService.adminToggleAmenity);
@@ -100,6 +103,7 @@ export default function AmenitiesPage() {
         aditAmenityReset();
       }
     }
+    setIsShowLoading(false);
     getAllAmenities({
       pagePerData: pageSize,
       pageNumber: currentPage,
@@ -114,7 +118,8 @@ export default function AmenitiesPage() {
     setIsEditing(false);
     setamenityId(null);
     setFileError(null);
-    setValue("amenity", "")
+    setValue("amenity", ""),
+      setValue("description", "")
   };
 
 
@@ -127,10 +132,11 @@ export default function AmenitiesPage() {
       setValue('description', chosenamenity[0]?.description),
       setIsEditing(true)
     setamenityId(id);
+    setIsShowLoading(false);
   };
 
   const handleToggle = async (id) => {
-    console.log("Toggle clicked for id:", id);
+    setIsShowLoading(false);
     const result = await toggleAmenity(id);
     if (result) {
       await getAllAmenities({
@@ -208,6 +214,7 @@ export default function AmenitiesPage() {
   ];
 
   const handleSearch = (query) => {
+    setIsShowLoading(false);
     setSearchKey(query)
   };
 
@@ -326,35 +333,36 @@ export default function AmenitiesPage() {
         </Modal>
       </div>
       {
-        fetchAmenityLoading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+        (fetchAmenityLoading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
           <Loader />
         </div>
       }
       <div className="min-h-screen my-4">
-        {allAmenities?.data.length > 0 ? (
-          <Table
-            title="Amenity Management"
-            subtitle="Manage your homestay amenities"
-            columns={amenityColumns}
-            data={allAmenities?.data}
-            actions={getActions}
-            onSearch={handleSearch}
-            initialSort={{ field: "title", direction: "asc" }}
-            currentPage={currentPage}
-            onPageChange={handlePageNumber}
-            onPageSizeChange={handlePageSize}
-            pageSize={pageSize}
-            totalItems={allAmenities?.totalPages}
-          />
-        ) : <div>
-          {
-            !fetchAmenityLoading && <EmptyState
-              title="Empty Homestays"
-              message="Your homestay amenity list is currently empty."
-              icon={<Component className="w-12 h-12 text-gray-400" />}
+        {
+          allAmenities?.data.length > 0 ? (
+            <Table
+              title="Amenity Management"
+              subtitle="Manage your homestay amenities"
+              columns={amenityColumns}
+              data={allAmenities?.data}
+              actions={getActions}
+              onSearch={handleSearch}
+              initialSort={{ field: "title", direction: "asc" }}
+              currentPage={currentPage}
+              onPageChange={handlePageNumber}
+              onPageSizeChange={handlePageSize}
+              pageSize={pageSize}
+              totalItems={allAmenities?.totalPages}
             />
-          }
-        </div>}
+          ) : <div>
+            {
+              !fetchAmenityLoading && <EmptyState
+                title="Empty Homestays"
+                message="Your homestay amenity list is currently empty."
+                icon={<Component className="w-12 h-12 text-gray-400" />}
+              />
+            }
+          </div>}
       </div>
     </>
   );

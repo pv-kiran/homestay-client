@@ -119,6 +119,8 @@ const RoomsPage = () => {
   const [images, setImages] = useState([]);
   const timer = useRef(null);
 
+  const [isShowLoading, setIsShowLoading] = useState(true);
+
   const {
     register,
     control,
@@ -311,6 +313,7 @@ const RoomsPage = () => {
         editHomeStayReset();
       }
     }
+    setIsShowLoading(false);
     getAllHomeStays({
       pagePerData: pageSize,
       pageNumber: currentPage,
@@ -385,6 +388,7 @@ const RoomsPage = () => {
   ];
 
   const handleToggle = async (id) => {
+    setIsShowLoading(false);
     const result = await toggleHomeStay(id);
     if (result) {
       await getAllHomeStays({
@@ -446,6 +450,7 @@ const RoomsPage = () => {
     setValue('checkOutTime', checkOutTime)
     setGuestPolicyList(guestPolicies);
     setHomeStayImages(chosenHomeStay[0]?.images);
+    setIsShowLoading(false)
   };
 
   const handleImageReorder = (item) => {
@@ -483,6 +488,7 @@ const RoomsPage = () => {
   ];
 
   const handleSearch = (query) => {
+    setIsShowLoading(false)
     setSearchKey(query);
   };
 
@@ -491,6 +497,7 @@ const RoomsPage = () => {
   }
 
   const handleReorder = async () => {
+    setIsShowLoading(false);
     const result = await reorderImages({ images, homeStayId })
     if (result) {
       await getAllHomeStays({
@@ -781,36 +788,37 @@ const RoomsPage = () => {
         </Modal>
       </div>
       {
-        homeStayLoading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+        (homeStayLoading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
           <Loader />
         </div>
       }
       <div className="min-h-[70vh] my-4">
-        {allHomeStays?.data.length > 0 ? (
-          <Table
-            title="Homestay Management"
-            subtitle="Manage your Homestay"
-            columns={homestayColumn}
-            data={allHomeStays?.data}
-            actions={getActions}
-            onSearch={handleSearch}
-            initialSort={{ field: "title", direction: "asc" }}
-            currentPage={currentPage}
-            onPageChange={handlePageNumber}
-            onPageSizeChange={handlePageSize}
-            pageSize={pageSize}
-            totalItems={allHomeStays?.totalPages}
-          />
-        ) :
-          <div>
-            {
-              !homeStayLoading && <EmptyState
-                title="Empty Homestays"
-                message="Your homestay list is currently empty."
-                icon={<BedDouble className="w-12 h-12 text-gray-400" />}
-              />
-            }
-          </div>
+        {
+          allHomeStays?.data.length > 0 ? (
+            <Table
+              title="Homestay Management"
+              subtitle="Manage your Homestay"
+              columns={homestayColumn}
+              data={allHomeStays?.data}
+              actions={getActions}
+              onSearch={handleSearch}
+              initialSort={{ field: "title", direction: "asc" }}
+              currentPage={currentPage}
+              onPageChange={handlePageNumber}
+              onPageSizeChange={handlePageSize}
+              pageSize={pageSize}
+              totalItems={allHomeStays?.totalPages}
+            />
+          ) :
+            <div>
+              {
+                !homeStayLoading && <EmptyState
+                  title="Empty Homestays"
+                  message="Your homestay list is currently empty."
+                  icon={<BedDouble className="w-12 h-12 text-gray-400" />}
+                />
+              }
+            </div>
         }
       </div>
     </>

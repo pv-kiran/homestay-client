@@ -16,6 +16,8 @@ export default function UserManagementPage() {
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
 
+  const [isShowLoading, setIsShowLoading] = useState(true);
+
   const {
     loading,
     data: allUsers,
@@ -30,7 +32,7 @@ export default function UserManagementPage() {
 
 
   const handleToggle = async (id) => {
-    console.log("Toggle clicked for id:", id);
+    setIsShowLoading(false)
     const result = await toggleUser(id);
     if (result) {
       await getAllUsers({
@@ -80,6 +82,7 @@ export default function UserManagementPage() {
   ];
 
   const handleSearch = (query) => {
+    setIsShowLoading(false)
     setSearchKey(query);
   };
 
@@ -135,7 +138,7 @@ export default function UserManagementPage() {
   return (
     <div>
       {
-        loading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+        (loading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
           <Loader />
         </div>
       }

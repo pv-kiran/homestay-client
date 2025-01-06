@@ -54,6 +54,9 @@ export default function CouponsPage() {
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
 
+  const [isShowLoading, setIsShowLoading] = useState(true);
+
+
   const {
     loading: addCouponLoading,
     execute: addCoupon,
@@ -104,6 +107,7 @@ export default function CouponsPage() {
         aditCouponReset();
       }
     }
+    setIsShowLoading(false);
     getAllCoupons({
       pagePerData: pageSize,
       pageNumber: currentPage,
@@ -138,9 +142,11 @@ export default function CouponsPage() {
     setValue('usageLimit', chosencoupon[0].usageLimit)
     setIsEditing(true)
     setCouponId(id);
+    setIsShowLoading(false);
   };
 
   const handleToggle = async (id) => {
+    setIsShowLoading(false);
     const result = await toggleCoupon(id);
     if (result) {
       await getAllCoupons({
@@ -217,6 +223,8 @@ export default function CouponsPage() {
   ];
 
   const handleSearch = (query) => {
+    // console.log(query)
+    setIsShowLoading(false);
     setSearchKey(query)
   };
 
@@ -372,37 +380,38 @@ export default function CouponsPage() {
         </Modal>
       </div>
       {
-        getCouponLoading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+        (getCouponLoading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
           <Loader />
         </div>
       }
 
       <div className="min-h-screen my-4">
-        {allCoupons?.data?.length > 0 ? (
-          <Table
-            title="Coupon Management"
-            subtitle="Manage your coupons"
-            columns={couponColumns}
-            data={allCoupons?.data}
-            actions={getActions}
-            onSearch={handleSearch}
-            initialSort={{ field: "title", direction: "asc" }}
-            currentPage={currentPage}
-            onPageChange={handlePageNumber}
-            onPageSizeChange={handlePageSize}
-            pageSize={pageSize}
-            totalItems={allCoupons?.totalPages}
-          />
-        ) :
-          <div>
-            {
-              !getCouponLoading && <EmptyState
-                title="Empty Homestays"
-                message="Your coupon list is currently empty."
-                icon={<TicketPercent className="w-12 h-12 text-gray-400" />}
-              />
-            }
-          </div>
+        {
+          allCoupons?.data?.length > 0 ? (
+            <Table
+              title="Coupon Management"
+              subtitle="Manage your coupons"
+              columns={couponColumns}
+              data={allCoupons?.data}
+              actions={getActions}
+              onSearch={handleSearch}
+              initialSort={{ field: "title", direction: "asc" }}
+              currentPage={currentPage}
+              onPageChange={handlePageNumber}
+              onPageSizeChange={handlePageSize}
+              pageSize={pageSize}
+              totalItems={allCoupons?.totalPages}
+            />
+          ) :
+            <div>
+              {
+                !getCouponLoading && <EmptyState
+                  title="Empty Homestays"
+                  message="Your coupon list is currently empty."
+                  icon={<TicketPercent className="w-12 h-12 text-gray-400" />}
+                />
+              }
+            </div>
         }
       </div>
     </>

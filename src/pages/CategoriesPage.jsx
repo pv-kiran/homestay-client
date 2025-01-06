@@ -30,6 +30,8 @@ export default function CategoriesPage() {
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
 
+  const [isShowLoading, setIsShowLoading] = useState(true);
+
   const {
     loading: addCategoryLoading,
     execute: addCategory,
@@ -96,6 +98,7 @@ export default function CategoriesPage() {
         editCategoryReset();
       }
     }
+    setIsShowLoading(false)
     getAllCategories({
       pagePerData: pageSize,
       pageNumber: currentPage,
@@ -120,10 +123,11 @@ export default function CategoriesPage() {
     setValue('category', chosenCategory[0].categoryName)
     setIsEditing(true)
     setCategoryId(id);
+    setIsShowLoading(false)
   };
 
   const handleToggle = async (id) => {
-    console.log("Toggle clicked for id:", id);
+    setIsShowLoading(false)
     const result = await toggleCategory(id);
     if (result) {
       await getAllCategories({
@@ -137,7 +141,6 @@ export default function CategoriesPage() {
       else {
         toast.error(result.message);
       }
-
     }
   };
 
@@ -197,6 +200,7 @@ export default function CategoriesPage() {
   ];
 
   const handleSearch = (query) => {
+    setIsShowLoading(false);
     setSearchKey(query)
   };
 
@@ -305,7 +309,7 @@ export default function CategoriesPage() {
         </Modal>
       </div>
       {
-        categoryLoading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+        (categoryLoading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
           <Loader />
         </div>
       }

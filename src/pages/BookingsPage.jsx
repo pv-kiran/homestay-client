@@ -28,6 +28,8 @@ const BookingsPage = () => {
     const [chosenBooking, setchosenBooking] = useState([]);
     const timer = useRef(null);
 
+    const [isShowLoading, setIsShowLoading] = useState(true);
+
 
     const {
         data: allBookings,
@@ -114,7 +116,9 @@ const BookingsPage = () => {
     };
 
 
-    const handleSearch = () => { }
+    const handleSearch = (query) => {
+        setSearchKey(query);
+    }
 
 
     useEffect(() => {
