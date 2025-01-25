@@ -117,6 +117,7 @@ const BookingsPage = () => {
 
 
     const handleSearch = (query) => {
+        setIsShowLoading(false)
         setSearchKey(query);
     }
 
@@ -155,7 +156,7 @@ const BookingsPage = () => {
     return (
         <div>
             {
-                loading && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+                (loading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
                     <Loader />
                 </div>
             }
