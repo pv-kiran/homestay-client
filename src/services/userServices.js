@@ -160,10 +160,10 @@ const userService = {
       throw error;
     }
   },
-  userGetValidCoupons: async () => {
+  userGetValidCoupons: async (currency) => {
     try {
       const response = await axiosInstance.get(
-        apiEndpoints.Bestays_User_Get_Valid_Coupons
+        apiEndpoints.Bestays_User_Get_Valid_Coupons.replace(":query", `currency=${currency}`)
       );
       return response;
     } catch (error) {
@@ -218,10 +218,10 @@ const userService = {
       throw error;
     }
   },
-  userGetHomeStayBookings: async () => {
+  userGetHomeStayBookings: async (currency) => {
     try {
       const response = await axiosInstance.get(
-        apiEndpoints.Bestays_User_Homestay_Booking_List
+        apiEndpoints.Bestays_User_Homestay_Booking_List.replace(":query", `currency=${currency}`)
       );
       return response;
     } catch (error) {
@@ -280,7 +280,7 @@ const userService = {
       throw error;
     }
   },
-  userGetHomestayReview: async ({homeStayId}) => {
+  userGetHomestayReview: async ({ homeStayId }) => {
     try {
       const response = await axiosInstance.get(
         apiEndpoints.Bestays_User_Homestay_Get_Review.replace(':$homeStayId', homeStayId)

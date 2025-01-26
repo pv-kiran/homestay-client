@@ -3,6 +3,9 @@ import adminService from "../services/adminServices";
 import useApi from "../hooks/useApi";
 import { Table } from "../components/common/table/Table";
 import { toast } from "react-toastify";
+import { Loader } from "../components/common/Loader";
+import { UserCircle } from "lucide-react";
+import { EmptyState } from "../components/common/EmptyState";
 
 
 
@@ -13,7 +16,10 @@ export default function UserManagementPage() {
   const [searchKey, setSearchKey] = useState('');
   const timer = useRef(null);
 
+  const [isShowLoading, setIsShowLoading] = useState(true);
+
   const {
+    loading,
     data: allUsers,
     execute: getAllUsers,
     error: getUserError,
@@ -26,7 +32,7 @@ export default function UserManagementPage() {
 
 
   const handleToggle = async (id) => {
-    console.log("Toggle clicked for id:", id);
+    setIsShowLoading(false)
     const result = await toggleUser(id);
     if (result) {
       await getAllUsers({
@@ -76,6 +82,7 @@ export default function UserManagementPage() {
   ];
 
   const handleSearch = (query) => {
+    setIsShowLoading(false)
     setSearchKey(query);
   };
 
@@ -129,9 +136,14 @@ export default function UserManagementPage() {
   }, [searchKey]);
 
   return (
-    <>
+    <div>
+      {
+        (loading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+          <Loader />
+        </div>
+      }
       <div className="min-h-screen my-4">
-        {allUsers?.data ? (
+        {allUsers?.data?.length > 0 ? (
           <Table
             title="User Management"
             subtitle="Manage your users"
@@ -146,8 +158,20 @@ export default function UserManagementPage() {
             pageSize={pageSize}
             totalItems={allUsers?.totalPages}
           />
-        ) : null}
+        ) :
+          <div>
+            {
+              !loading && <EmptyState
+                title="Empty Homestays"
+                message="Your user list is currently empty."
+                icon={<UserCircle className="w-12 h-12 text-gray-400" />}
+              />
+            }
+          </div>
+        }
       </div>
-    </>
+    </div>
   );
 }
+
+

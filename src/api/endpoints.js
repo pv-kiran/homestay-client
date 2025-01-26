@@ -15,11 +15,11 @@ const apiEndpoints = {
   Bestays_User_Profile_Update: `/user/auth/update-profile`,
   Bestays_User_Profile_View: `/user/auth/view-profile`,
   Bestays_User_Homestay_Booking: "/user/book/homestay",
-  Bestays_User_Get_Valid_Coupons: "/user/get-coupons",
+  Bestays_User_Get_Valid_Coupons: "/user/get-coupons?:query",
   Bestays_User_Apply_Coupon: "/user/apply-coupon",
   Bestays_User_Latest_Coupon: "/user/get-latestcoupon",
   Bestays_User_Homestay_Booking_Complete: "/user/book/homestay/complete",
-  Bestays_User_Homestay_Booking_List: "/user/homestay/my-bookings",
+  Bestays_User_Homestay_Booking_List: "/user/homestay/my-bookings?:query",
   Bestays_User_Homestay_CheckIn: "/user/homestay/checkin/:$bookingId",
   Bestays_User_Homestay_CheckOut: "/user/homestay/checkout/:$bookingId",
   Bestays_User_Homestay_Cancel: "/user/homestay/cancel/:$bookingId",
@@ -55,6 +55,11 @@ const apiEndpoints = {
   Bestays_Admin_Homestays_Edit: "/admin/update-homestay/:$homestayId",
   Bestays_Admin_Get_All_Bookings: "/admin/get-allbookings",
   Bestays_Admin_Image_Reordering: "/admin/homestay/:$homeStayId/images",
+  Bestays_Admin_Monthly_Report: "/admin/month/report",
+  Bestays_Admin_Homestay_Wise_Report: "/admin/homestay/report",
+  Bestays_Admin_Category_Wise_Report: "/admin/category/report",
+  Bestays_Admin_Yearly_Report: "/admin/yearly/report",
+  Bestays_Admin_Overall_Report: "/admin/overall/report",
 };
 
 export default apiEndpoints;

@@ -7,7 +7,13 @@ import userService from '../services/userServices';
 import { toast } from 'react-toastify';
 import { Modal } from './common/Modal';
 import ReviewForm from './reviewModal/ReviewForm';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import { useSelector } from 'react-redux';
 
 const MyBookingCard = ({
     _id,
@@ -27,6 +33,14 @@ const MyBookingCard = ({
 }) => {
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [confirmDialog, setConfirmDialog] = useState({
+        open: false,
+        type: null,
+        title: '',
+        message: ''
+    });
+
+    const { currency } = useSelector((store) => store?.currency)
 
     const {
         loading: checkInLoading,
@@ -61,7 +75,7 @@ const MyBookingCard = ({
         if (!amount) return '';
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
-            currency: 'INR',
+            currency: `${currency?.code}`,
             maximumFractionDigits: 0,
         }).format(amount);
     };
@@ -91,13 +105,56 @@ const MyBookingCard = ({
         if (response.success) {
             toast.success(response.message);
             getMyBookings();
-            toast.success("Cancellation is Sucessfull");
         }
     };
 
+    const openConfirmDialog = (type) => {
+        const dialogConfig = {
+            checkIn: {
+                title: 'Confirm Check-In',
+                message: 'Are you sure you want to check in to this homestay?'
+            },
+            checkOut: {
+                title: 'Confirm Check-Out',
+                message: 'Are you sure you want to check out from this homestay?'
+            },
+            cancel: {
+                title: 'Confirm Cancellation',
+                message: 'Are you sure you want to cancel this booking? This action cannot be undone.'
+            }
+        };
 
+        setConfirmDialog({
+            open: true,
+            type,
+            title: dialogConfig[type].title,
+            message: dialogConfig[type].message
+        });
+    };
 
+    const handleConfirmDialogClose = () => {
+        setConfirmDialog({
+            open: false,
+            type: null,
+            title: '',
+            message: ''
+        });
+    };
 
+    const handleConfirmAction = async () => {
+        switch (confirmDialog.type) {
+            case 'checkIn':
+                await handleCheckIn();
+                break;
+            case 'checkOut':
+                await handleCheckOut();
+                break;
+            case 'cancel':
+                await handleCancel();
+                break;
+        }
+        handleConfirmDialogClose();
+    };
 
 
     const handleClose = () => {
@@ -162,13 +219,40 @@ const MyBookingCard = ({
                 <BookingButtons
                     checkIn={checkIn}
                     checkOut={checkOut}
-                    onCheckIn={handleCheckIn}
-                    onCheckOut={handleCheckOut}
-                    onCancel={handleCancel}
+                    onCheckIn={() => openConfirmDialog('checkIn')}
+                    onCheckOut={() => openConfirmDialog('checkOut')}
+                    onCancel={() => openConfirmDialog('cancel')}
                     isCheckedIn={isCheckedIn}
                     isCheckedOut={isCheckedOut}
                     isCancelled={isCancelled}
                 />
+                <Dialog
+                    open={confirmDialog.open}
+                    onClose={handleConfirmDialogClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {confirmDialog.title}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {confirmDialog.message}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleConfirmDialogClose} color="inherit">
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleConfirmAction}
+                            color={confirmDialog.type === 'cancel' ? 'error' : 'primary'}
+                            autoFocus
+                        >
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </Dialog>
                 <Modal
                     isOpen={isReviewModalOpen}
                     onClose={handleClose}

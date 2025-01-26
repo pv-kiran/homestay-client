@@ -13,10 +13,11 @@ const otpSchema = yup.object({
     .matches(/^[0-9]+$/, 'Only numbers are allowed'),
 });
 
-export const OtpForm = ({ onSubmit, isLoading, timeLeft, onResendOtp }) => {
+export const OtpForm = ({ onSubmit, isLoading, timeLeft, onResendOtp, otpError, resetError }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(otpSchema),
@@ -27,6 +28,11 @@ export const OtpForm = ({ onSubmit, isLoading, timeLeft, onResendOtp }) => {
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
+
+  if (otpError) {
+    setValue('otp', "")
+    resetError()
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -41,7 +47,7 @@ export const OtpForm = ({ onSubmit, isLoading, timeLeft, onResendOtp }) => {
         {errors.otp && (
           <p className="mt-1 text-xs text-red-500">{errors.otp.message}</p>
         )}
-        
+
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center text-gray-500">
             <Timer className="mr-1 h-4 w-4" />
@@ -52,9 +58,8 @@ export const OtpForm = ({ onSubmit, isLoading, timeLeft, onResendOtp }) => {
           <button
             type="button"
             onClick={onResendOtp}
-            className={`text-turquoise-600 hover:text-turquoise-700 ${
-              timeLeft > 0 ? 'cursor-not-allowed opacity-50' : ''
-            }`}
+            className={`text-turquoise-600 hover:text-turquoise-700 ${timeLeft > 0 ? 'cursor-not-allowed opacity-50' : ''
+              }`}
             disabled={timeLeft > 0}
           >
             Resend OTP

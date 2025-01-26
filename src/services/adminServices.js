@@ -253,7 +253,7 @@ const adminService = {
       throw error;
     }
   },
-  adminCouponEdit: async ({ data, couponId }) => {    
+  adminCouponEdit: async ({ data, couponId }) => {
     try {
       const response = await axiosInstance.put(
         apiEndpoints.Bestays_Admin_Coupon_Edit.replace(
@@ -303,6 +303,57 @@ const adminService = {
       const response = await axiosInstance.put(
         apiEndpoints.Bestays_Admin_Image_Reordering.replace(":$homeStayId", homeStayId),
         images
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  adminGetMonthlyReports: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Monthly_Report,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetHomestayReports: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Homestay_Wise_Report,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetCategoryReports: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Category_Wise_Report,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetYearlyReports: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Yearly_Report,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetOverallReports: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Overall_Report,
       );
       return response;
     } catch (error) {
