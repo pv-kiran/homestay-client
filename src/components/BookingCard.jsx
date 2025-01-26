@@ -7,7 +7,7 @@ import { theme } from '../utils/theme';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { CheckCircle, Sparkles, Tag, Ticket, Users, X, } from 'lucide-react';
+import { CheckCircle, Sparkles, Tag, Ticket, Users, X, Info } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { SignupModal } from './SignupModal';
 import userService from '../services/userServices';
@@ -38,7 +38,7 @@ const wordAnimation = {
     }
 };
 
-export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests, setModal }) => {
+export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests, setModal, insuranceDetails }) => {
     const { id } = useParams();
     const [availableCoupons, setAvailableCoupons] = useState([{}]);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
@@ -226,6 +226,25 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             // setIsCouponModalOpen(false);
             toast.success(response.message);
         }
+    }
+
+
+    const calculatePrice = (price, nights) => {
+        return price * nights
+    }
+
+    const calculateInsurance = (price, differenceInDays, insurancePercentage) => {
+        return Math.ceil(((price * differenceInDays) * insurancePercentage) / 100)
+    }
+
+    const totalPrice = (price, differenceInDays, insuranceCoverage, isCouponApplied) => {
+        if (!isCouponApplied) {
+            const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
+            const totalPrice = price * differenceInDays;
+            const totalAmount = totalPrice + insurance;
+            return totalAmount;
+        }
+        return price + Math.ceil((price * insuranceCoverage) / 100);
     }
 
     useEffect(() => {
@@ -591,11 +610,41 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             </Modal>
                         </div>
                         <div className="flex justify-between mb-2 mt-2">
-                            <span className="text-gray-600 text-md">{`${currency?.symbol} ${price} ×`}
+                            <span className="text-gray-600 text-md">
+                                {`${currency?.symbol} ${price} ×`}
                                 {differenceInDays ? ` ${differenceInDays} ` : ` ${1}`}    night(s)</span>
                             <span>
                                 {
-                                    differenceInDays ? `${price * differenceInDays}/-` : `${price}/-`
+                                    differenceInDays ? `${calculatePrice(price, differenceInDays)
+                                        }/-` : `${price}/-`
+                                }
+                            </span>
+                        </div>
+                        <div
+                            className="flex justify-between mb-2 mt-2 group relative">
+                            <span className="text-gray-600 text-md flex items-center gap-3">
+                                Liability Insurance
+                                <span className="relative">
+                                    <Info color='#14b8a6' className="h-4 w-4 text-gray-500 cursor-help" />
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-black text-white text-sm rounded-lg p-2 shadow-lg">
+                                        <div className="relative">
+                                            <p>
+                                                <span className='block'>
+                                                    {insuranceDetails?.provider}
+                                                </span>
+                                                <span>
+                                                    {insuranceDetails?.insuranceDescription}
+                                                </span>
+                                            </p>
+                                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 translate-y-full w-2 h-2 bg-black rotate-45"></div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </span>
+
+                            <span>
+                                {
+                                    differenceInDays ? `${calculateInsurance(price, differenceInDays, insuranceDetails?.insurancePercentage)} /-` : `${calculateInsurance(price, 1, insuranceDetails?.insurancePercentage)}/-`
                                 }
                             </span>
                         </div>
@@ -616,7 +665,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                     currency?.symbol
                                 }
                                 {
-                                    appliedCoupon !== null ? (`${appliedCoupon?.newPrice}/-`) : (differenceInDays ? `${price * differenceInDays}/-` : `${price}`)
+                                    appliedCoupon !== null ? (`${totalPrice(appliedCoupon?.newPrice, 0, insuranceDetails?.insurancePercentage, true)}/-`) : (differenceInDays ? `${totalPrice(price, differenceInDays, insuranceDetails?.insurancePercentage, false)}/-` : `${totalPrice(price, 1, insuranceDetails?.insurancePercentage, false)} /-`)
                                 }
                             </span>
                         </div>

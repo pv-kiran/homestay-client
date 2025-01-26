@@ -27,7 +27,7 @@ const schema = yup.object({
     .required("Please add a title"),
   description: yup
     .string()
-    .required("Please add a title"),
+    .required("Please add a description"),
   category: yup
     .object()
     .required("Please select a Category"),
@@ -96,6 +96,22 @@ const schema = yup.object({
   checkOutTime: yup
     .string()
     .required("Please add a longitude"),
+  provider: yup
+    .string()
+    .required("Please add a provider"),
+  insuranceDescription: yup
+    .string()
+    .required("Please add a description"),
+  insuranceAmount: yup
+    .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? null : value
+    )
+    .nullable()
+    .required("Please add insurance amount"),
+  proximityCity: yup
+    .string()
+    .required("Please add a proximity city"),
 });
 
 
@@ -259,6 +275,7 @@ const RoomsPage = () => {
       address: {
         street: data?.street,
         city: data?.city,
+        proximityCity: data?.proximityCity,
         district: data?.district,
         state: data?.state,
         zip: data?.zip,
@@ -274,6 +291,9 @@ const RoomsPage = () => {
       noOfBathRooms: data?.numberOfBathRooms,
       pricePerNight: data?.price,
       maxGuests: data?.maxGuests,
+      provider: data?.provider,
+      insuranceAmount: data?.insuranceAmount,
+      insuranceDescription: data?.insuranceDescription,
       categoryId: data?.category?.value,
       hotelPolicies: {
         checkInTime: data.checkInTime,
@@ -433,11 +453,12 @@ const RoomsPage = () => {
     setValue('numberOfBathRooms', chosenHomeStay[0].noOfBathRooms)
     setValue('price', chosenHomeStay[0].pricePerNight)
     setValue('maxGuests', chosenHomeStay[0].maxGuests)
-    const { street, city, state, district, zip,
+    const { street, city, state, district, zip, proximityCity,
       coordinates: { latitude, longitude, nearByLatitude, nearByLongitude }
     } = chosenHomeStay[0].address
     setValue('street', street)
     setValue('city', city)
+    setValue('proximityCity', proximityCity)
     setValue('state', state)
     setValue('district', district)
     setValue('zip', zip)
@@ -448,6 +469,9 @@ const RoomsPage = () => {
     const { checkInTime, checkOutTime, guestPolicies } = chosenHomeStay[0]?.hotelPolicies
     setValue('checkInTime', checkInTime)
     setValue('checkOutTime', checkOutTime)
+    setValue('provider', chosenHomeStay[0].provider)
+    setValue('insuranceAmount', chosenHomeStay[0].insuranceAmount)
+    setValue('insuranceDescription', chosenHomeStay[0].insuranceDescription)
     setGuestPolicyList(guestPolicies);
     setHomeStayImages(chosenHomeStay[0]?.images);
     setIsShowLoading(false)
@@ -647,6 +671,14 @@ const RoomsPage = () => {
                   error={errors.city}
                 />
               </div>
+              <FormField
+                type="text"
+                name="proximityCity"
+                label="Proximity city"
+                placeholder="Enter proximity city"
+                register={register}
+                error={errors.proximityCity}
+              />
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   type="text"
@@ -730,6 +762,30 @@ const RoomsPage = () => {
               <InputList
                 lists={guestPolicyList}
                 setLists={setGuestPolicyList}
+              />
+              <FormField
+                type="text"
+                name="provider"
+                label="Insurance Provider"
+                placeholder="Enter provider details"
+                register={register}
+                error={errors.provider}
+              />
+              <FormField
+                type="number"
+                name="insuranceAmount"
+                label="Insurance Amount"
+                placeholder="Insurance Amount"
+                register={register}
+                error={errors.insuranceAmount}
+              />
+              <FormField
+                type="textarea"
+                name="insuranceDescription"
+                label="Description"
+                placeholder="Enter insurance description"
+                register={register}
+                error={errors.insuranceDescription}
               />
               {
                 isEditing ? <ImageList

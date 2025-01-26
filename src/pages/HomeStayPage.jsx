@@ -121,6 +121,13 @@ function HomeStayPage() {
                                     onCheckInChange={setCheckIn}
                                     onCheckOutChange={setCheckOut}
                                     price={homeStay?.data?.pricePerNight}
+                                    insuranceDetails={
+                                        {
+                                            provider: homeStay?.data?.provider,
+                                            insurancePercentage: homeStay?.data?.insuranceAmount,
+                                            insuranceDescription: homeStay?.data?.insuranceDescription
+                                        }
+                                    }
                                     guests={guests}
                                     setGuests={setGuests}
                                     maxGuests={homeStay?.data?.maxGuests}
