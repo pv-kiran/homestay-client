@@ -27,18 +27,45 @@ export const routes = [
     icon: <BedDouble className="w-5 h-5" />
   },
   {
-    path: '/admin/add-ons',
+    path: '/admin/bookings',
+    title: 'Bookings',
+    icon: <UserCircle className="w-5 h-5" />
+  },
+  {
+    path: null,
     title: 'Add-ons',
-    icon: <Package className="w-5 h-5" />
+    icon: <Package className="w-5 h-5" />,
+    hasSubMenu: true,
+    subMenu: [
+      {
+        path: '/admin/add-ons/services',
+        title: 'Room Services',
+      },
+      {
+        path: '/admin/add-ons/restaurents',
+        title: 'Restaurents',
+      },
+      {
+        path: '/admin/add-ons/homelyfood',
+        title: 'Homely Food'
+      },
+      {
+        path: '/admin/add-ons/rides',
+        title: 'Rides/ Drives',
+      },
+      {
+        path: '/admin/add-ons/entertainment',
+        title: 'Entertainment',
+      },
+      {
+        path: '/admin/add-ons/others',
+        title: 'Other services',
+      }
+    ]
   },
   {
     path: '/admin/coupons',
     title: 'Coupons',
     icon: <TicketPercent className="w-5 h-5" />
-  },
-  {
-    path: '/admin/bookings',
-    title: 'Bookings',
-    icon: <UserCircle className="w-5 h-5" />
   }
 ];

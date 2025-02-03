@@ -360,6 +360,45 @@ const adminService = {
       throw error;
     }
   },
+  adminRestaurentAdd: async (homestayData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_Restaurent,
+        JSON.stringify(homestayData),
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllRestaurents: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_Restaurent,
+        pagination
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminRestaurantEdit: async ({ data, restaurentId }) => {
+    console.log(data);
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_Restaurent.replace(
+          ":id", restaurentId
+        ),
+        {
+          ...data,
+          city: data?.city?.value
+        },
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

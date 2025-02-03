@@ -60,6 +60,9 @@ const apiEndpoints = {
   Bestays_Admin_Category_Wise_Report: "/admin/category/report",
   Bestays_Admin_Yearly_Report: "/admin/yearly/report",
   Bestays_Admin_Overall_Report: "/admin/overall/report",
+  Bestays_Admin_Add_Restaurent: "/admin/add-restaurent",
+  Bestays_Admin_Get_Restaurent: "/admin/get-restaurents",
+  Bestays_Admin_Put_Restaurent: "/admin/restaurant/:id",
 };
 
 export default apiEndpoints;
