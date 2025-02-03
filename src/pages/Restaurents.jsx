@@ -416,8 +416,8 @@ export default function Restaurents() {
                         <div>
                             {
                                 !restaurentsLoading && <EmptyState
-                                    title="Empty Homestays"
-                                    message="Your homestay list is currently empty."
+                                    title="Empty Restaurents"
+                                    message="Your Restaurent list is currently empty."
                                     icon={<BedDouble className="w-12 h-12 text-gray-400" />}
                                 />
                             }

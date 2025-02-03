@@ -63,6 +63,9 @@ const apiEndpoints = {
   Bestays_Admin_Add_Restaurent: "/admin/add-restaurent",
   Bestays_Admin_Get_Restaurent: "/admin/get-restaurents",
   Bestays_Admin_Put_Restaurent: "/admin/restaurant/:id",
+  Bestays_Admin_Add_HomelyFood: "/admin/add-homelyfood",
+  Bestays_Admin_Get_HomelyFood: "/admin/get-homelyfoods",
+  Bestays_Admin_Put_HomelyFood: "/admin/homelyfood/:id",
 };
 
 export default apiEndpoints;

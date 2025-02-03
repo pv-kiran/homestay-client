@@ -399,6 +399,45 @@ const adminService = {
       throw error;
     }
   },
+  adminHomelyFoodAdd: async (homestayData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_HomelyFood,
+        JSON.stringify(homestayData),
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllHomelyFoods: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_HomelyFood,
+        pagination
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminHomelyFoodEdit: async ({ data, restaurentId }) => {
+    console.log(data);
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_HomelyFood.replace(
+          ":id", restaurentId
+        ),
+        {
+          ...data,
+          city: data?.city?.value
+        },
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;
