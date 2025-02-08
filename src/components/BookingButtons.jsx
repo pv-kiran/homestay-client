@@ -28,7 +28,7 @@ const BookingButtons = ({
     const isCancelActive = now < checkInDate && !isCancelled;
 
     return (
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="mt-4 flex flex-col gap-2">
             {/* Check In Button */}
             <button
                 onClick={onCheckIn}
