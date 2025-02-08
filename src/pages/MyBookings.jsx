@@ -39,7 +39,12 @@ const MyBookings = () => {
                 {
                     !loading && data?.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {data?.map((booking) => (
-                            <MyBookingCard key={booking._id} {...booking} getMyBookings={getMyBookings} getBookings={getMyBookings} />
+                            <MyBookingCard
+                                key={booking._id}
+                                {...booking}
+                                getMyBookings={getMyBookings}
+                            // getBookings={getMyBookings}
+                            />
                         ))}
                     </div> :
                         <div>

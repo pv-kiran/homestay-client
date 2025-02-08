@@ -66,6 +66,18 @@ const apiEndpoints = {
   Bestays_Admin_Add_HomelyFood: "/admin/add-homelyfood",
   Bestays_Admin_Get_HomelyFood: "/admin/get-homelyfoods",
   Bestays_Admin_Put_HomelyFood: "/admin/homelyfood/:id",
+  Bestays_Admin_Add_RoomService: "/admin/add-roomservice",
+  Bestays_Admin_Get_RoomService: "/admin/get-roomservice",
+  Bestays_Admin_Put_RoomService: "/admin/roomservice/:id",
+  Bestays_Admin_Add_Ride: "/admin/add-rides",
+  Bestays_Admin_Get_Ride: "/admin/get-rides",
+  Bestays_Admin_Put_Ride: "/admin/ride/:id",
+  Bestays_Admin_Add_Entertainment: "/admin/add-entertainment",
+  Bestays_Admin_Get_Entertainment: "/admin/get-entertainment",
+  Bestays_Admin_Put_Entertainment: "/admin/entertainment/:id",
+  Bestays_Admin_Add_OtherService: "/admin/add-otherservice",
+  Bestays_Admin_Get_OtherService: "/admin/get-otherservice",
+  Bestays_Admin_Put_OtherService: "/admin/otherservice/:id",
 };
 
 export default apiEndpoints;

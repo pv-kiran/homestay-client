@@ -63,7 +63,7 @@ function AppRoutes() {
           <Route path="account" element={<AccountPage />} />
           <Route path="bookings" element={<BookingsPage />} />
           <Route path="add-ons/services" element={<RoomServices />} />
-          <Route path="add-ons/restaurents" element={<Restaurents />} />
+          <Route path="add-ons/restaurants" element={<Restaurents />} />
           <Route path="add-ons/homelyfood" element={<HomelyFood />} />
           <Route path="add-ons/rides" element={<Rides />} />
           <Route path="add-ons/entertainment" element={<Entertainments />} />

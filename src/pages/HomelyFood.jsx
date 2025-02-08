@@ -399,8 +399,8 @@ export default function HomelyFood() {
                 {
                     allRestaurents?.data.length > 0 ? (
                         <Table
-                            title="Restaurant Management"
-                            subtitle="Manage your Restaurant"
+                            title="Homely food Management"
+                            subtitle="Manage your homely food services"
                             columns={restaurentsColumn}
                             data={allRestaurents?.data}
                             actions={getActions}

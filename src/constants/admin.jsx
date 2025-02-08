@@ -2,36 +2,6 @@ import { Home, BedDouble, Grid, Package, UserCircle, Users, Component, TicketPer
 
 export const routes = [
   {
-    path: '/admin/dashboard',
-    title: 'Dashboard',
-    icon: <Home className="w-5 h-5" />
-  },
-  {
-    path: '/admin/categories',
-    title: 'Categories',
-    icon: <Grid className="w-5 h-5" />
-  },
-  {
-    path: '/admin/amenities',
-    title: 'Amenities',
-    icon: <Component className="w-5 h-5" />
-  },
-  {
-    path: '/admin/users',
-    title: 'Users',
-    icon: <Users className="w-5 h-5" />
-  },
-  {
-    path: '/admin/rooms',
-    title: 'Homestays',
-    icon: <BedDouble className="w-5 h-5" />
-  },
-  {
-    path: '/admin/bookings',
-    title: 'Bookings',
-    icon: <UserCircle className="w-5 h-5" />
-  },
-  {
     path: null,
     title: 'Add-ons',
     icon: <Package className="w-5 h-5" />,
@@ -42,8 +12,8 @@ export const routes = [
         title: 'Room Services',
       },
       {
-        path: '/admin/add-ons/restaurents',
-        title: 'Restaurents',
+        path: '/admin/add-ons/restaurants',
+        title: 'Restaurants',
       },
       {
         path: '/admin/add-ons/homelyfood',
@@ -51,7 +21,7 @@ export const routes = [
       },
       {
         path: '/admin/add-ons/rides',
-        title: 'Rides/ Drives',
+        title: 'Rides & Drives',
       },
       {
         path: '/admin/add-ons/entertainment',
@@ -64,8 +34,38 @@ export const routes = [
     ]
   },
   {
+    path: '/admin/amenities',
+    title: 'Amenities',
+    icon: <Component className="w-5 h-5" />
+  },
+  {
+    path: '/admin/bookings',
+    title: 'Bookings',
+    icon: <UserCircle className="w-5 h-5" />
+  },
+  {
+    path: '/admin/categories',
+    title: 'Categories',
+    icon: <Grid className="w-5 h-5" />
+  },
+  {
     path: '/admin/coupons',
     title: 'Coupons',
     icon: <TicketPercent className="w-5 h-5" />
-  }
+  },
+  {
+    path: '/admin/dashboard',
+    title: 'Dashboard',
+    icon: <Home className="w-5 h-5" />
+  },
+  {
+    path: '/admin/rooms',
+    title: 'Homestays',
+    icon: <BedDouble className="w-5 h-5" />
+  },
+  {
+    path: '/admin/users',
+    title: 'Users',
+    icon: <Users className="w-5 h-5" />
+  },
 ];

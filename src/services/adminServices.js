@@ -438,6 +438,146 @@ const adminService = {
       throw error;
     }
   },
+  adminRoomserviceAdd: async (serviceData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_RoomService,
+        serviceData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllRoomservice: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_RoomService,
+        JSON.stringify(pagination)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminRoomserviceEdit: async ({ formData, serviceId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_RoomService.replace(
+          ":id", serviceId
+        ),
+        formData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminRidesAdd: async (serviceData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_Ride,
+        serviceData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllRides: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_Ride,
+        JSON.stringify(pagination)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminRidesEdit: async ({ formData, serviceId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_Ride.replace(
+          ":id", serviceId
+        ),
+        formData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminEntertainmentAdd: async (serviceData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_Entertainment,
+        serviceData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllEntertainment: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_Entertainment,
+        JSON.stringify(pagination)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminEditEntertainment: async ({ formData, serviceId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_Entertainment.replace(
+          ":id", serviceId
+        ),
+        formData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminOtherServiceAdd: async (serviceData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Add_OtherService,
+        serviceData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetAllOtherService: async (pagination) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_Admin_Get_OtherService,
+        JSON.stringify(pagination)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminEditOtherService: async ({ formData, serviceId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_OtherService.replace(
+          ":id", serviceId
+        ),
+        formData,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

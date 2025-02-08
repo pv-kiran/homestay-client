@@ -230,12 +230,12 @@ export default function Restaurents() {
     return (
         <>
             <div className="flex justify-end">
-                <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add Restaurents</Button>
+                <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add Restaurant</Button>
                 <Modal
                     isOpen={isModalOpen}
                     onClose={handleClose}
-                    title={"Add Restaurents"}
-                    description={"Signature restaurents details"}
+                    title={"Add Restaurant"}
+                    description={"Signature restaurants details"}
                     maxWidth="600px"
                 >
                     <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-lg p-6 space-y-6">
@@ -400,7 +400,7 @@ export default function Restaurents() {
                     allRestaurents?.data.length > 0 ? (
                         <Table
                             title="Restaurant Management"
-                            subtitle="Manage your Restaurant"
+                            subtitle="Manage your restaurants"
                             columns={restaurentsColumn}
                             data={allRestaurents?.data}
                             actions={getActions}
@@ -416,7 +416,7 @@ export default function Restaurents() {
                         <div>
                             {
                                 !restaurentsLoading && <EmptyState
-                                    title="Empty Restaurents"
+                                    title="Empty Restaurants"
                                     message="Your Restaurent list is currently empty."
                                     icon={<BedDouble className="w-12 h-12 text-gray-400" />}
                                 />
