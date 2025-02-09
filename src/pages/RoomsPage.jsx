@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { ImageGrid } from '../components/ImageGrid';
 import { Loader } from '../components/common/Loader';
 import { EmptyState } from '../components/common/EmptyState';
+import AddonsForm from '../components/forms/AddonsForm';
 
 
 const schema = yup.object({
@@ -126,6 +127,7 @@ const RoomsPage = () => {
   const [homeStayId, setHomeStayId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isAddons, setIsAddons] = useState(false);
   const [homeStayImages, setHomeStayImages] = useState([]);
   const [fileError, setFileError] = useState(false);
   const [pageSize, setPageSize] = useState(10);
@@ -133,6 +135,7 @@ const RoomsPage = () => {
   const [searchKey, setSearchKey] = useState('');
   const [isReorder, setIsReorder] = useState(false);
   const [images, setImages] = useState([]);
+  const [selectedHomestay, setSelectedHomeStay] = useState([]);
   const timer = useRef(null);
 
   const [isShowLoading, setIsShowLoading] = useState(true);
@@ -191,6 +194,13 @@ const RoomsPage = () => {
     reset: reorderReset,
   } = useApi(adminService.adminReorderHomeStayImages);
 
+  const {
+    loading: addonsLoading,
+    data: allAddOns,
+    execute: getAllAddOns,
+    error: getAllAddonsError,
+  } = useApi(adminService.adminGetAllAddons);
+
   const fetchAmentitiesandCategories = async () => {
     const categories = await getAllCategories();
     const amenities = await getAllAmenities();
@@ -229,6 +239,8 @@ const RoomsPage = () => {
     setImages([]);
     setHomeStayId(null);
     setIsReorder(false)
+    setIsAddons(false)
+    setSelectedHomeStay([])
     reset();
   };
 
@@ -259,13 +271,17 @@ const RoomsPage = () => {
     if (reorderError) {
       toast.error(reorderError?.message);
     }
+    if (getAllAddonsError) {
+      toast.error(reorderError?.message);
+    }
   }, [
     getAmenitiesError,
     getCategoriesError,
     addHomeStayError,
     allHomeStaysError,
     toggleHomeStayError,
-    editHomeStayError
+    editHomeStayError,
+    getAllAddonsError
   ]);
 
   const onSubmit = async (data) => {
@@ -337,7 +353,7 @@ const RoomsPage = () => {
     getAllHomeStays({
       pagePerData: pageSize,
       pageNumber: currentPage,
-      searchParams: ""
+      searchParams: searchKey
     })
     handleClose();
   }
@@ -359,6 +375,13 @@ const RoomsPage = () => {
     setPageSize(size);
   }
 
+  const getHomeStayAddons = () => {
+    getAllHomeStays({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: searchKey
+    });
+  }
 
   const homestayColumn = [
     {
@@ -487,6 +510,17 @@ const RoomsPage = () => {
     setHomeStayId(item?._id)
   }
 
+  const handleAddons = (id) => {
+    setIsModalOpen(true);
+    // setIsViewDetail(true)
+    setIsAddons(true)
+    const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
+    setHomeStayId(id);
+    setSelectedHomeStay(chosenHomeStay);
+    const { address } = chosenHomeStay[0]
+    getAllAddOns(address?.city)
+  }
+
   const getActions = (item) => [
     {
       icon: "view",
@@ -502,6 +536,11 @@ const RoomsPage = () => {
       icon: "reorder",
       onClick: () => handleImageReorder(item),
       title: "Reorder",
+    },
+    {
+      icon: "addons",
+      onClick: () => handleAddons(item?._id),
+      title: "Addons",
     },
     {
       icon: "toggle",
@@ -561,6 +600,7 @@ const RoomsPage = () => {
       });
     }, 500);
   }, [searchKey]);
+
 
 
 
@@ -842,6 +882,15 @@ const RoomsPage = () => {
                 </Button>
               </div>
             </>
+          }
+          {
+            isAddons && <AddonsForm
+              addOndata={allAddOns}
+              homeStayId={homeStayId}
+              handleClose={handleClose}
+              selectedHomestay={selectedHomestay}
+              getHomeStayAddons={getHomeStayAddons}
+            />
           }
         </Modal>
       </div>
