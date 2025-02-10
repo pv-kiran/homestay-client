@@ -5,11 +5,13 @@ import { BookingCard } from '../components/BookingCard';
 import { useParams } from 'react-router-dom';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MapView from '../components/MapView';
 import { calculateDifferenceInDays } from '../utils/dateDifference';
 import ReviewsSection from '../components/displayReview/ReviewsSection';
 import { Loader } from '../components/common/Loader';
+import AddonsSection from '../components/addons/AddonsSection';
+import { setAddOns } from '../app/features/admin/addonSlice';
 
 
 function HomeStayPage() {
@@ -17,6 +19,7 @@ function HomeStayPage() {
     const { currency } = useSelector((store) => store?.currency);
     const { authState } = useSelector((store) => store?.userAuth);
     const { id } = useParams();
+    const dispatch = useDispatch();
 
 
 
@@ -80,6 +83,19 @@ function HomeStayPage() {
         }
     }, [])
 
+    useEffect(() => {
+        if (homeStay?.data) {
+            const { restaurants, otherservice, rides, roomservice, homelyfoods, entertainments } = homeStay?.data;
+            dispatch(setAddOns({
+                restaurants,
+                otherservice,
+                rides,
+                roomservice,
+                homelyfoods,
+                entertainments
+            }));
+        }
+    }, [homeStay]);
 
     return (
         <>
@@ -135,6 +151,10 @@ function HomeStayPage() {
                                 />
                             </div>
                         </div>
+
+                        {/* Addons */}
+                        <AddonsSection />
+
                         {
                             (!isModalOpen && id) && <ReviewsSection homeStayId={id} />
                         }
