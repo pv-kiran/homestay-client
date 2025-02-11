@@ -130,7 +130,7 @@ function HomeStayPage() {
                                 />
                             </div>
 
-                            <div>
+                            <div className="hidden lg:block">
                                 <BookingCard
                                     checkIn={checkIn}
                                     checkOut={checkOut}
@@ -153,7 +153,30 @@ function HomeStayPage() {
                         </div>
 
                         {/* Addons */}
-                        <AddonsSection />
+                        <div>
+                            <AddonsSection />
+                        </div>
+
+                        <div className="block mb-4 lg:hidden">
+                            <BookingCard
+                                checkIn={checkIn}
+                                checkOut={checkOut}
+                                onCheckInChange={setCheckIn}
+                                onCheckOutChange={setCheckOut}
+                                price={homeStay?.data?.pricePerNight}
+                                insuranceDetails={
+                                    {
+                                        provider: homeStay?.data?.provider,
+                                        insurancePercentage: homeStay?.data?.insuranceAmount,
+                                        insuranceDescription: homeStay?.data?.insuranceDescription
+                                    }
+                                }
+                                guests={guests}
+                                setGuests={setGuests}
+                                maxGuests={homeStay?.data?.maxGuests}
+                                setModal={setIsModalOpen}
+                            />
+                        </div>
 
                         {
                             (!isModalOpen && id) && <ReviewsSection homeStayId={id} />

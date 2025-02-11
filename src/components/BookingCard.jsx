@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import { Button } from './common/Button';
 import { motion } from 'framer-motion';
 import { Modal } from "../components/common/Modal";
+import AddonsPrice from './addons/AddonsPrice';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Kolkata');
@@ -46,7 +47,9 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         const storedCoupon = sessionStorage.getItem('appliedCoupon');
         return storedCoupon ? JSON.parse(storedCoupon) : null;
     });
+    const { authState } = useSelector((state) => state?.userAuth);
     const { currency } = useSelector((store) => store?.currency);
+    const { selectedItems } = useSelector((store) => store?.addOns);
     const [couponCode, setCouponCode] = useState('');
     const [checkInError, setCheckInError] = useState(null);
     const [checkOutError, setCheckOutError] = useState(null);
@@ -86,9 +89,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     } = useApi(userService.userBookHomestayComplete);
 
 
-    const { authState } = useSelector((state) => state?.userAuth)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const differenceInDays = checkOut && checkIn ? dayjs(checkOut).diff(dayjs(checkIn), 'day') : null;
+
+
 
 
     function loadScript(src) {
@@ -229,6 +233,25 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
 
+    const getAddonAmount = () => {
+        const hasItems = Object.values(selectedItems).some(category => Object.keys(category)?.length > 0);
+        if (hasItems) {
+            const totalAddonAmount = Object.values(selectedItems).reduce(
+                (sum, category) =>
+                    sum + Object.values(category).reduce(
+                        (categorySum, item) => categorySum + item.price * item.quantity,
+                        0
+                    ),
+                0
+            );
+            return Math.ceil(totalAddonAmount);
+        }
+        return 0;
+    }
+
+
+
+
     const calculatePrice = (price, nights) => {
         return price * nights
     }
@@ -242,9 +265,9 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
             const totalPrice = price * differenceInDays;
             const totalAmount = totalPrice + insurance;
-            return totalAmount;
+            return totalAmount + Math.floor(getAddonAmount());
         }
-        return price + Math.ceil((price * insuranceCoverage) / 100);
+        return price + Math.ceil((price * insuranceCoverage) / 100) * getAddonAmount();
     }
 
     useEffect(() => {
@@ -276,6 +299,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             handleRemoveCoupon()
         }
     }, [checkIn, checkOut, currency])
+
+    console.log(selectedItems, "HHHHH");
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -609,7 +634,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 )}
                             </Modal>
                         </div>
-                        <div className="flex justify-between mb-2 mt-2">
+                        <div className="flex justify-between mb-2 mt-2 px-2">
                             <span className="text-gray-600 text-md">
                                 {`${currency?.symbol} ${price} ×`}
                                 {differenceInDays ? ` ${differenceInDays} ` : ` ${1}`}    night(s)</span>
@@ -621,7 +646,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             </span>
                         </div>
                         <div
-                            className="flex justify-between mb-2 mt-2 group relative">
+                            className="flex justify-between mb-2 mt-2 group relative px-2">
                             <span className="text-gray-600 text-md flex items-center gap-3">
                                 Liability Insurance
                                 <span className="relative">
@@ -648,6 +673,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 }
                             </span>
                         </div>
+                        <AddonsPrice />
                         {appliedCoupon !== null && (
                             <div className="flex justify-between mb-2">
                                 <div className='flex'>
@@ -658,7 +684,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             </div>
                         )}
 
-                        <div className="flex justify-between pt-4 border-t font-semibold text-lg">
+                        <div className="flex justify-between pt-4 mt-6 border-t font-semibold text-lg">
                             <span>Total</span>
                             <span>
                                 {
