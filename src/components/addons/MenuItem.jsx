@@ -48,7 +48,7 @@ export const MenuItem = ({
                     </div>
                 )}
                 <p className="text-sm sm:text-base font-semibold text-gray-900">
-                    ₹{(Math.ceil(item.price) * (quantity || 1)).toFixed(2)}
+                    ₹{(item.price) * (quantity || 1).toFixed(2)}
                 </p>
             </div>
         </div>

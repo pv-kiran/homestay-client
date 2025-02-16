@@ -244,7 +244,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                     ),
                 0
             );
-            return Math.ceil(totalAddonAmount);
+            return totalAddonAmount;
         }
         return 0;
     }
@@ -265,7 +265,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
             const totalPrice = price * differenceInDays;
             const totalAmount = totalPrice + insurance;
-            return totalAmount + Math.floor(getAddonAmount());
+            return totalAmount + getAddonAmount();
         }
         return price + Math.ceil((price * insuranceCoverage) / 100) * getAddonAmount();
     }

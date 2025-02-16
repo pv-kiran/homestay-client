@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Utensils, Home } from 'lucide-react';
 import { MenuItem } from './MenuItem';
 import { ServiceSection } from './ServiceSection';
@@ -10,7 +10,9 @@ function AddonsSection() {
 
     const { addOns } = useSelector((store) => store?.addOns);
     const { selectedItems } = useSelector((store) => store?.addOns);
+    const { currency } = useSelector((store) => store?.currency);
     const dispatch = useDispatch();
+
 
     const handleMenuItemToggle = (section, id, item) => {
         dispatch(toggleMenuItem({ section, id, item }));
@@ -20,6 +22,40 @@ function AddonsSection() {
         dispatch(updateQuantity({ section, id, quantity }));
     };
 
+
+
+
+    useEffect(() => {
+        const updatedItems = JSON.parse(JSON.stringify(selectedItems));
+        // Iterate through each service category
+        Object.keys(updatedItems)?.forEach(category => {
+            if (addOns && addOns[category]) {
+                // Get the items in this category from addOns
+                const categoryAddOns = addOns[category];
+
+                // Update each item in selectedItems if it exists in addOns
+                Object.keys(updatedItems[category]).forEach(itemId => {
+                    const selectedItem = updatedItems[category][itemId];
+                    const addOnItem = categoryAddOns.find(item => item._id === itemId);
+
+                    if (addOnItem) {
+                        // Update price based on addOn
+                        const newPrice = category === 'restaurants' || category === 'homelyFoods'
+                            ? addOnItem.price
+                            : addOnItem.amount;
+
+                        selectedItem.price = newPrice;
+
+                        // Update total amount if quantity exists
+                        if (selectedItem.quantity) {
+                            selectedItem.totalAmount = Number((newPrice * selectedItem.quantity).toFixed(2));
+                        }
+                    }
+                });
+            }
+        });
+
+    }, [addOns])
 
     return (
         <div className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 ">
@@ -35,8 +71,8 @@ function AddonsSection() {
                     subtitle="Discover local and international cuisines"
                 >
                     <div className="grid gap-6 sm:gap-8">
-                        {addOns?.restaurants.map((restaurant) => (
-                            <div key={restaurant._id}>
+                        {addOns?.restaurants?.map((restaurant) => (
+                            <div key={restaurant?._id}>
                                 <div className="flex items-center space-x-2 mb-4">
                                     <Utensils className="w-4 h-4 sm:w-5 sm:h-5 text-turquoise-500" />
                                     <h3 className="text-lg sm:text-xl font-semibold text-gray-800">
@@ -45,7 +81,7 @@ function AddonsSection() {
                                     <span className="text-xs sm:text-sm text-gray-500">({restaurant.city})</span>
                                 </div>
                                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {restaurant.menuItems.map((item) => (
+                                    {restaurant?.menuItems.map((item) => (
                                         <MenuItem
                                             key={item._id}
                                             item={item}
@@ -75,7 +111,7 @@ function AddonsSection() {
                     subtitle="Authentic local flavors prepared with care"
                 >
                     <div className="grid gap-6 sm:gap-8">
-                        {addOns?.homelyfoods.map((food) => (
+                        {addOns?.homelyfoods?.map((food) => (
                             <div key={food._id}>
                                 <div className="flex items-center space-x-2 mb-4">
                                     <Home className="w-4 h-4 sm:w-5 sm:h-5 text-turquoise-500" />
@@ -115,7 +151,7 @@ function AddonsSection() {
                     subtitle="Extra comforts for your stay"
                 >
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {addOns?.otherservice.map((service) => (
+                        {addOns?.otherservice?.map((service) => (
                             <ServiceItem
                                 key={service._id}
                                 service={service}
@@ -141,7 +177,7 @@ function AddonsSection() {
                     subtitle="Comfort at your doorstep"
                 >
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {addOns?.roomservice.map((service) => (
+                        {addOns?.roomservice?.map((service) => (
                             <ServiceItem
                                 key={service._id}
                                 service={service}
@@ -167,7 +203,7 @@ function AddonsSection() {
                     subtitle="Explore the city with ease"
                 >
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {addOns?.rides.map((service) => (
+                        {addOns?.rides?.map((service) => (
                             <ServiceItem
                                 key={service._id}
                                 service={service}
@@ -193,7 +229,7 @@ function AddonsSection() {
                     subtitle="Add fun to your stay"
                 >
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {addOns?.entertainments.map((service) => (
+                        {addOns?.entertainments?.map((service) => (
                             <ServiceItem
                                 key={service._id}
                                 service={service}

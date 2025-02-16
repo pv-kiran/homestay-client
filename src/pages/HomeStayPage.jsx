@@ -39,6 +39,8 @@ function HomeStayPage() {
         error: getHomeStayError,
     } = useApi(userService.userGetHomeStayById);
 
+    console.log(homeStay, "HHHHH1");
+
     const {
         data: bookingStatus,
         loading: bookingStatusLoading,
@@ -47,14 +49,6 @@ function HomeStayPage() {
         error: getbookingStatusError,
     } = useApi(userService.userGetHomeStayBookingStatus);
 
-
-    // const nextImage = () => {
-    //     setCurrentImageIndex((prev) => (prev + 1) % homeStay?.data?.images?.length);
-    // };
-
-    // const prevImage = () => {
-    //     setCurrentImageIndex((prev) => (prev - 1 + homeStay?.data?.images?.length) % homeStay?.data?.images?.length);
-    // };
 
     const nextImage = () => {
         if (homeStay?.data?.images?.length > 2) {
