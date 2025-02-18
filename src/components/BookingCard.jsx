@@ -127,7 +127,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                     checkIn: checkIn?.$d,
                     checkOut: checkOut?.$d,
                     currency: JSON.parse(localStorage.getItem('currency')),
-                    couponCode
+                    couponCode,
+                    addOns: selectedItems
                 })
 
                 const { data } = response
@@ -154,7 +155,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 checkIn: checkIn?.$d,
                                 checkOut: checkOut?.$d,
                                 orderId: response?.razorpay_order_id,
-                                paymentId: response?.razorpay_payment_id
+                                paymentId: response?.razorpay_payment_id,
+                                addOns: selectedItems
                             }
 
 
@@ -300,7 +302,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         }
     }, [checkIn, checkOut, currency])
 
-    console.log(selectedItems, "HHHHH");
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
