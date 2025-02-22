@@ -18,6 +18,7 @@ import {
 import { Button } from "../components/common/Button";
 import { Loader } from "../components/common/Loader";
 import { EmptyState } from "../components/common/EmptyState";
+import ServiceList from "../components/addons/ServiceList";
 
 
 const BookingsPage = () => {
@@ -297,6 +298,14 @@ const BookingsPage = () => {
                                     </div>
                                     <p className="mt-1 ml-7 text-sm">{chosenBooking[0].paymentId}</p>
                                 </div>
+                            </div>
+                            <div>
+                                {
+                                    chosenBooking[0]?.addOns && <ServiceList
+                                        data={chosenBooking[0]?.addOns}
+                                    />
+                                }
+
                             </div>
                             <Button className="w-full">Initiate Refund</Button>
                         </div>

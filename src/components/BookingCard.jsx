@@ -60,8 +60,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         error,
         loading,
         execute: bookHomestay,
-        success,
-        reset,
     } = useApi(userService.userBookHomestay);
 
     const {
@@ -156,20 +154,20 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 checkOut: checkOut?.$d,
                                 orderId: response?.razorpay_order_id,
                                 paymentId: response?.razorpay_payment_id,
-                                addOns: selectedItems
+                                addOns: selectedItems,
+                                currency
                             }
 
 
                             const bookingResponse = await bookHomestayComplete(requestBody)
 
                             if (response.success === true) {
-                                console.log(bookingResponse)
+
                             }
 
                             navigate(`/booking/${bookingResponse?.data?._id}/success`, {
                                 state: { bookingResponse },
                             })
-                            console.log(bookingResponse);
                         },
                         prefill: {
                             name: "Testing",
@@ -261,6 +259,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     const calculateInsurance = (price, differenceInDays, insurancePercentage) => {
         return Math.ceil(((price * differenceInDays) * insurancePercentage) / 100)
     }
+
+
 
     const totalPrice = (price, differenceInDays, insuranceCoverage, isCouponApplied) => {
         if (!isCouponApplied) {
@@ -670,7 +670,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
                             <span>
                                 {
-                                    differenceInDays ? `${calculateInsurance(price, differenceInDays, insuranceDetails?.insurancePercentage)} /-` : `${calculateInsurance(price, 1, insuranceDetails?.insurancePercentage)}/-`
+                                    differenceInDays ? `${calculateInsurance(price, differenceInDays, insuranceDetails?.insurancePercentage)} /-` : `${calculateInsurance(price, 1, insuranceDetails?.insurancePercentage,
+                                    )}/-`
                                 }
                             </span>
                         </div>
