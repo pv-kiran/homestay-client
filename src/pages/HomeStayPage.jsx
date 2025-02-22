@@ -5,11 +5,13 @@ import { BookingCard } from '../components/BookingCard';
 import { useParams } from 'react-router-dom';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MapView from '../components/MapView';
 import { calculateDifferenceInDays } from '../utils/dateDifference';
 import ReviewsSection from '../components/displayReview/ReviewsSection';
 import { Loader } from '../components/common/Loader';
+import AddonsSection from '../components/addons/AddonsSection';
+import { setAddOns } from '../app/features/admin/addonSlice';
 
 
 function HomeStayPage() {
@@ -17,6 +19,7 @@ function HomeStayPage() {
     const { currency } = useSelector((store) => store?.currency);
     const { authState } = useSelector((store) => store?.userAuth);
     const { id } = useParams();
+    const dispatch = useDispatch();
 
 
 
@@ -36,6 +39,8 @@ function HomeStayPage() {
         error: getHomeStayError,
     } = useApi(userService.userGetHomeStayById);
 
+    console.log(homeStay, "HHHHH1");
+
     const {
         data: bookingStatus,
         loading: bookingStatusLoading,
@@ -44,14 +49,6 @@ function HomeStayPage() {
         error: getbookingStatusError,
     } = useApi(userService.userGetHomeStayBookingStatus);
 
-
-    // const nextImage = () => {
-    //     setCurrentImageIndex((prev) => (prev + 1) % homeStay?.data?.images?.length);
-    // };
-
-    // const prevImage = () => {
-    //     setCurrentImageIndex((prev) => (prev - 1 + homeStay?.data?.images?.length) % homeStay?.data?.images?.length);
-    // };
 
     const nextImage = () => {
         if (homeStay?.data?.images?.length > 2) {
@@ -80,6 +77,19 @@ function HomeStayPage() {
         }
     }, [])
 
+    useEffect(() => {
+        if (homeStay?.data) {
+            const { restaurants, otherservice, rides, roomservice, homelyfoods, entertainments } = homeStay?.data;
+            dispatch(setAddOns({
+                restaurants,
+                otherservice,
+                rides,
+                roomservice,
+                homelyfoods,
+                entertainments
+            }));
+        }
+    }, [homeStay]);
 
     return (
         <>
@@ -114,7 +124,7 @@ function HomeStayPage() {
                                 />
                             </div>
 
-                            <div>
+                            <div className="hidden lg:block">
                                 <BookingCard
                                     checkIn={checkIn}
                                     checkOut={checkOut}
@@ -135,6 +145,33 @@ function HomeStayPage() {
                                 />
                             </div>
                         </div>
+
+                        {/* Addons */}
+                        <div>
+                            <AddonsSection />
+                        </div>
+
+                        <div className="block mb-4 lg:hidden">
+                            <BookingCard
+                                checkIn={checkIn}
+                                checkOut={checkOut}
+                                onCheckInChange={setCheckIn}
+                                onCheckOutChange={setCheckOut}
+                                price={homeStay?.data?.pricePerNight}
+                                insuranceDetails={
+                                    {
+                                        provider: homeStay?.data?.provider,
+                                        insurancePercentage: homeStay?.data?.insuranceAmount,
+                                        insuranceDescription: homeStay?.data?.insuranceDescription
+                                    }
+                                }
+                                guests={guests}
+                                setGuests={setGuests}
+                                maxGuests={homeStay?.data?.maxGuests}
+                                setModal={setIsModalOpen}
+                            />
+                        </div>
+
                         {
                             (!isModalOpen && id) && <ReviewsSection homeStayId={id} />
                         }

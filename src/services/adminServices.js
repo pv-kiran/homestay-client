@@ -578,6 +578,29 @@ const adminService = {
       throw error;
     }
   },
+  adminGetAllAddons: async (city) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Get_OtherService.replace(":city", city),
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminEditHomeStayAddons: async ({ addOns, homeStayId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_HomeStay_OtherService.replace(
+          ":id", homeStayId
+        ),
+        addOns,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

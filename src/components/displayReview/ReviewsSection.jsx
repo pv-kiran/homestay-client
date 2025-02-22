@@ -32,7 +32,7 @@ function ReviewsSection({ homeStayId }) {
     }, [])
 
     return (
-        <div className="py-4">
+        <div className="py-2">
             {/* <h2 className="text-xl font-semibold">Reviews & Ratings</h2> */}
             {(!reviews?.length) ? (
                 <div className="relative overflow-hidden bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-sm border border-gray-100">
