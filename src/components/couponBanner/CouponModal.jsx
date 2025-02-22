@@ -82,7 +82,7 @@ export function CouponModal({ isOpen, onClose }) {
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {(isOpen && lastestCoupon!==undefined) && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
