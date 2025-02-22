@@ -12,9 +12,12 @@ import {
     MapPin,
     CreditCard,
     Building,
-    Clock
+    Clock,
+    UserCircle
 } from 'lucide-react';
 import { Button } from "../components/common/Button";
+import { Loader } from "../components/common/Loader";
+import { EmptyState } from "../components/common/EmptyState";
 
 
 const BookingsPage = () => {
@@ -25,11 +28,13 @@ const BookingsPage = () => {
     const [chosenBooking, setchosenBooking] = useState([]);
     const timer = useRef(null);
 
+    const [isShowLoading, setIsShowLoading] = useState(true);
+
 
     const {
         data: allBookings,
         execute: getAllBookings,
-        error
+        loading
     } = useApi(adminService.adminGetAllBookings);
 
     const handlePageNumber = (page) => {
@@ -99,7 +104,7 @@ const BookingsPage = () => {
                         ? "bg-turquoise-200 text-turquoise-500"
                         : "bg-gray-100 text-gray-800"
                         }`}>
-                    {!user?.isDisabled ? "Active" : "Disabled"}
+                    {!user?.isDisabled ? "Paid" : "Disabled"}
                 </span>
             ),
             sortable: true,
@@ -111,7 +116,10 @@ const BookingsPage = () => {
     };
 
 
-    const handleSearch = () => { }
+    const handleSearch = (query) => {
+        setIsShowLoading(false)
+        setSearchKey(query);
+    }
 
 
     useEffect(() => {
@@ -144,10 +152,16 @@ const BookingsPage = () => {
     }, [searchKey]);
 
 
+
     return (
         <div>
+            {
+                (loading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+                    <Loader />
+                </div>
+            }
             <div className="min-h-screen my-4">
-                {allBookings?.data ? (
+                {allBookings?.data?.length > 0 ? (
                     <Table
                         title="Booking Management"
                         subtitle="Manage your bookings"
@@ -162,7 +176,17 @@ const BookingsPage = () => {
                         pageSize={pageSize}
                         totalItems={allBookings?.totalPages}
                     />
-                ) : null}
+                ) :
+                    <div>
+                        {
+                            !loading && <EmptyState
+                                title="Empty Homestays"
+                                message="Your homestay list is currently empty."
+                                icon={<UserCircle className="w-12 h-12 text-gray-400" />}
+                            />
+                        }
+                    </div>
+                }
             </div>
             {
                 chosenBooking?.length > 0 ? <Modal

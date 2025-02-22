@@ -5,7 +5,7 @@ import useApi from '../hooks/useApi';
 import { FormField } from '../components/common/FormField';
 import { useForm } from 'react-hook-form';
 import * as yup from "yup";
-import { CirclePlus } from 'lucide-react';
+import { BedDouble, CirclePlus } from 'lucide-react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
@@ -17,6 +17,8 @@ import { ViewHomeStay } from '../components/VeiwHomeStay';
 import ImageList from '../components/common/ImageList';
 import { toast } from 'react-toastify';
 import { ImageGrid } from '../components/ImageGrid';
+import { Loader } from '../components/common/Loader';
+import { EmptyState } from '../components/common/EmptyState';
 
 
 const schema = yup.object({
@@ -25,7 +27,7 @@ const schema = yup.object({
     .required("Please add a title"),
   description: yup
     .string()
-    .required("Please add a title"),
+    .required("Please add a description"),
   category: yup
     .object()
     .required("Please select a Category"),
@@ -94,6 +96,22 @@ const schema = yup.object({
   checkOutTime: yup
     .string()
     .required("Please add a longitude"),
+  provider: yup
+    .string()
+    .required("Please add a provider"),
+  insuranceDescription: yup
+    .string()
+    .required("Please add a description"),
+  insuranceAmount: yup
+    .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? null : value
+    )
+    .nullable()
+    .required("Please add insurance amount"),
+  proximityCity: yup
+    .string()
+    .required("Please add a proximity city"),
 });
 
 
@@ -106,6 +124,7 @@ const RoomsPage = () => {
   const [guestPolicyList, setGuestPolicyList] = useState([]);
   const [chosenHomestay, setChosenHomeStay] = useState([]);
   const [homeStayId, setHomeStayId] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [homeStayImages, setHomeStayImages] = useState([]);
   const [fileError, setFileError] = useState(false);
@@ -115,6 +134,8 @@ const RoomsPage = () => {
   const [isReorder, setIsReorder] = useState(false);
   const [images, setImages] = useState([]);
   const timer = useRef(null);
+
+  const [isShowLoading, setIsShowLoading] = useState(true);
 
   const {
     register,
@@ -145,6 +166,7 @@ const RoomsPage = () => {
   } = useApi(adminService.adminHomeStayAdd);
 
   const {
+    loading: homeStayLoading,
     data: allHomeStays,
     execute: getAllHomeStays,
     error: allHomeStaysError,
@@ -200,11 +222,13 @@ const RoomsPage = () => {
       setHomeStayImages([]);
     }
     setIsEditing(false);
+    setIsAdding(false);
     setFiles([]);
     setFileError('');
     setGuestPolicyList([])
     setImages([]);
     setHomeStayId(null);
+    setIsReorder(false)
     reset();
   };
 
@@ -251,6 +275,7 @@ const RoomsPage = () => {
       address: {
         street: data?.street,
         city: data?.city,
+        proximityCity: data?.proximityCity,
         district: data?.district,
         state: data?.state,
         zip: data?.zip,
@@ -266,6 +291,9 @@ const RoomsPage = () => {
       noOfBathRooms: data?.numberOfBathRooms,
       pricePerNight: data?.price,
       maxGuests: data?.maxGuests,
+      provider: data?.provider,
+      insuranceAmount: data?.insuranceAmount,
+      insuranceDescription: data?.insuranceDescription,
       categoryId: data?.category?.value,
       hotelPolicies: {
         checkInTime: data.checkInTime,
@@ -305,6 +333,7 @@ const RoomsPage = () => {
         editHomeStayReset();
       }
     }
+    setIsShowLoading(false);
     getAllHomeStays({
       pagePerData: pageSize,
       pageNumber: currentPage,
@@ -379,6 +408,7 @@ const RoomsPage = () => {
   ];
 
   const handleToggle = async (id) => {
+    setIsShowLoading(false);
     const result = await toggleHomeStay(id);
     if (result) {
       await getAllHomeStays({
@@ -423,11 +453,12 @@ const RoomsPage = () => {
     setValue('numberOfBathRooms', chosenHomeStay[0].noOfBathRooms)
     setValue('price', chosenHomeStay[0].pricePerNight)
     setValue('maxGuests', chosenHomeStay[0].maxGuests)
-    const { street, city, state, district, zip,
+    const { street, city, state, district, zip, proximityCity,
       coordinates: { latitude, longitude, nearByLatitude, nearByLongitude }
     } = chosenHomeStay[0].address
     setValue('street', street)
     setValue('city', city)
+    setValue('proximityCity', proximityCity)
     setValue('state', state)
     setValue('district', district)
     setValue('zip', zip)
@@ -438,14 +469,19 @@ const RoomsPage = () => {
     const { checkInTime, checkOutTime, guestPolicies } = chosenHomeStay[0]?.hotelPolicies
     setValue('checkInTime', checkInTime)
     setValue('checkOutTime', checkOutTime)
+    setValue('provider', chosenHomeStay[0].provider)
+    setValue('insuranceAmount', chosenHomeStay[0].insuranceAmount)
+    setValue('insuranceDescription', chosenHomeStay[0].insuranceDescription)
     setGuestPolicyList(guestPolicies);
     setHomeStayImages(chosenHomeStay[0]?.images);
+    setIsShowLoading(false)
   };
 
   const handleImageReorder = (item) => {
     setIsModalOpen(true);
     setIsViewDetail(false);
     setIsEditing(false);
+    setIsAdding(false);
     setIsReorder(true);
     setImages(item?.images);
     setHomeStayId(item?._id)
@@ -476,6 +512,7 @@ const RoomsPage = () => {
   ];
 
   const handleSearch = (query) => {
+    setIsShowLoading(false)
     setSearchKey(query);
   };
 
@@ -484,6 +521,7 @@ const RoomsPage = () => {
   }
 
   const handleReorder = async () => {
+    setIsShowLoading(false);
     const result = await reorderImages({ images, homeStayId })
     if (result) {
       await getAllHomeStays({
@@ -525,10 +563,15 @@ const RoomsPage = () => {
   }, [searchKey]);
 
 
+
+
   return (
     <>
       <div className='flex justify-end'>
-        <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add homestay</Button>
+        <Button onClick={() => {
+          setIsModalOpen(true)
+          setIsAdding(true);
+        }} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add homestay</Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
@@ -538,7 +581,7 @@ const RoomsPage = () => {
           maxWidth={!isViewDetail ? "600px" : "700px"}
         >
           {
-            isEditing &&
+            (isEditing || isAdding) &&
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
               <FormField
                 type="text"
@@ -630,6 +673,14 @@ const RoomsPage = () => {
                   error={errors.city}
                 />
               </div>
+              <FormField
+                type="text"
+                name="proximityCity"
+                label="Proximity city"
+                placeholder="Enter proximity city"
+                register={register}
+                error={errors.proximityCity}
+              />
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   type="text"
@@ -714,6 +765,30 @@ const RoomsPage = () => {
                 lists={guestPolicyList}
                 setLists={setGuestPolicyList}
               />
+              <FormField
+                type="text"
+                name="provider"
+                label="Insurance Provider"
+                placeholder="Enter provider details"
+                register={register}
+                error={errors.provider}
+              />
+              <FormField
+                type="number"
+                name="insuranceAmount"
+                label="Insurance Amount"
+                placeholder="Insurance Amount"
+                register={register}
+                error={errors.insuranceAmount}
+              />
+              <FormField
+                type="textarea"
+                name="insuranceDescription"
+                label="Description"
+                placeholder="Enter insurance description"
+                register={register}
+                error={errors.insuranceDescription}
+              />
               {
                 isEditing ? <ImageList
                   images={homeStayImages}
@@ -724,7 +799,7 @@ const RoomsPage = () => {
                 onChange={handleFileUpload}
                 value={files}
                 multiple={true}
-                maxFiles={!isEditing ? 5 : 5 - homeStayImages.length}
+                maxFiles={!isEditing ? 10 : 10 - homeStayImages.length}
               />
               {fileError ?
                 <p className="text-xs text-red-500">{fileError}</p>
@@ -770,23 +845,39 @@ const RoomsPage = () => {
           }
         </Modal>
       </div>
-      <div className="min-h-screen my-4">
-        {allHomeStays?.data ? (
-          <Table
-            title="Homestay Management"
-            subtitle="Manage your Homestay"
-            columns={homestayColumn}
-            data={allHomeStays?.data}
-            actions={getActions}
-            onSearch={handleSearch}
-            initialSort={{ field: "title", direction: "asc" }}
-            currentPage={currentPage}
-            onPageChange={handlePageNumber}
-            onPageSizeChange={handlePageSize}
-            pageSize={pageSize}
-            totalItems={allHomeStays?.totalPages}
-          />
-        ) : null}
+      {
+        (homeStayLoading && isShowLoading) && <div className='mt-2 h-[70vh] flex items-center justify-center'>
+          <Loader />
+        </div>
+      }
+      <div className="min-h-[70vh] my-4">
+        {
+          allHomeStays?.data.length > 0 ? (
+            <Table
+              title="Homestay Management"
+              subtitle="Manage your Homestay"
+              columns={homestayColumn}
+              data={allHomeStays?.data}
+              actions={getActions}
+              onSearch={handleSearch}
+              initialSort={{ field: "title", direction: "asc" }}
+              currentPage={currentPage}
+              onPageChange={handlePageNumber}
+              onPageSizeChange={handlePageSize}
+              pageSize={pageSize}
+              totalItems={allHomeStays?.totalPages}
+            />
+          ) :
+            <div>
+              {
+                !homeStayLoading && <EmptyState
+                  title="Empty Homestays"
+                  message="Your homestay list is currently empty."
+                  icon={<BedDouble className="w-12 h-12 text-gray-400" />}
+                />
+              }
+            </div>
+        }
       </div>
     </>
   );

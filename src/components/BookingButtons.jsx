@@ -12,15 +12,14 @@ const BookingButtons = ({
     isCancelled,
 }) => {
 
-
-    console.log(isCheckedIn)
-
     const now = new Date();
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
+    console.log(now.toDateString(), "DATE");
+    console.log(checkInDate.toDateString(), "DATE")
 
     // Check-In button enabled only on the exact check-in date if not already checked in
-    const isCheckInActive = now.toDateString() === checkInDate.toDateString() && !isCheckedIn && !isCancelled;
+    const isCheckInActive = now.toDateString() === checkInDate.toDateString() && !isCheckedIn && !isCancelled && !isCheckedOut;
 
     // Check-Out button enabled only between the day after check-in date and before check-out date if not already checked out
     const isCheckOutActive = now > checkInDate && now < checkOutDate && !isCheckedOut && !isCancelled;
@@ -29,7 +28,7 @@ const BookingButtons = ({
     const isCancelActive = now < checkInDate && !isCancelled;
 
     return (
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="mt-4 flex flex-col gap-2">
             {/* Check In Button */}
             <button
                 onClick={onCheckIn}

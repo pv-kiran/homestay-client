@@ -76,7 +76,7 @@ export function ViewHomeStay({ data }) {
             <div className="my-">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <ShieldX className="h-5 w-5 text-gray-500" />
+                  {/* <ShieldX className="h-5 w-5 text-gray-500" /> */}
                   <div>
                     <p className="font-semibold text-gray-700">Guest Policies</p>
                     <div className="font-semibold">

@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import MapView from '../components/MapView';
 import { calculateDifferenceInDays } from '../utils/dateDifference';
 import ReviewsSection from '../components/displayReview/ReviewsSection';
+import { Loader } from '../components/common/Loader';
 
 
 function HomeStayPage() {
@@ -23,6 +24,8 @@ function HomeStayPage() {
     const [checkIn, setCheckIn] = useState(null);
     const [checkOut, setCheckOut] = useState(null);
     const [guests, setGuests] = useState(1);
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
 
     const {
@@ -78,9 +81,13 @@ function HomeStayPage() {
     }, [])
 
 
-
     return (
         <>
+            {
+                homeStayLoading && <div className='mt-[65px] h-[80vh] flex items-center justify-center'>
+                    <Loader text="Loading your homestay..." />
+                </div>
+            }
             {
                 homeStay?.data ? <div className="min-h-screen mt-[65px] bg-gray-50">
                     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
@@ -101,6 +108,9 @@ function HomeStayPage() {
                                     policies={
                                         homeStay?.data?.hotelPolicies?.guestPolicies
                                     }
+                                    checkIn={homeStay?.data?.hotelPolicies?.checkInTime}
+                                    checkOut={homeStay?.data?.hotelPolicies?.checkOutTime}
+                                    homeStayId={id}
                                 />
                             </div>
 
@@ -111,40 +121,58 @@ function HomeStayPage() {
                                     onCheckInChange={setCheckIn}
                                     onCheckOutChange={setCheckOut}
                                     price={homeStay?.data?.pricePerNight}
+                                    insuranceDetails={
+                                        {
+                                            provider: homeStay?.data?.provider,
+                                            insurancePercentage: homeStay?.data?.insuranceAmount,
+                                            insuranceDescription: homeStay?.data?.insuranceDescription
+                                        }
+                                    }
                                     guests={guests}
                                     setGuests={setGuests}
+                                    maxGuests={homeStay?.data?.maxGuests}
+                                    setModal={setIsModalOpen}
                                 />
                             </div>
                         </div>
-                        <ReviewsSection homeStayId= {id}/>
                         {
-                            (bookingStatus?.status && calculateDifferenceInDays(bookingStatus?.checkIn) <= 2) ? <div>
-                                <MapView
-                                    position={
-                                        [
-                                            homeStay?.data?.address?.coordinates?.latitude,
-                                            homeStay?.data?.address?.coordinates?.longitude
-                                        ]}
-                                    title={homeStay?.data?.title}
-                                    address={homeStay?.data?.address}
-                                />
-                            </div> : <div>
-                                {
-                                    (homeStay?.data?.address?.coordinates?.nearByLatitude && homeStay?.data?.address?.coordinates?.nearByLongitude) && <MapView
-                                        position={
-                                            [
-                                                homeStay?.data?.address?.coordinates?.nearByLatitude,
-                                                homeStay?.data?.address?.coordinates?.nearByLongitude
-                                            ]
-                                        }
-                                        title={homeStay?.data?.title}
-                                        address={homeStay?.data?.address}
-                                    />
-                                }
-                            </div>
+                            (!isModalOpen && id) && <ReviewsSection homeStayId={id} />
                         }
-
-
+                        {
+                            (bookingStatus?.status && calculateDifferenceInDays(bookingStatus?.checkIn) <= 2) ?
+                                <div>
+                                    {
+                                        !isModalOpen && <MapView
+                                            position={
+                                                [
+                                                    homeStay?.data?.address?.coordinates?.latitude,
+                                                    homeStay?.data?.address?.coordinates?.longitude
+                                                ]}
+                                            title={homeStay?.data?.title}
+                                            address={homeStay?.data?.address}
+                                        />
+                                    }
+                                </div> :
+                                <div>
+                                    {
+                                        (homeStay?.data?.address?.coordinates?.nearByLatitude && homeStay?.data?.address?.coordinates?.nearByLongitude) &&
+                                        <div>
+                                            {
+                                                !isModalOpen && <MapView
+                                                    position={
+                                                        [
+                                                            homeStay?.data?.address?.coordinates?.nearByLatitude,
+                                                            homeStay?.data?.address?.coordinates?.nearByLongitude
+                                                        ]
+                                                    }
+                                                    title={homeStay?.data?.title}
+                                                    address={homeStay?.data?.address}
+                                                />
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                        }
                     </main>
                 </div> : null
             }

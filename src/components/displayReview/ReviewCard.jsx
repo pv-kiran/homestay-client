@@ -14,7 +14,7 @@ function ReviewCard({review}) {
                 {userId?.profilePic ? (
                     <img
                         src={userId?.profilePic}
-                        alt={`${userId?.fullName || 'User'}'s profile`}
+                        alt={`https://res.cloudinary.com/djd2rpgil/image/upload/v1735479438/homestay-landing_bg/yqpmgbvksvrvvuroguqc.png`}
                         className="w-full h-full rounded-[10px] object-cover"
                     />
                 ) : (

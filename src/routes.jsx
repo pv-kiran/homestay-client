@@ -22,6 +22,13 @@ import UserProfilePage from "./pages/UserProfilePage";
 import CouponsPage from "./pages/CouponsPage";
 import MyBookings from "./pages/MyBookings";
 import BookingsPage from "./pages/BookingsPage";
+import BookingSuccess from "./pages/BookingSuccess";
+import RoomServices from "./pages/RoomServices";
+import Restaurents from "./pages/Restaurents";
+import HomelyFood from "./pages/HomelyFood";
+import Rides from "./pages/Rides";
+import Entertainments from "./pages/Entertainments";
+import OtherServices from "./pages/OtherService";
 
 
 function AppRoutes() {
@@ -34,6 +41,7 @@ function AppRoutes() {
         <Route path="/homestay/view/:id" element={<HomeStayPage />} />
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/mybookings" element={<MyBookings />} />
+        <Route path="/booking/:id/success" element={<BookingSuccess />} />
       </Route>
 
       <Route element={<PublicRoutesAdmin />}>
@@ -54,6 +62,12 @@ function AppRoutes() {
           <Route path="add-ons" element={<AddOnsPage />} />
           <Route path="account" element={<AccountPage />} />
           <Route path="bookings" element={<BookingsPage />} />
+          <Route path="add-ons/services" element={<RoomServices />} />
+          <Route path="add-ons/restaurants" element={<Restaurents />} />
+          <Route path="add-ons/homelyfood" element={<HomelyFood />} />
+          <Route path="add-ons/rides" element={<Rides />} />
+          <Route path="add-ons/entertainment" element={<Entertainments />} />
+          <Route path="add-ons/others" element={<OtherServices />} />
           <Route path="sample" element={<SamplePage />} />
         </Route>
       </Route>

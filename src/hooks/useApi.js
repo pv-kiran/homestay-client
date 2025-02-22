@@ -33,6 +33,32 @@ const useApi = (apiFunc) => {
     [apiFunc]
   );
 
+  const executeBlob = useCallback(
+    async (...params) => {
+      try {
+          setLoading(true);
+          setError(null);
+          const response = await apiFunc(...params);
+          // Don't destructure for blob responses
+          if (response?.headers?.['content-type']?.includes('application/pdf')) {
+              setSuccess(true);
+              return response;  // Return full response for blobs
+          }
+          // For regular JSON responses
+          setData(response.data);
+          setSuccess(true);
+          return response;
+      } catch (err) {
+          setError(err?.response?.data || "An error occurred");
+          setSuccess(false);
+          throw err;  // Propagate the error instead of returning false
+      } finally {
+          setLoading(false);
+      }
+    },
+    [apiFunc]
+  );
+
   return {
     data,
     error,
@@ -40,6 +66,7 @@ const useApi = (apiFunc) => {
     success,
     execute,
     reset,
+    executeBlob,
   };
 };
 

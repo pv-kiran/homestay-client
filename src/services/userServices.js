@@ -150,34 +150,35 @@ const userService = {
     }
   },
   userBookHomestay: async (bookingData) => {
-  try {
-    const response = await axiosInstance.post(
-      apiEndpoints.Bestays_User_Homestay_Booking,
-      JSON.stringify(bookingData)
-    );
-    return response;
-  } catch (error) {
-    throw error;
-  }
-  },
-  userGetValidCoupons: async () => {
     try {
-      const response = await axiosInstance.get(
-        apiEndpoints.Bestays_User_Get_Valid_Coupons
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Homestay_Booking,
+        JSON.stringify(bookingData)
       );
       return response;
     } catch (error) {
       throw error;
     }
   },
-  userApplyCoupon: async (code, id, days) => {    
+  userGetValidCoupons: async (currency) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Get_Valid_Coupons.replace(":query", `currency=${currency}`)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userApplyCoupon: async (code, id, days, currencyCode) => {
     try {
       const response = await axiosInstance.post(
         apiEndpoints.Bestays_User_Apply_Coupon,
         {
-          couponCode:code,
+          couponCode: code,
           homestayId: id,
-          numberOfDays: days
+          numberOfDays: days,
+          currencyCode
         }
       );
       return response;
@@ -217,10 +218,10 @@ const userService = {
       throw error;
     }
   },
-  userGetHomeStayBookings: async () => {
+  userGetHomeStayBookings: async (currency) => {
     try {
       const response = await axiosInstance.get(
-        apiEndpoints.Bestays_User_Homestay_Booking_List
+        apiEndpoints.Bestays_User_Homestay_Booking_List.replace(":query", `currency=${currency}`)
       );
       return response;
     } catch (error) {
@@ -279,7 +280,7 @@ const userService = {
       throw error;
     }
   },
-  userGetHomestayReview: async ({homeStayId}) => {
+  userGetHomestayReview: async ({ homeStayId }) => {
     try {
       const response = await axiosInstance.get(
         apiEndpoints.Bestays_User_Homestay_Get_Review.replace(':$homeStayId', homeStayId)
@@ -288,7 +289,24 @@ const userService = {
     } catch (error) {
       throw error;
     }
-  }
+  },
+  userDownloadReceipt: async (id) => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Homestay_Download_Receipt.replace(':$bookingId', id),
+        {
+          responseType: 'blob',
+          headers: {
+            'Accept': 'application/pdf'
+          }
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('PDF download error:', error);
+      throw error;
+    }
+  },
 }
 
 export default userService;
