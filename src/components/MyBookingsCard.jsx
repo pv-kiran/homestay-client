@@ -29,7 +29,8 @@ const MyBookingCard = ({
     isCheckedIn,
     isCheckedOut,
     isCancelled,
-    homestayId
+    homestayId,
+    setLoading
 }) => {
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -83,6 +84,7 @@ const MyBookingCard = ({
     const handleCheckIn = async () => {
         const response = await checkInInitiate({ bookingId: _id });
         if (response.success) {
+            setLoading()
             toast.success(response.message);
             getMyBookings();
             toast.success("Checkin is Sucessfull");
@@ -92,6 +94,7 @@ const MyBookingCard = ({
     const handleCheckOut = async () => {
         const response = await checkOutInitiate({ bookingId: _id });
         if (response.success) {
+            setLoading()
             toast.success("Checkout is Sucessfull");
             getMyBookings();
             setTimeout(() => {
@@ -103,6 +106,7 @@ const MyBookingCard = ({
     const handleCancel = async () => {
         const response = await cancelInitiate({ bookingId: _id });
         if (response.success) {
+            setLoading()
             toast.success(response.message);
             getMyBookings();
         }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import userService from '../services/userServices';
 import useApi from './../hooks/useApi';
 import MyBookingCard from '../components/MyBookingsCard';
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 const MyBookings = () => {
 
-
+    const [isShowLoading, setIsShowLoading] = useState(true);
     const { currency } = useSelector((store) => store?.currency);
 
     const {
@@ -23,6 +23,9 @@ const MyBookings = () => {
         getMyBookings(currency?.code);
     }, [currency])
 
+    const handleLoading = () => {
+        setIsShowLoading(false)
+    }
 
 
     return (
@@ -31,19 +34,19 @@ const MyBookings = () => {
                 <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Bookings</h1>
 
                 {
-                    loading && <div className='mt-2 h-[55vh] flex items-center justify-center'>
+                    (loading && isShowLoading) && <div className='mt-2 h-[55vh] flex items-center justify-center'>
                         <Loader />
                     </div>
                 }
 
                 {
-                    !loading && data?.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    data?.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {data?.map((booking) => (
                             <MyBookingCard
                                 key={booking._id}
                                 {...booking}
                                 getMyBookings={getMyBookings}
-                            // getBookings={getMyBookings}
+                                setLoading={handleLoading}
                             />
                         ))}
                     </div> :
@@ -54,18 +57,6 @@ const MyBookings = () => {
                         </div>
 
                 }
-
-
-
-                {/* {(data === null) ? (
-                    <NoBookings />
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {data?.map((booking) => (
-                            <MyBookingCard key={booking._id} {...booking} getMyBookings={getMyBookings} getBookings={getMyBookings} />
-                        ))}
-                    </div>
-                )} */}
             </div>
         </div>
     );
