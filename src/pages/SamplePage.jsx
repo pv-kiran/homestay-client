@@ -26,11 +26,10 @@ const SamplePage = () => {
       header: "Status",
       accessor: (category) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            category.status === "Active"
+          className={`px-3 py-1 rounded-full text-xs font-medium ${category.status === "Active"
               ? "bg-green-100 text-green-800"
               : "bg-gray-100 text-gray-800"
-          }`}>
+            }`}>
           {category.status}
         </span>
       ),
@@ -83,11 +82,10 @@ const SamplePage = () => {
       header: "Status",
       accessor: (user) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            user.status === "Active"
+          className={`px-3 py-1 rounded-full text-xs font-medium ${user.status === "Active"
               ? "bg-green-100 text-green-800"
               : "bg-gray-100 text-gray-800"
-          }`}>
+            }`}>
           {user.status}
         </span>
       ),
@@ -120,15 +118,15 @@ const SamplePage = () => {
   ];
 
   const handleEdit = (id) => {
-    console.log("Edit clicked for id:", id);
+    // console.log("Edit clicked for id:", id);
   };
 
   const handleToggle = (id) => {
-    console.log("Toggle clicked for id:", id);
+    // console.log("Toggle clicked for id:", id);
   };
 
   const handleDelete = (id) => {
-    console.log("Delete clicked for id:", id);
+    // console.log("Delete clicked for id:", id);
   };
 
   const getActions = (item) => [

@@ -223,7 +223,6 @@ export default function CouponsPage() {
   ];
 
   const handleSearch = (query) => {
-    // console.log(query)
     setIsShowLoading(false);
     setSearchKey(query)
   };

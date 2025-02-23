@@ -265,7 +265,6 @@ const userService = {
       );
       return response;
     } catch (error) {
-      console.log(error)
       throw error;
     }
   },
@@ -303,7 +302,6 @@ const userService = {
       );
       return response;
     } catch (error) {
-      console.error('PDF download error:', error);
       throw error;
     }
   },

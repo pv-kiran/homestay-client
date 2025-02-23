@@ -39,7 +39,6 @@ function HomeStayPage() {
         error: getHomeStayError,
     } = useApi(userService.userGetHomeStayById);
 
-    console.log(homeStay, "HHHHH1");
 
     const {
         data: bookingStatus,

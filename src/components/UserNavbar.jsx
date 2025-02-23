@@ -65,7 +65,6 @@ export default function UserNavbar() {
         const processedData = processCurrencyData(data);
         setCurrencies(processedData);
       } catch (error) {
-        console.error('Error fetching currencies:', error);
       }
     };
 

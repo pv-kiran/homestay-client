@@ -187,6 +187,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                 }
 
             } catch (err) {
+                // TODO: - payment failure
                 console.log(err)
             }
 

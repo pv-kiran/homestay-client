@@ -39,7 +39,6 @@ export function FormExample() {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
   };
 
   const [file, setFile] = useState(null);
@@ -144,8 +143,8 @@ export function FormExample() {
 
       <FileUpload onChange={setFile} value={file} />
 
-       <MultipleFileUpload onChange={handleFileUpload} value={files} multiple={false} />
-      
+      <MultipleFileUpload onChange={handleFileUpload} value={files} multiple={false} />
+
       <MultipleFileUpload onChange={handleFileUpload} value={files} multiple={true} />
       <InputList />
 

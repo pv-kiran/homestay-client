@@ -83,7 +83,6 @@ export default function Rides() {
                 addAmenityReset();
             }
         } else {
-            console.log(amenityId)
             const result = await amenityEdit({ formData, serviceId: amenityId });
             if (result) {
                 toast.success(result?.message);

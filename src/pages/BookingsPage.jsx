@@ -53,7 +53,6 @@ const BookingsPage = () => {
     const handleView = (id) => {
         setIsModalOpen(true);
         const chosenBooking = allBookings?.data.filter((booking) => booking?._id === id);
-        console.log(chosenBooking)
         setchosenBooking(chosenBooking)
     };
 

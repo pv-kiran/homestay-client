@@ -61,12 +61,6 @@ export default function DashboardPage() {
     overallExecute()
   }, [])
 
-  console.log(monthlyData);
-  console.log(homeStayData);
-  console.log(categoryData);
-  console.log(yealryData);
-  console.log(overallData);
-
   useEffect(() => {
     if (overallData) {
       const updatedStats = [

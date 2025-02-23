@@ -15,8 +15,6 @@ const BookingButtons = ({
     const now = new Date();
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
-    console.log(now.toDateString(), "DATE");
-    console.log(checkInDate.toDateString(), "DATE")
 
     // Check-In button enabled only on the exact check-in date if not already checked in
     const isCheckInActive = now.toDateString() === checkInDate.toDateString() && !isCheckedIn && !isCancelled && !isCheckedOut;
