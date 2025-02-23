@@ -21,10 +21,15 @@ const MyBookings = () => {
 
     useEffect(() => {
         getMyBookings(currency?.code);
+        setIsShowLoading(false)
     }, [currency])
 
     const handleLoading = () => {
         setIsShowLoading(false)
+    }
+
+    const getUpdatedBookings = () => {
+        getMyBookings(currency?.code);
     }
 
 
@@ -45,7 +50,7 @@ const MyBookings = () => {
                             <MyBookingCard
                                 key={booking._id}
                                 {...booking}
-                                getMyBookings={getMyBookings}
+                                getMyBookings={getUpdatedBookings}
                                 setLoading={handleLoading}
                             />
                         ))}
