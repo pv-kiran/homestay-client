@@ -113,6 +113,13 @@ const schema = yup.object({
   proximityCity: yup
     .string()
     .required("Please add a proximity city"),
+  gst: yup
+    .number()
+    .transform((value, originalValue) =>
+      originalValue === "" ? null : value
+    )
+    .nullable()
+    .required("Please add insurance amount"),
 });
 
 
@@ -309,6 +316,7 @@ const RoomsPage = () => {
       maxGuests: data?.maxGuests,
       provider: data?.provider,
       insuranceAmount: data?.insuranceAmount,
+      gst: data?.gst,
       insuranceDescription: data?.insuranceDescription,
       categoryId: data?.category?.value,
       hotelPolicies: {
@@ -494,6 +502,7 @@ const RoomsPage = () => {
     setValue('checkOutTime', checkOutTime)
     setValue('provider', chosenHomeStay[0].provider)
     setValue('insuranceAmount', chosenHomeStay[0].insuranceAmount)
+    setValue('gst', chosenHomeStay[0].gst)
     setValue('insuranceDescription', chosenHomeStay[0].insuranceDescription)
     setGuestPolicyList(guestPolicies);
     setHomeStayImages(chosenHomeStay[0]?.images);
@@ -816,10 +825,18 @@ const RoomsPage = () => {
               <FormField
                 type="number"
                 name="insuranceAmount"
-                label="Insurance Amount"
-                placeholder="Insurance Amount"
+                label="Insurance Percentage"
+                placeholder="Insurance Percentage"
                 register={register}
                 error={errors.insuranceAmount}
+              />
+              <FormField
+                type="number"
+                name="gst"
+                label="GST"
+                placeholder="GST"
+                register={register}
+                error={errors.gst}
               />
               <FormField
                 type="textarea"

@@ -39,7 +39,7 @@ const wordAnimation = {
     }
 };
 
-export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests, setModal, insuranceDetails }) => {
+export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests, setModal, insuranceDetails, gst }) => {
     const { id } = useParams();
     const [availableCoupons, setAvailableCoupons] = useState([{}]);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
@@ -217,8 +217,9 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         setCouponCode(code)
         const currencyCode = currency?.code;
         const insuranceAmount = calculateInsurance(price, 1, insuranceDetails?.insurancePercentage);
+        const gstAmount = calculateGst(price, 1, gst)
         const addOnAmount = getAddonAmount();
-        const response = await applyCoupon(code, id, days, currencyCode, insuranceAmount, addOnAmount)
+        const response = await applyCoupon(code, id, days, currencyCode, insuranceAmount, addOnAmount, gstAmount)
         if (response.success) {
             const couponDetails = {
                 discountAmount: response?.data?.discountAmount,
@@ -252,9 +253,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         return 0;
     }
 
-
-
-
     const calculatePrice = (price, nights) => {
         return price * nights
     }
@@ -263,18 +261,20 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         return Math.ceil(((price * differenceInDays) * insurancePercentage) / 100)
     }
 
+    const calculateGst = (price, differenceInDays, gst) => {
+        return Math.ceil(((price * differenceInDays) * gst) / 100)
+    }
 
 
-    const totalPrice = (price, differenceInDays, insuranceCoverage, isCouponApplied) => {
 
+    const totalPrice = (price, differenceInDays, insuranceCoverage, gst, isCouponApplied) => {
         if (!isCouponApplied) {
             const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
             const totalPrice = price * differenceInDays;
             const totalAmount = totalPrice + insurance;
-            return totalAmount + getAddonAmount();
+            return Math.ceil(totalAmount + getAddonAmount() + price);
         }
-        console.log(Math.ceil((price * insuranceCoverage) / 100), "HHHH4")
-        return price + Math.ceil((price * insuranceCoverage) / 100) + getAddonAmount();
+        return price + Math.ceil((price * insuranceCoverage) / 100) + Math.ceil((price * gst) / 100) + Math.ceil(getAddonAmount());
     }
 
     useEffect(() => {
@@ -683,6 +683,18 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                         <div
                             className="flex justify-between mb-2 mt-2 group relative px-2">
                             <span className="text-gray-600 text-md flex items-center gap-3">
+                                GST
+                            </span>
+                            <span>
+                                {
+                                    differenceInDays ? `${calculateGst(price, differenceInDays, gst)} /-` : `${calculateGst(price, 1, gst
+                                    )}/-`
+                                }
+                            </span>
+                        </div>
+                        <div
+                            className="flex justify-between mb-2 mt-2 group relative px-2">
+                            <span className="text-gray-600 text-md flex items-center gap-3">
                                 Caution Deposit
                             </span>
                             <span>
@@ -710,9 +722,9 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 }
                                 {
                                     appliedCoupon !== null ?
-                                        (`${totalPrice(appliedCoupon?.newPrice, 0, insuranceDetails?.insurancePercentage, true)}/-`)
-                                        : (differenceInDays ? `${totalPrice(price, differenceInDays, insuranceDetails?.insurancePercentage, false)}/-`
-                                            : `${totalPrice(price, 1, insuranceDetails?.insurancePercentage, false)} /-`)
+                                        (`${totalPrice(appliedCoupon?.newPrice, 0, insuranceDetails?.insurancePercentage, gst, true)}/-`)
+                                        : (differenceInDays ? `${totalPrice(price, differenceInDays, insuranceDetails?.insurancePercentage, gst, false)}/-`
+                                            : `${totalPrice(price, 1, insuranceDetails?.insurancePercentage, gst, false)} /-`)
                                 }
                             </span>
                         </div>

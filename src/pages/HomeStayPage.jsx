@@ -22,7 +22,7 @@ function HomeStayPage() {
     const dispatch = useDispatch();
 
 
-
+    const [initialLoad, setIsInitialLoad] = useState(true);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [checkIn, setCheckIn] = useState(null);
     const [checkOut, setCheckOut] = useState(null);
@@ -67,7 +67,7 @@ function HomeStayPage() {
     }, []);
 
     useEffect(() => {
-        getHomeStayById({ id, currency: JSON.parse(localStorage.getItem('currency')).code });
+        getHomeStayById({ id, currency: JSON.parse(localStorage.getItem('currency')).code, setLoading: setIsInitialLoad });
     }, [id, currency])
 
     useEffect(() => {
@@ -93,7 +93,7 @@ function HomeStayPage() {
     return (
         <>
             {
-                homeStayLoading && <div className='mt-[65px] h-[80vh] flex items-center justify-center'>
+                (homeStayLoading && initialLoad) && <div className='mt-[65px] h-[80vh] flex items-center justify-center'>
                     <Loader text="Loading your homestay..." />
                 </div>
             }
@@ -137,6 +137,7 @@ function HomeStayPage() {
                                             insuranceDescription: homeStay?.data?.insuranceDescription
                                         }
                                     }
+                                    gst={homeStay?.data?.gst}
                                     guests={guests}
                                     setGuests={setGuests}
                                     maxGuests={homeStay?.data?.maxGuests}

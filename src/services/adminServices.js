@@ -599,6 +599,16 @@ const adminService = {
       throw error;
     }
   },
+  adminRefundInitiate: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Booking_Refund.replace(":id", bookingId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

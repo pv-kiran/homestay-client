@@ -96,11 +96,12 @@ const userService = {
       throw error;
     }
   },
-  userGetHomeStayById: async ({ id, currency }) => {
+  userGetHomeStayById: async ({ id, currency, setLoading }) => {
     try {
       const response = await axiosInstance.get(
         apiEndpoints.Bestays_User_Homestay_Id.replace(":$homestayId", id)?.replace(":$currency", currency)
       );
+      setLoading(false);
       return response;
     } catch (error) {
       throw error;
@@ -170,7 +171,7 @@ const userService = {
       throw error;
     }
   },
-  userApplyCoupon: async (code, id, days, currencyCode, insuranceAmount, addOnAmount) => {
+  userApplyCoupon: async (code, id, days, currencyCode, insuranceAmount, addOnAmount, gstAmount) => {
     try {
       const response = await axiosInstance.post(
         apiEndpoints.Bestays_User_Apply_Coupon,
@@ -180,7 +181,8 @@ const userService = {
           numberOfDays: days,
           currencyCode,
           insuranceAmount,
-          addOnAmount: Number(addOnAmount)
+          addOnAmount: Number(addOnAmount),
+          gst: gstAmount
         }
       );
       return response;
