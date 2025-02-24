@@ -216,7 +216,9 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         const days = differenceInDays === null ? 1 : differenceInDays
         setCouponCode(code)
         const currencyCode = currency?.code;
-        const response = await applyCoupon(code, id, days, currencyCode)
+        const insuranceAmount = calculateInsurance(price, 1, insuranceDetails?.insurancePercentage);
+        const addOnAmount = getAddonAmount();
+        const response = await applyCoupon(code, id, days, currencyCode, insuranceAmount, addOnAmount)
         if (response.success) {
             const couponDetails = {
                 discountAmount: response?.data?.discountAmount,
@@ -264,13 +266,15 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
 
     const totalPrice = (price, differenceInDays, insuranceCoverage, isCouponApplied) => {
+
         if (!isCouponApplied) {
             const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
             const totalPrice = price * differenceInDays;
             const totalAmount = totalPrice + insurance;
             return totalAmount + getAddonAmount();
         }
-        return price + Math.ceil((price * insuranceCoverage) / 100) * getAddonAmount();
+        console.log(Math.ceil((price * insuranceCoverage) / 100), "HHHH4")
+        return price + Math.ceil((price * insuranceCoverage) / 100) + getAddonAmount();
     }
 
     useEffect(() => {
@@ -676,6 +680,17 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 }
                             </span>
                         </div>
+                        <div
+                            className="flex justify-between mb-2 mt-2 group relative px-2">
+                            <span className="text-gray-600 text-md flex items-center gap-3">
+                                Caution Deposit
+                            </span>
+                            <span>
+                                {
+                                    `${price} /-`
+                                }
+                            </span>
+                        </div>
                         <AddonsPrice />
                         {appliedCoupon !== null && (
                             <div className="flex justify-between mb-2">
@@ -694,7 +709,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                     currency?.symbol
                                 }
                                 {
-                                    appliedCoupon !== null ? (`${totalPrice(appliedCoupon?.newPrice, 0, insuranceDetails?.insurancePercentage, true)}/-`) : (differenceInDays ? `${totalPrice(price, differenceInDays, insuranceDetails?.insurancePercentage, false)}/-` : `${totalPrice(price, 1, insuranceDetails?.insurancePercentage, false)} /-`)
+                                    appliedCoupon !== null ?
+                                        (`${totalPrice(appliedCoupon?.newPrice, 0, insuranceDetails?.insurancePercentage, true)}/-`)
+                                        : (differenceInDays ? `${totalPrice(price, differenceInDays, insuranceDetails?.insurancePercentage, false)}/-`
+                                            : `${totalPrice(price, 1, insuranceDetails?.insurancePercentage, false)} /-`)
                                 }
                             </span>
                         </div>

@@ -170,7 +170,7 @@ const userService = {
       throw error;
     }
   },
-  userApplyCoupon: async (code, id, days, currencyCode) => {
+  userApplyCoupon: async (code, id, days, currencyCode, insuranceAmount, addOnAmount) => {
     try {
       const response = await axiosInstance.post(
         apiEndpoints.Bestays_User_Apply_Coupon,
@@ -178,7 +178,9 @@ const userService = {
           couponCode: code,
           homestayId: id,
           numberOfDays: days,
-          currencyCode
+          currencyCode,
+          insuranceAmount,
+          addOnAmount: Number(addOnAmount)
         }
       );
       return response;
