@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from 'react-toastify';
 import axiosInstance from '../api/axiosInstance';
+import { formatDate } from '../utils/dateDifference';
 
 
 const schema = yup.object({
@@ -413,7 +414,7 @@ function ProfileCard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InfoRow icon={Mail} label="Email" value={userProfile?.user?.email} />
               <InfoRow icon={Phone} label="Phone" value={userProfile?.user?.phone} />
-              <InfoRow icon={Calendar} label="Year of Birth" value={userProfile?.user?.dob} />
+              <InfoRow icon={Calendar} label="Year of Birth" value={formatDate(userProfile?.user?.dob)} />
               <InfoRow icon={User2} label="Gender" value={userProfile?.user?.gender} />
               <InfoRow
                 icon={Home}

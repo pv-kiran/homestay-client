@@ -39,7 +39,7 @@ const wordAnimation = {
     }
 };
 
-export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests, setModal, insuranceDetails, gst }) => {
+export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChange, price, guests, setGuests, maxGuests, setModal, insuranceDetails, gst, initiatePayment, completePayment }) => {
     const { id } = useParams();
     const [availableCoupons, setAvailableCoupons] = useState([{}]);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
@@ -146,8 +146,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                         // image: { logo },
                         order_id: data?.id,
                         handler: async function (response) {
-
-
                             const requestBody = {
                                 homestayId: id,
                                 checkIn: checkIn?.$d,
@@ -160,15 +158,16 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 guests
                             }
 
+                            initiatePayment();
+
 
                             const bookingResponse = await bookHomestayComplete(requestBody)
-
-                            console.log(bookingResponse, "HHHHHH")
 
                             if (bookingResponse?.data?._id) {
                                 navigate(`/booking/${bookingResponse?.data?._id}/success`, {
                                     state: { bookingResponse },
                                 })
+                                completePayment();
                             }
                         },
                         prefill: {
@@ -183,13 +182,13 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             color: "#14b8a6",
                         },
                     };
-
                     const paymentObject = new window.Razorpay(options);
                     paymentObject.open();
                 }
-
+                completePayment();
             } catch (err) {
                 // TODO: - payment failure
+                completePayment();
                 console.log(err)
             }
 

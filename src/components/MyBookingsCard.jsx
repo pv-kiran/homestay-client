@@ -30,7 +30,8 @@ const MyBookingCard = ({
     isCheckedOut,
     isCancelled,
     homestayId,
-    setLoading
+    setLoading,
+    refundId
 }) => {
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -87,7 +88,6 @@ const MyBookingCard = ({
             setLoading()
             toast.success(response.message);
             getMyBookings();
-            toast.success("Checkin is Sucessfull");
         }
     };
 
@@ -185,11 +185,18 @@ const MyBookingCard = ({
             <div className="p-4">
                 <div className="flex justify-between items-start mb-3">
                     <h3 className="text-lg font-bold text-gray-900 line-clamp-1">{homestayName}</h3>
-                    {paymentId && (
+                    {(!isCancelled && paymentId) && (
                         <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full">
                             Paid
                         </span>
                     )}
+                    {
+                        (isCancelled && refundId) && (
+                            <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full">
+                                Refunding
+                            </span>
+                        )
+                    }
                 </div>
 
                 <div className="space-y-2">
@@ -213,13 +220,22 @@ const MyBookingCard = ({
                     </div>
                 </div>
 
-                {paymentId && (
+                {(!isCancelled && paymentId) && (
                     <div className="mt-3 pt-3 border-t border-gray-100">
                         <p className="text-xs text-gray-500">
                             Payment ID: {paymentId}
                         </p>
                     </div>
                 )}
+                {
+                    (isCancelled && refundId) && (
+                        <div className="mt-3 pt-3 border-t border-gray-100">
+                            <p className="text-xs text-gray-500">
+                                Refund ID: {refundId}
+                            </p>
+                        </div>
+                    )
+                }
                 <BookingButtons
                     checkIn={checkIn}
                     checkOut={checkOut}

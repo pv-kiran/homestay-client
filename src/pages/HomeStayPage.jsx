@@ -11,12 +11,14 @@ import ReviewsSection from '../components/displayReview/ReviewsSection';
 import { Loader } from '../components/common/Loader';
 import AddonsSection from '../components/addons/AddonsSection';
 import { setAddOns } from '../app/features/admin/addonSlice';
+import { PaymentProcessing } from '../components/PaymentProcessing';
 
 function HomeStayPage() {
 
     const { currency } = useSelector((store) => store?.currency);
     const { id } = useParams();
     const dispatch = useDispatch();
+    const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
 
     const [initialLoad, setIsInitialLoad] = useState(true);
@@ -48,6 +50,14 @@ function HomeStayPage() {
         }
     };
 
+    const initiatePayment = () => {
+        setIsPaymentProcessing(true)
+    }
+
+    const completePayment = () => {
+        setIsPaymentProcessing(false)
+    }
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -73,8 +83,11 @@ function HomeStayPage() {
         }
     }, [homeStay]);
 
+    if (isPaymentProcessing) {
+        return <PaymentProcessing />
+    }
     return (
-        <>
+        <section>
             {
                 (homeStayLoading && initialLoad) && <div className='mt-[65px] h-[80vh] flex items-center justify-center'>
                     <Loader text="Loading your homestay..." />
@@ -125,6 +138,8 @@ function HomeStayPage() {
                                     setGuests={setGuests}
                                     maxGuests={homeStay?.data?.maxGuests}
                                     setModal={setIsModalOpen}
+                                    initiatePayment={initiatePayment}
+                                    completePayment={completePayment}
                                 />
                             </div>
                         </div>
@@ -180,7 +195,7 @@ function HomeStayPage() {
                     </main>
                 </div> : null
             }
-        </>
+        </section>
     );
 }
 

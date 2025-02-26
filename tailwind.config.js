@@ -53,12 +53,18 @@ export default {
         shimmer: {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' },
+        },
+        progressBar: {
+          '0%': { transform: 'translateX(-100%)' },
+          '50%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(100%)' }
         }
       },
       animation: {
         overlayShow: 'overlayShow 150ms ease-out',
         modalSlide: 'modalSlide 150ms ease-out',
         shimmer: 'shimmer 2s linear infinite',
+        progressBar: 'progressBar 2s ease-in-out infinite',
       },
     },
   },

@@ -21,7 +21,6 @@ const MyBookings = () => {
 
     useEffect(() => {
         getMyBookings(currency?.code);
-        setIsShowLoading(false)
     }, [currency])
 
     const handleLoading = () => {
