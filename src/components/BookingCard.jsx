@@ -155,19 +155,21 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 orderId: response?.razorpay_order_id,
                                 paymentId: response?.razorpay_payment_id,
                                 addOns: selectedItems,
-                                currency
+                                currency,
+                                amount: data?.amount,
+                                guests
                             }
 
 
                             const bookingResponse = await bookHomestayComplete(requestBody)
 
-                            if (response.success === true) {
+                            console.log(bookingResponse, "HHHHHH")
 
+                            if (bookingResponse?.data?._id) {
+                                navigate(`/booking/${bookingResponse?.data?._id}/success`, {
+                                    state: { bookingResponse },
+                                })
                             }
-
-                            navigate(`/booking/${bookingResponse?.data?._id}/success`, {
-                                state: { bookingResponse },
-                            })
                         },
                         prefill: {
                             name: "Testing",
