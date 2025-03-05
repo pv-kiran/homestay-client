@@ -794,7 +794,7 @@ const RoomsPage = () => {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
-                  type="text"
+                  type="time"
                   name="checkInTime"
                   label="Check-in time"
                   placeholder="Enter check-in time"
@@ -802,7 +802,7 @@ const RoomsPage = () => {
                   error={errors.checkInTime}
                 />
                 <FormField
-                  type="text"
+                  type="time"
                   name="checkOutTime"
                   label="Checkout time"
                   placeholder="Enter checkout time"

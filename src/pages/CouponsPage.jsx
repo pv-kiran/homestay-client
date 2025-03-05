@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { CirclePlus, TicketPercent } from "lucide-react";
 import { Loader } from './../components/common/Loader';
 import { EmptyState } from "../components/common/EmptyState";
+import { parseDateString } from "../utils/dateDifference";
+
 
 
 const couponSchema = yup.object({
@@ -34,6 +36,7 @@ const couponSchema = yup.object({
     .required("Maximum discount is required")
     .positive("Maximum discount must be a positive number"),
   expiryDate: yup.date()
+    .transform(parseDateString)
     .typeError("Expiry date must be a valid date")
     .required("Expiry date is required")
     .min(new Date(), "Expiry date cannot be in the past"),
@@ -88,7 +91,9 @@ export default function CouponsPage() {
     handleSubmit,
     setValue,
     clearErrors,
+    watch,
     formState: { errors },
+    control
   } = useForm({
     resolver: yupResolver(couponSchema),
   });
@@ -116,6 +121,8 @@ export default function CouponsPage() {
     handleClose();
   };
 
+  console.log(watch('expiryDate'), "HHHHHH")
+
   const handleClose = () => {
     setIsModalOpen(false);
     setIsEditing(false);
@@ -130,13 +137,18 @@ export default function CouponsPage() {
     clearErrors();
   };
 
+  const extractNumber = (value) => {
+    const match = String(value).match(/\d+(\.\d+)?/);
+    return match ? parseFloat(match[0]) : 0;
+  };
+
   const handleEdit = (id) => {
     const chosencoupon = allCoupons?.data.filter((coupon) => coupon._id === id);
     setIsModalOpen(true);
     setValue('code', chosencoupon[0].code)
     setValue('description', chosencoupon[0].description)
     setValue('discountType', chosencoupon[0].discountType)
-    setValue('discountValue', chosencoupon[0].discountValue)
+    setValue('discountValue', extractNumber(chosencoupon[0].discountValue))
     setValue('maxDiscount', chosencoupon[0].maxDiscount)
     setValue('expiryDate', chosencoupon[0].expiryDate)
     setValue('usageLimit', chosencoupon[0].usageLimit)
@@ -299,7 +311,10 @@ export default function CouponsPage() {
         {/* <h1 className="text-2xl font-semibold text-gray-800">
           Amenities Management
         </h1> */}
-        <Button onClick={() => setIsModalOpen(true)} size="sm"><CirclePlus className='pr-1 pb-1' color="#ffffff" />Add coupon</Button>
+        <Button onClick={() => setIsModalOpen(true)} size="sm">
+          <CirclePlus className='pr-1 pb-1' color="#ffffff" />
+          Add coupon
+        </Button>
         <Modal
           isOpen={isModalOpen}
           onClose={handleClose}
@@ -353,12 +368,22 @@ export default function CouponsPage() {
               register={register}
               error={errors.maxDiscount}
             />
-            <FormField
+            {/* <FormField
               type="text"
               name="expiryDate"
               label="Expiry date"
               placeholder="Enter expiry date"
               register={register}
+              control={control}
+              error={errors.expiryDate}
+            /> */}
+            <FormField
+              type="date"
+              name="expiryDate"
+              label="Date of Birth"
+              placeholder="Date of Birth"
+              register={register}
+              control={control}
               error={errors.expiryDate}
             />
             <FormField

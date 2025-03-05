@@ -7,19 +7,19 @@ import userService from '../services/userServices';
 
 function DetailCard({ icon, label, value }) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
-        <div className="flex items-center gap-3">
-          <div className="bg-blue-50 p-3 rounded-full">
-            {icon}
-          </div>
-          <div>
-            <p className="text-gray-500 text-sm">{label}</p>
-            <p className="font-semibold text-gray-900">{value}</p>
-          </div>
+        <div className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow duration-200">
+            <div className="flex items-center gap-3">
+                <div className="bg-blue-50 p-3 rounded-full">
+                    {icon}
+                </div>
+                <div>
+                    <p className="text-gray-500 text-sm">{label}</p>
+                    <p className="font-semibold text-gray-900">{value}</p>
+                </div>
+            </div>
         </div>
-      </div>
     );
-  }
+}
 
 export const PropertyDetails = ({
     name,
@@ -41,13 +41,13 @@ export const PropertyDetails = ({
     } = useApi(userService.userGetHomestayReview);
 
     const handleStarRating = async () => {
-        const response = await getStarRating({homeStayId})
+        const response = await getStarRating({ homeStayId })
         setStarRating(response.data);
     }
 
     useEffect(() => {
         handleStarRating()
-    },[])
+    }, [])
 
     const averageRating = starRating?.reduce((acc, curr) => acc + curr?.rating, 0) / starRating?.length;
 
@@ -131,12 +131,12 @@ export const PropertyDetails = ({
                 </div>
                 <div className="flex flex-wrap gap-2">
                     {policies.map((policy, index) => (
-                    <div
-                        key={index}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-white text-gray-600 rounded-full text-md border border-gray-300"
-                    >
-                        {policy}
-                    </div>
+                        <div
+                            key={index}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full text-md border border-gray-300"
+                        >
+                            {policy}
+                        </div>
                     ))}
                 </div>
             </div>

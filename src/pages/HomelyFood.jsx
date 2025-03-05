@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -59,7 +59,7 @@ export default function HomelyFood() {
         loading: restaurentsLoading,
         data: allRestaurents,
         execute: getAllRestaurentss,
-        error: allRestaurentssError,
+        // error: allRestaurentssError,
     } = useApi(adminService.adminGetAllHomelyFoods);
 
     const {
@@ -322,7 +322,7 @@ export default function HomelyFood() {
                                         </label>
                                         <div className="mt-1 relative rounded-md shadow-sm">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <span className="text-gray-500 sm:text-sm">$</span>
+                                                <span className="text-gray-500 sm:text-sm">₹</span>
                                             </div>
                                             <input
                                                 {...register(`menuItems.${index}.price`)}

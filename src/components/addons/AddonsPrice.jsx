@@ -34,15 +34,15 @@ function AddonsPrice() {
     return (
         <div >
             <div className="max-w-2xl mx-auto">
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         className="w-full py-4 flex justify-between items-center px-2"
                     >
-                        <span className="text-gray-600 text-md">Addons Amount</span>
+                        <span className="text-gray-600 text-md">Add-ons</span>
                         <div className="flex items-center">
-                            <span className="text-md mr-4 text-gray-600">{totalAmount?.toFixed(2)}</span>
-                            <ChevronDown className={`h-6 w-6 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                            <span className="text-md mr-1 text-gray-600">{totalAmount?.toFixed(2)}</span>
+                            <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                         </div>
                     </button>
 

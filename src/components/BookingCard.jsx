@@ -654,10 +654,10 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                         </div>
                         <div
                             className="flex justify-between mb-2 mt-2 group relative px-2">
-                            <span className="text-gray-600 text-md flex items-center gap-3">
+                            <span className="text-gray-600 text-md flex items-center gap-1">
                                 Liability Insurance
                                 <span className="relative">
-                                    <Info color='#14b8a6' className="h-4 w-4 text-gray-500 cursor-help" />
+                                    <Info color='#14b8a6' className="h-3 w-4 text-gray-500 cursor-help" />
                                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-black text-white text-sm rounded-lg p-2 shadow-lg">
                                         <div className="relative">
                                             <p>
