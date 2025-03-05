@@ -29,7 +29,7 @@ export const ServiceItem = ({
                 </div>
             </div>
             <div className="flex items-center space-x-4 w-full sm:w-auto justify-between sm:justify-end">
-                {isSelected && (
+                {/* {isSelected && (
                     <div className="flex items-center space-x-2 bg-white rounded-lg border border-gray-200 p-1">
                         <button
                             onClick={() => quantity > 1 && onQuantityChange(quantity - 1)}
@@ -46,7 +46,7 @@ export const ServiceItem = ({
                             <Plus size={16} className="text-gray-600" />
                         </button>
                     </div>
-                )}
+                )} */}
                 <p className="text-sm sm:text-base font-semibold text-gray-900">
                     ₹{(service.amount * (quantity || 1)).toFixed(2)}
                 </p>
