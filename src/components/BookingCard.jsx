@@ -259,23 +259,31 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
     const calculateInsurance = (price, differenceInDays, insurancePercentage) => {
-        return Math.ceil(((price * differenceInDays) * insurancePercentage) / 100)
+        return insurancePercentage ? Math.ceil(((price * differenceInDays) * insurancePercentage) / 100) : 0
     }
 
     const calculateGst = (price, differenceInDays, gst) => {
-        return Math.ceil(((price * differenceInDays) * gst) / 100)
+        return gst ? Math.ceil(((price * differenceInDays) * gst) / 100) : 0
     }
 
+    const getCouponInsurance = (price, insuranceCoverage) => {
+        return insuranceCoverage ? Math.ceil((price * insuranceCoverage) / 100) : 0
+    }
+
+    const getCouponGST = (price, gst) => {
+        return gst ? Math.ceil((price * gst) / 100) : null
+    }
 
 
     const totalPrice = (price, differenceInDays, insuranceCoverage, gst, isCouponApplied) => {
         if (!isCouponApplied) {
-            const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
+            // const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
+            const insurance = calculateInsurance(price, differenceInDays, insuranceCoverage)
             const totalPrice = price * differenceInDays;
             const totalAmount = totalPrice + insurance;
             return Math.ceil(totalAmount + getAddonAmount() + price);
         }
-        return price + Math.ceil((price * insuranceCoverage) / 100) + Math.ceil((price * gst) / 100) + Math.ceil(getAddonAmount());
+        return price + getCouponInsurance(price, insuranceCoverage) + getCouponGST(price, gst) + Math.ceil(getAddonAmount());
     }
 
     useEffect(() => {
@@ -652,47 +660,51 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 }
                             </span>
                         </div>
-                        <div
-                            className="flex justify-between mb-2 mt-2 group relative px-2">
-                            <span className="text-gray-600 text-md flex items-center gap-1">
-                                Liability Insurance
-                                <span className="relative">
-                                    <Info color='#14b8a6' className="h-3 w-4 text-gray-500 cursor-help" />
-                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-black text-white text-sm rounded-lg p-2 shadow-lg">
-                                        <div className="relative">
-                                            <p>
-                                                <span className='block'>
-                                                    {insuranceDetails?.provider}
-                                                </span>
-                                                <span>
-                                                    {insuranceDetails?.insuranceDescription}
-                                                </span>
-                                            </p>
-                                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 translate-y-full w-2 h-2 bg-black rotate-45"></div>
+                        {
+                            insuranceDetails?.insurancePercentage && <div
+                                className="flex justify-between mb-2 mt-2 group relative px-2">
+                                <span className="text-gray-600 text-md flex items-center gap-1">
+                                    Liability Insurance
+                                    <span className="relative">
+                                        <Info color='#14b8a6' className="h-3 w-4 text-gray-500 cursor-help" />
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-black text-white text-sm rounded-lg p-2 shadow-lg">
+                                            <div className="relative">
+                                                <p>
+                                                    <span className='block'>
+                                                        {insuranceDetails?.provider}
+                                                    </span>
+                                                    <span>
+                                                        {insuranceDetails?.insuranceDescription}
+                                                    </span>
+                                                </p>
+                                                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 translate-y-full w-2 h-2 bg-black rotate-45"></div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </span>
                                 </span>
-                            </span>
 
-                            <span>
-                                {
-                                    differenceInDays ? `${calculateInsurance(price, differenceInDays, insuranceDetails?.insurancePercentage)} /-` : `${calculateInsurance(price, 1, insuranceDetails?.insurancePercentage,
-                                    )}/-`
-                                }
-                            </span>
-                        </div>
-                        <div
-                            className="flex justify-between mb-2 mt-2 group relative px-2">
-                            <span className="text-gray-600 text-md flex items-center gap-3">
-                                GST
-                            </span>
-                            <span>
-                                {
-                                    differenceInDays ? `${calculateGst(price, differenceInDays, gst)} /-` : `${calculateGst(price, 1, gst
-                                    )}/-`
-                                }
-                            </span>
-                        </div>
+                                <span>
+                                    {
+                                        differenceInDays ? `${calculateInsurance(price, differenceInDays, insuranceDetails?.insurancePercentage)} /-` : `${calculateInsurance(price, 1, insuranceDetails?.insurancePercentage,
+                                        )}/-`
+                                    }
+                                </span>
+                            </div>
+                        }
+                        {
+                            gst && <div
+                                className="flex justify-between mb-2 mt-2 group relative px-2">
+                                <span className="text-gray-600 text-md flex items-center gap-3">
+                                    GST
+                                </span>
+                                <span>
+                                    {
+                                        differenceInDays ? `${calculateGst(price, differenceInDays, gst)} /-` : `${calculateGst(price, 1, gst
+                                        )}/-`
+                                    }
+                                </span>
+                            </div>
+                        }
                         <div
                             className="flex justify-between mb-2 mt-2 group relative px-2">
                             <span className="text-gray-600 text-md flex items-center gap-3">
