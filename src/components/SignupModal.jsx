@@ -76,7 +76,6 @@ export function SignupModal({ isOpen, onClose }) {
 
   const handleOTPSubmit = async (data) => {
     if (timeLeft === 0) {
-      console.log("OTP has expired");
       return;
     }
     const result = await verifyOtp({

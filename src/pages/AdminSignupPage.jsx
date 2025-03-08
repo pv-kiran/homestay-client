@@ -48,7 +48,6 @@ export function AdminSignupPage() {
 
   const handleOTPSubmit = async (data) => {
     if (timeLeft === 0) {
-      console.log("OTP has expired");
       return;
     }
 

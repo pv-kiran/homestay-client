@@ -6,7 +6,6 @@ import DashboardPage from "./pages/DashboardPage";
 import RoomsPage from "./pages/RoomsPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import AddOnsPage from "./pages/AddOnsPage";
-import SamplePage from "./pages/SamplePage";
 import LandingPage from "./pages/LandingPage";
 import UserLayout from "./layout/UserLayout";
 import { AdminSignupPage } from "./pages/AdminSignupPage";
@@ -68,7 +67,6 @@ function AppRoutes() {
           <Route path="add-ons/rides" element={<Rides />} />
           <Route path="add-ons/entertainment" element={<Entertainments />} />
           <Route path="add-ons/others" element={<OtherServices />} />
-          <Route path="sample" element={<SamplePage />} />
         </Route>
       </Route>
 

@@ -62,7 +62,6 @@ export default function Categories() {
     }, [data])
 
     const handleNavigation = (category) => {
-        console.log(category);
         navigate(`/homestays/all?id=${category._id}&name=${category?.categoryName}`)
     }
     return (

@@ -7,29 +7,27 @@ import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 import { useDispatch, useSelector } from 'react-redux';
 import MapView from '../components/MapView';
-import { calculateDifferenceInDays } from '../utils/dateDifference';
 import ReviewsSection from '../components/displayReview/ReviewsSection';
 import { Loader } from '../components/common/Loader';
 import AddonsSection from '../components/addons/AddonsSection';
 import { setAddOns } from '../app/features/admin/addonSlice';
-
+import { PaymentProcessing } from '../components/PaymentProcessing';
 
 function HomeStayPage() {
 
     const { currency } = useSelector((store) => store?.currency);
-    const { authState } = useSelector((store) => store?.userAuth);
     const { id } = useParams();
     const dispatch = useDispatch();
+    const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
 
 
-
+    const [initialLoad, setIsInitialLoad] = useState(true);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [checkIn, setCheckIn] = useState(null);
     const [checkOut, setCheckOut] = useState(null);
     const [guests, setGuests] = useState(1);
 
     const [isModalOpen, setIsModalOpen] = useState(false)
-
 
     const {
         data: homeStay,
@@ -38,16 +36,6 @@ function HomeStayPage() {
         reset,
         error: getHomeStayError,
     } = useApi(userService.userGetHomeStayById);
-
-    console.log(homeStay, "HHHHH1");
-
-    const {
-        data: bookingStatus,
-        loading: bookingStatusLoading,
-        execute: getbookingStatus,
-        reset: bookingStatusReset,
-        error: getbookingStatusError,
-    } = useApi(userService.userGetHomeStayBookingStatus);
 
 
     const nextImage = () => {
@@ -62,20 +50,24 @@ function HomeStayPage() {
         }
     };
 
+    const initiatePayment = () => {
+        setIsPaymentProcessing(true)
+    }
+
+    const completePayment = () => {
+        setIsPaymentProcessing(false)
+    }
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
-        getHomeStayById({ id, currency: JSON.parse(localStorage.getItem('currency')).code });
+        getHomeStayById({ id, currency: JSON.parse(localStorage.getItem('currency')).code, setLoading: setIsInitialLoad });
     }, [id, currency])
 
-    useEffect(() => {
-        if (authState) {
-            getbookingStatus({ homeStayId: id })
-        }
-    }, [])
+
 
     useEffect(() => {
         if (homeStay?.data) {
@@ -91,10 +83,13 @@ function HomeStayPage() {
         }
     }, [homeStay]);
 
+    if (isPaymentProcessing) {
+        return <PaymentProcessing />
+    }
     return (
-        <>
+        <section>
             {
-                homeStayLoading && <div className='mt-[65px] h-[80vh] flex items-center justify-center'>
+                (homeStayLoading && initialLoad) && <div className='mt-[65px] h-[80vh] flex items-center justify-center'>
                     <Loader text="Loading your homestay..." />
                 </div>
             }
@@ -138,10 +133,13 @@ function HomeStayPage() {
                                             insuranceDescription: homeStay?.data?.insuranceDescription
                                         }
                                     }
+                                    gst={homeStay?.data?.gst}
                                     guests={guests}
                                     setGuests={setGuests}
                                     maxGuests={homeStay?.data?.maxGuests}
                                     setModal={setIsModalOpen}
+                                    initiatePayment={initiatePayment}
+                                    completePayment={completePayment}
                                 />
                             </div>
                         </div>
@@ -175,45 +173,29 @@ function HomeStayPage() {
                         {
                             (!isModalOpen && id) && <ReviewsSection homeStayId={id} />
                         }
-                        {
-                            (bookingStatus?.status && calculateDifferenceInDays(bookingStatus?.checkIn) <= 2) ?
+                        <div>
+                            {
+                                (homeStay?.data?.address?.coordinates?.nearByLatitude && homeStay?.data?.address?.coordinates?.nearByLongitude) &&
                                 <div>
                                     {
                                         !isModalOpen && <MapView
                                             position={
                                                 [
-                                                    homeStay?.data?.address?.coordinates?.latitude,
-                                                    homeStay?.data?.address?.coordinates?.longitude
-                                                ]}
+                                                    homeStay?.data?.address?.coordinates?.nearByLatitude,
+                                                    homeStay?.data?.address?.coordinates?.nearByLongitude
+                                                ]
+                                            }
                                             title={homeStay?.data?.title}
                                             address={homeStay?.data?.address}
                                         />
                                     }
-                                </div> :
-                                <div>
-                                    {
-                                        (homeStay?.data?.address?.coordinates?.nearByLatitude && homeStay?.data?.address?.coordinates?.nearByLongitude) &&
-                                        <div>
-                                            {
-                                                !isModalOpen && <MapView
-                                                    position={
-                                                        [
-                                                            homeStay?.data?.address?.coordinates?.nearByLatitude,
-                                                            homeStay?.data?.address?.coordinates?.nearByLongitude
-                                                        ]
-                                                    }
-                                                    title={homeStay?.data?.title}
-                                                    address={homeStay?.data?.address}
-                                                />
-                                            }
-                                        </div>
-                                    }
                                 </div>
-                        }
+                            }
+                        </div>
                     </main>
                 </div> : null
             }
-        </>
+        </section>
     );
 }
 

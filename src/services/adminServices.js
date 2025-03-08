@@ -383,7 +383,6 @@ const adminService = {
     }
   },
   adminRestaurantEdit: async ({ data, restaurentId }) => {
-    console.log(data);
     try {
       const response = await axiosInstance.put(
         apiEndpoints.Bestays_Admin_Put_Restaurent.replace(
@@ -422,7 +421,6 @@ const adminService = {
     }
   },
   adminHomelyFoodEdit: async ({ data, restaurentId }) => {
-    console.log(data);
     try {
       const response = await axiosInstance.put(
         apiEndpoints.Bestays_Admin_Put_HomelyFood.replace(
@@ -595,6 +593,16 @@ const adminService = {
           ":id", homeStayId
         ),
         addOns,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminRefundInitiate: async ({ bookingId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Booking_Refund.replace(":id", bookingId)
       );
       return response;
     } catch (error) {

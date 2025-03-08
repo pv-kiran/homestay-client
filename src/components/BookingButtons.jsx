@@ -15,8 +15,6 @@ const BookingButtons = ({
     const now = new Date();
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
-    console.log(now.toDateString(), "DATE");
-    console.log(checkInDate.toDateString(), "DATE")
 
     // Check-In button enabled only on the exact check-in date if not already checked in
     const isCheckInActive = now.toDateString() === checkInDate.toDateString() && !isCheckedIn && !isCancelled && !isCheckedOut;
@@ -36,7 +34,7 @@ const BookingButtons = ({
                 className={`flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium ${isCheckedIn
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : isCheckInActive
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
+                        ? 'border border-blue-400 text-blue-400 hover:border-blue-600'
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     }`}
             >
@@ -51,7 +49,7 @@ const BookingButtons = ({
                 className={`flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium ${isCheckedOut
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : isCheckOutActive
-                        ? 'bg-green-600 text-white hover:bg-green-700'
+                        ? 'border border-green-400 text-green-600 hover:border-green-700'
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     }`}
             >
@@ -66,7 +64,7 @@ const BookingButtons = ({
                 className={`col-span-2 flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium ${isCancelled
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     : isCancelActive
-                        ? 'bg-red-600 text-white hover:bg-red-700'
+                        ? 'border border-red-600 text-red-400 hover:border-red-700'
                         : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                     }`}
             >

@@ -5,11 +5,11 @@ import { cn } from "../utils/test";
 
 
 
-export function MultipleFileUpload({ 
-  onChange, 
-  value, 
-  multiple = false, 
-  maxFiles = 5 
+export function MultipleFileUpload({
+  onChange,
+  value,
+  multiple = false,
+  maxFiles = 5
 }) {
   const [previews, setPreviews] = useState([]);
 
@@ -18,8 +18,9 @@ export function MultipleFileUpload({
       if (multiple) {
         const totalFiles = value.length + acceptedFiles.length;
         const filesToAdd = acceptedFiles.slice(0, maxFiles - value.length);
-        
+
         if (totalFiles > maxFiles) {
+          // TODO : Max file handling
           console.warn(`Only ${maxFiles} files are allowed. Additional files were ignored.`);
         }
 
@@ -86,7 +87,7 @@ export function MultipleFileUpload({
           </p>
         </div>
       ) : (
-        <div className={`${multiple ? "grid grid-cols-2 gap-4": "flex justify-center"}`}>
+        <div className={`${multiple ? "grid grid-cols-2 gap-4" : "flex justify-center"}`}>
           {previews.map((preview, index) => (
             <div key={preview} className="relative rounded-lg overflow-hidden border">
               <img

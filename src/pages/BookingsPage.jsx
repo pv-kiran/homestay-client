@@ -38,6 +38,12 @@ const BookingsPage = () => {
         loading
     } = useApi(adminService.adminGetAllBookings);
 
+    const {
+        execute: initiateRefund,
+        loading: refundLoading,
+        error: refundError
+    } = useApi(adminService.adminRefundInitiate);
+
     const handlePageNumber = (page) => {
         setCurrentPage(page);
     }
@@ -53,7 +59,6 @@ const BookingsPage = () => {
     const handleView = (id) => {
         setIsModalOpen(true);
         const chosenBooking = allBookings?.data.filter((booking) => booking?._id === id);
-        console.log(chosenBooking)
         setchosenBooking(chosenBooking)
     };
 
@@ -131,6 +136,19 @@ const BookingsPage = () => {
         });
     }, [pageSize, currentPage]);
 
+    const refundInitiate = async () => {
+        const result = await initiateRefund({ bookingId: chosenBooking[0]?._id })
+        if (result?.success) {
+            toast.success(result?.message);
+            setIsModalOpen(false)
+            getAllBookings({
+                pagePerData: pageSize,
+                pageNumber: currentPage,
+                searchParams: searchKey
+            });
+        }
+    }
+
 
     useEffect(() => {
         if (!timer.current) {
@@ -152,6 +170,11 @@ const BookingsPage = () => {
         }, 500);
     }, [searchKey]);
 
+    useEffect(() => {
+        if (refundError) {
+            toast.error(refundError?.message)
+        }
+    }, [refundError])
 
 
     return (
@@ -298,6 +321,35 @@ const BookingsPage = () => {
                                     </div>
                                     <p className="mt-1 ml-7 text-sm">{chosenBooking[0].paymentId}</p>
                                 </div>
+                                {
+                                    chosenBooking[0]?.isRefunded && <div className="bg-gray-50 p-4 rounded-lg">
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <CreditCard className="w-5 h-5" />
+                                            <span className="font-medium">Order ID</span>
+                                        </div>
+                                        <p className="mt-1 ml-7 text-sm">{chosenBooking[0].orderId}</p>
+                                    </div>
+                                }
+                                {
+                                    chosenBooking[0]?.isRefunded && <div className="bg-gray-50 p-4 rounded-lg">
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <CreditCard className="w-5 h-5" />
+                                            <span className="font-medium">Refund ID</span>
+                                        </div>
+                                        <p className="mt-1 ml-7 text-sm">{chosenBooking[0].refundId}</p>
+                                    </div>
+                                }
+                                {
+                                    chosenBooking[0]?.isRefunded && <div className="bg-gray-50 p-4 rounded-lg">
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <Calendar className="w-5 h-5" />
+                                            <span className="font-medium">Refunded Out</span>
+                                        </div>
+                                        <p className="mt-1 ml-7">
+                                            {formatDate(chosenBooking[0].refundedAt)}
+                                        </p>
+                                    </div>
+                                }
                             </div>
                             <div>
                                 {
@@ -307,7 +359,15 @@ const BookingsPage = () => {
                                 }
 
                             </div>
-                            <Button className="w-full">Initiate Refund</Button>
+                            {
+                                !chosenBooking[0]?.isRefunded && <Button
+                                    onClick={() => refundInitiate()}
+                                    className="w-full"
+                                    isLoading={refundLoading}
+                                >
+                                    Initiate Refund
+                                </Button>
+                            }
                         </div>
                     </div>
                 </Modal> : null

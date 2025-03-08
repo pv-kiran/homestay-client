@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Controller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import Select from 'react-select';
 import CalenderView from './calender/CalenderView';
 
@@ -17,7 +17,7 @@ export function FormField({
   disabled = false
 }) {
   const baseInputStyles = "w-full rounded-lg border border-gray-300 bg-white py-3 px-4 text-sm placeholder:text-gray-400 focus:border-turquoise-500 focus:outline-none focus:ring-1 focus:ring-turquoise-500";
-  
+
   const renderField = () => {
     switch (type) {
       case 'textarea':
@@ -43,15 +43,13 @@ export function FormField({
                 placeholder={placeholder || "Select..."}
                 className="text-sm"
                 classNames={{
-                  control: (state) => 
-                    `!rounded-lg !border-gray-300 !bg-white !shadow-none !ring-0 ${
-                      state.isFocused ? '!border-turquoise-500 !ring-1 !ring-turquoise-500' : ''
+                  control: (state) =>
+                    `!rounded-lg !border-gray-300 !bg-white !shadow-none !ring-0 ${state.isFocused ? '!border-turquoise-500 !ring-1 !ring-turquoise-500' : ''
                     }`,
                   option: (state) =>
-                    `!text-sm ${
-                      state.isSelected
-                        ? '!bg-turquoise-500'
-                        : state.isFocused
+                    `!text-sm ${state.isSelected
+                      ? '!bg-turquoise-500'
+                      : state.isFocused
                         ? '!bg-turquoise-50'
                         : ''
                     }`,
@@ -105,7 +103,18 @@ export function FormField({
             <span className="text-sm text-gray-700">{placeholder}</span>
           </label>
         );
-      
+
+      case 'time':
+        return (
+          <input
+            type="time"
+            {...register(name)}
+            placeholder={placeholder}
+            className={baseInputStyles}
+            disabled={disabled}
+          />
+        );
+
       case 'date':
         return <Controller
           name={name}
@@ -117,8 +126,8 @@ export function FormField({
               error={error}
               disabled={disabled}
             />
-        )}
-    />
+          )}
+        />
 
       default:
         return (

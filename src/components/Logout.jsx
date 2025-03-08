@@ -5,7 +5,6 @@ const Logout = () => {
 
   const handleLogout = () => {
     try {
-      console.log("sss");
       // Clear Google OAuth
       googleLogout();
 

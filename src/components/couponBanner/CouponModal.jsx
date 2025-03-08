@@ -20,7 +20,6 @@ export function CouponModal({ isOpen, onClose }) {
 
   const getCoupon = async () => {
     const response = await getLatestCoupon();
-    console.log(response);
     setLatestCoupon(response.coupon);
   }
 
@@ -45,13 +44,12 @@ export function CouponModal({ isOpen, onClose }) {
   };
 
   const CloseButton = ({ onClose }) => (
-    <div 
+    <div
       role="button"
       tabIndex={0}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Close clicked');
         onClose();
       }}
       onKeyDown={(e) => {
@@ -78,11 +76,11 @@ export function CouponModal({ isOpen, onClose }) {
 
   useEffect(() => {
     getCoupon();
-  },[])
+  }, [])
 
   return (
     <AnimatePresence>
-      {(isOpen && lastestCoupon!==undefined) && (
+      {(isOpen && lastestCoupon !== undefined) && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -97,7 +95,7 @@ export function CouponModal({ isOpen, onClose }) {
             className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl"
           >
             {/* Background Image */}
-            <div 
+            <div
               className="absolute inset-0 opacity-10"
               style={{
                 backgroundImage: "url('https://res.cloudinary.com/djd2rpgil/image/upload/v1735232665/homestay-landing_bg/zb3s9qcyskezfg66axoc.webp')",
@@ -110,16 +108,16 @@ export function CouponModal({ isOpen, onClose }) {
             <CloseButton onClose={onClose} />
 
             <div className="relative p-6">
-              <ModalHeader description = {lastestCoupon?.description} />
-              
+              <ModalHeader description={lastestCoupon?.description} />
+
               <div className="space-y-5">
                 <DiscountBanner value={`${lastestCoupon?.discountValue}`} />
-                <CouponCode 
+                <CouponCode
                   code={lastestCoupon?.code}
                   onCopy={copyCode}
                   copied={copied}
                 />
-                <TermsAndCta date={lastestCoupon?.expiryDate} handleBook={onBookClick}/>
+                <TermsAndCta date={lastestCoupon?.expiryDate} handleBook={onBookClick} />
               </div>
             </div>
           </motion.div>

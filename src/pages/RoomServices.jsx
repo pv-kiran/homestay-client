@@ -84,7 +84,6 @@ export default function RoomServices() {
                 addAmenityReset();
             }
         } else {
-            console.log(amenityId)
             const result = await amenityEdit({ formData, serviceId: amenityId });
             if (result) {
                 toast.success(result?.message);

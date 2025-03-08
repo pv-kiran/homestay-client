@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from 'react-toastify';
 import axiosInstance from '../api/axiosInstance';
+import { formatDate } from '../utils/dateDifference';
 
 
 const schema = yup.object({
@@ -53,7 +54,7 @@ function ProfileCard() {
 
   const dispatch = useDispatch();
 
-  const { 
+  const {
     // error: userError,
     loading: userUpdateLoading,
     execute: userDataSubmit,
@@ -81,8 +82,8 @@ function ProfileCard() {
   const fileInputRef = useRef(null);
 
   const populateFields = () => {
-    if(userProfile) {
-      setValue('fullName', userProfile?.user?.fullName   || '');
+    if (userProfile) {
+      setValue('fullName', userProfile?.user?.fullName || '');
       setValue('dob', userProfile?.user?.dob || '');
       setValue('email', userProfile?.user?.email || '');
       setValue('street', userProfile?.user?.address?.street || '');
@@ -95,14 +96,14 @@ function ProfileCard() {
       setValue('gender', userProfile?.user?.gender || '');
     }
   }
-  
+
   useEffect(() => {
     populateFields();
-  },[userProfile])
+  }, [userProfile])
 
   useEffect(() => {
     dispatch(setAuth())
-  },[])
+  }, [])
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -115,7 +116,7 @@ function ProfileCard() {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    
+
     // Validate file
     if (!file) {
       toast.error("No file selected");
@@ -138,7 +139,7 @@ function ProfileCard() {
 
     // Immediately start upload process
     setIsUploading(true);
-    
+
     try {
       // Create preview
       const previewUrl = URL.createObjectURL(file);
@@ -163,7 +164,6 @@ function ProfileCard() {
         setPreview(null);
       }
     } catch (error) {
-      console.error("Upload error:", error);
       toast.error("Failed to upload profile picture. Please try again.");
       // Revert preview if upload fails
       setPreview(null);
@@ -198,18 +198,18 @@ function ProfileCard() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await userDataSubmit(data,authState?.userId);
-      if(response.success===true){
+      const response = await userDataSubmit(data, authState?.userId);
+      if (response.success === true) {
         setIsModalOpen(false)
         getUserProfile()
       }
     } catch (error) {
       toast.error('Please try again later');
-    }  
+    }
   }
 
   useState(() => {
-    if(authState) {
+    if (authState) {
       getUserProfile(authState?.userId)
     }
   }, [authState])
@@ -289,7 +289,7 @@ function ProfileCard() {
               <Button
                 variant='transparent'
                 onClick={() => setIsModalOpen(true)} size="sm">
-                  <Edit2 className='pr-1 pb-1' color="#FFFFFF"/>
+                <Edit2 className='pr-1 pb-1' color="#FFFFFF" />
                 <span color='#FFFFFF'>Edit Profile</span>
               </Button>
               <Modal
@@ -300,8 +300,8 @@ function ProfileCard() {
                   "Add more details about you"
                 }
               >
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
-                <FormField
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
+                  <FormField
                     type="text"
                     name="fullName"
                     label="Fullname"
@@ -407,20 +407,20 @@ function ProfileCard() {
                   >
                     Submit
                   </Button>
-              </form>
+                </form>
               </Modal>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InfoRow icon={Mail} label="Email" value={userProfile?.user?.email} />
               <InfoRow icon={Phone} label="Phone" value={userProfile?.user?.phone} />
-              <InfoRow icon={Calendar} label="Year of Birth" value={userProfile?.user?.dob} />
+              <InfoRow icon={Calendar} label="Year of Birth" value={formatDate(userProfile?.user?.dob)} />
               <InfoRow icon={User2} label="Gender" value={userProfile?.user?.gender} />
-              <InfoRow 
-                icon={Home} 
-                label="Address" 
+              <InfoRow
+                icon={Home}
+                label="Address"
                 value={userProfile?.user?.address?.street && `${userProfile?.user?.address?.street}${userProfile?.user?.address?.city ? `, 
-                      ${userProfile?.user?.address?.city}` : ''}${userProfile?.user?.address?.state ? `, ${userProfile?.user?.address?.state}` : ''} ${userProfile?.user?.address?.zip || ''}`} 
+                      ${userProfile?.user?.address?.city}` : ''}${userProfile?.user?.address?.state ? `, ${userProfile?.user?.address?.state}` : ''} ${userProfile?.user?.address?.zip || ''}`}
               />
               <InfoRow icon={Globe} label="Country" value={userProfile?.user?.address?.country} />
               {/* <InfoRow icon={User2} label="Marital Status" value={userProfile?.user?.maritalStatus} /> */}

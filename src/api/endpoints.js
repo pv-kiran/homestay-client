@@ -80,6 +80,7 @@ const apiEndpoints = {
   Bestays_Admin_Put_OtherService: "/admin/otherservice/:id",
   Bestays_Admin_Get_OtherService: "/admin/homestay/allservice?city=:city",
   Bestays_Admin_Put_HomeStay_OtherService: "/admin/homestay/allservice/:id",
+  Bestays_Admin_Booking_Refund: "/admin/booking/refund/:id",
 };
 
 export default apiEndpoints;

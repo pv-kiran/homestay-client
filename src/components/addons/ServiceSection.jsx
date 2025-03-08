@@ -12,9 +12,9 @@ export const ServiceSection = ({ title, subtitle, children }) => {
                 className="w-full px-4 sm:px-8 py-4 sm:py-6 flex items-center justify-between bg-gradient-to-r from-turquoise-50 to-white hover:from-turquoise-100 transition-colors"
             >
                 <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{title}</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-left">{title}</h2>
                     {subtitle && (
-                        <p className="text-xs sm:text-sm text-gray-500 mt-1">{subtitle}</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1 text-left">{subtitle}</p>
                     )}
                 </div>
                 <ChevronDown
