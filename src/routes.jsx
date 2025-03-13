@@ -28,6 +28,7 @@ import HomelyFood from "./pages/HomelyFood";
 import Rides from "./pages/Rides";
 import Entertainments from "./pages/Entertainments";
 import OtherServices from "./pages/OtherService";
+import IdProofPage from "./pages/IdProofPage";
 
 
 function AppRoutes() {
@@ -53,6 +54,7 @@ function AppRoutes() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="verification" element={<IdProofPage />} />
           <Route path="rooms" element={<RoomsPage />} />
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="users" element={<UserManagementPage />} />
