@@ -579,7 +579,7 @@ const adminService = {
   adminGetAllAddons: async (city) => {
     try {
       const response = await axiosInstance.get(
-        apiEndpoints.Bestays_Admin_Get_OtherService.replace(":city", city),
+        apiEndpoints.Bestays_Admin_Get_ADDONS.replace(":city", city),
       );
       return response;
     } catch (error) {

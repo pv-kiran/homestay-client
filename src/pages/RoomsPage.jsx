@@ -522,6 +522,7 @@ const RoomsPage = () => {
   const handleAddons = (id) => {
     setIsModalOpen(true);
     // setIsViewDetail(true)
+    setIsShowLoading(false)
     setIsAddons(true)
     const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay._id === id);
     setHomeStayId(id);
