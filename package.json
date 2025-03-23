@@ -25,6 +25,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
+    "file-saver": "^2.0.5",
     "framer-motion": "^11.15.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.454.0",
@@ -39,6 +40,7 @@
     "react-select": "^5.8.2",
     "react-toastify": "^10.0.6",
     "tailwind-merge": "^2.5.4",
+    "xlsx": "^0.18.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {

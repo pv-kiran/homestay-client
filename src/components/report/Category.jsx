@@ -1,10 +1,13 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Download } from "lucide-react";
+import { exportToExcel } from '../../utils/excell';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Category = ({ categoryData }) => {
+    const headers = ['Category', 'Bookings', 'Revenue'];
     const data = {
         labels: categoryData?.map(d => d.category),
         datasets: [
@@ -28,7 +31,21 @@ const Category = ({ categoryData }) => {
     };
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Category Distribution</h2>
+            <div className="flex justify-between items-center bg-white p-4  rounded-lg">
+                <h2 className="text-xl font-bold text-gray-800">Monthly Report</h2>
+                <button
+                    onClick={() => exportToExcel({
+                        headers, data: categoryData.map(({ category, bookings, revenue }) => ({
+                            category,
+                            bookings,
+                            revenue
+                        }))
+                    })}
+                    className="flex items-center gap-2  text-white font-semibold py-1 px-2 rounded-lg transition duration-300"
+                >
+                    <Download color='gray' size={20} />
+                </button>
+            </div>
             <Doughnut data={data} />
         </div>
     );
