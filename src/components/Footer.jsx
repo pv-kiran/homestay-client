@@ -1,7 +1,11 @@
 import React from 'react';
 import { Home, Mail, Phone, Instagram, Twitter, Facebook } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Footer() {
+
+    const navigate = useNavigate();
+
     return (
         <footer className="bg-black text-white">
             <div className="max-w-7xl mx-auto px-4 py-8">
@@ -34,8 +38,7 @@ export default function Footer() {
                     <div>
                         <h4 className="font-medium mb-4">Quick Links</h4>
                         <ul className="space-y-2 text-gray-400">
-                            <li><a href="#" className="hover:text-white transition">About Us</a></li>
-                            <li><a href="#" className="hover:text-white transition">Host with Us</a></li>
+                            <li><Link to="/about-us" className="hover:text-white transition">About Us</Link></li>
                             <li><a href="#" className="hover:text-white transition">Support</a></li>
                             <li><a href="#" className="hover:text-white transition">Terms & Conditions</a></li>
                         </ul>
@@ -44,13 +47,13 @@ export default function Footer() {
                     <div>
                         <h4 className="font-medium mb-4">Follow Us</h4>
                         <div className="flex gap-4">
-                            <a href="#" className="hover:text-indigo-400 transition">
+                            <a href="#" className="text-pink-500 hover:text-pink-600 transition">
                                 <Instagram />
                             </a>
-                            <a href="#" className="hover:text-indigo-400 transition">
+                            <a href="#" className="text-blue-400 hover:text-blue-500 transition">
                                 <Twitter />
                             </a>
-                            <a href="#" className="hover:text-indigo-400 transition">
+                            <a href="#" className="text-blue-600 hover:text-blue-700 transition">
                                 <Facebook />
                             </a>
                         </div>
@@ -58,7 +61,7 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                    <p>© 2024 BeStays. All rights reserved.</p>
+                    <p>© 2025 BeStays. All rights reserved.</p>
                 </div>
             </div>
         </footer>
