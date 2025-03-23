@@ -335,6 +335,19 @@ const userService = {
       throw error;
     }
   },
+
+  
+  UserContactUs: async (emailData) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Contact_Us,
+        JSON.stringify(emailData)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 }
 
 export default userService;
