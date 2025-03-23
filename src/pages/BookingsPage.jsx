@@ -85,7 +85,7 @@ const BookingsPage = () => {
             sortable: true,
         },
         {
-            header: "CheckIN",
+            header: "Checkin",
             accessor: (data) => (
                 <span>
                     {formatDate(data?.checkIn)}

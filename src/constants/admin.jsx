@@ -1,4 +1,4 @@
-import { Home, BedDouble, Grid, Package, UserCircle, Users, Component, TicketPercent } from 'lucide-react';
+import { Home, BedDouble, Grid, Package, UserCircle, Users, Component, TicketPercent, FileSpreadsheet } from 'lucide-react';
 
 export const routes = [
   {
@@ -57,6 +57,11 @@ export const routes = [
     path: '/admin/dashboard',
     title: 'Dashboard',
     icon: <Home className="w-5 h-5" />
+  },
+  {
+    path: '/admin/verification',
+    title: 'Verification',
+    icon: <FileSpreadsheet className="w-5 h-5" />
   },
   {
     path: '/admin/rooms',

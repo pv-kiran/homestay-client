@@ -43,7 +43,7 @@ const schema = yup.object({
     .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
 })
 
-function ProfileCard() {
+function ProfileCard({ onIdProofChange }) {
 
   const { authState } = useSelector((state) => state?.userAuth);
   // const [userData, setUserData] = useState(initialUserData);
@@ -214,6 +214,12 @@ function ProfileCard() {
     }
   }, [authState])
 
+  useEffect(() => {
+    if (userProfile?.user?.idProof) {
+      onIdProofChange(userProfile?.user?.idProof);
+    }
+  }, [userProfile?.user?.idProof, onIdProofChange, authState]);
+
   return (
     <div className="bg-white shadow-lg rounded-xl overflow-hidden">
       <div className="h-32 bg-gradient-to-r from-[#14B8A6] to-[#2BC0B4]"></div>
@@ -259,9 +265,8 @@ function ProfileCard() {
 
             {/* Stats Section */}
             <div className="mt-6 w-full bg-gray-50 rounded-lg overflow-hidden">
-              <Stat label="Bookings" value={userProfile?.user?.bookings} />
+              <Stat label="Bookings" value={userProfile?.bookingsCount} />
               <Stat label="Member Since" value={new Date(userProfile?.user?.createdAt).getFullYear()} />
-              <Stat label="Verified Stays" value={userProfile?.user?.verifiedStays} />
             </div>
           </div>
 
