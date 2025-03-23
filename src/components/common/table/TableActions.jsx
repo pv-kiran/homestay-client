@@ -1,12 +1,13 @@
 import React from "react";
-import { Pencil, Trash2, Eye, ArrowRightLeft, Package } from "lucide-react";
+import { Pencil, Trash2, Eye, ArrowRightLeft, Package, TimerOff } from "lucide-react";
 
 const iconMap = {
   edit: Pencil,
   delete: Trash2,
   view: Eye,
   addons: Package,
-  reorder: ArrowRightLeft
+  reorder: ArrowRightLeft,
+  cancpolicy: TimerOff
 };
 
 
@@ -16,6 +17,8 @@ const defaultClassNames = {
   delete: "text-red-600 hover:text-red-800",
   reorder: "text-blue-600 hover:text-blue-800",
   addons: "text-blue-600 hover:text-blue-800",
+  cancpolicy: "text-blue-600 hover:text-blue-800",
+  view: "text-blue-600 hover:text-blue-800"
 };
 
 const ToggleSwitch = ({ isActive, onClick, title }) => {

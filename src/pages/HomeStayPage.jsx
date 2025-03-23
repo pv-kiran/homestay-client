@@ -12,6 +12,7 @@ import { Loader } from '../components/common/Loader';
 import AddonsSection from '../components/addons/AddonsSection';
 import { setAddOns } from '../app/features/admin/addonSlice';
 import { PaymentProcessing } from '../components/PaymentProcessing';
+import CancellationPolicy from '../components/CancellationPolicy';
 
 function HomeStayPage() {
 
@@ -141,6 +142,9 @@ function HomeStayPage() {
                                     initiatePayment={initiatePayment}
                                     completePayment={completePayment}
                                 />
+                                <div className="mt-8 mb-6">
+                                    <CancellationPolicy cancPolicy={homeStay?.data?.cancellationPolicy} />
+                                </div>
                             </div>
                         </div>
 
@@ -168,6 +172,9 @@ function HomeStayPage() {
                                 maxGuests={homeStay?.data?.maxGuests}
                                 setModal={setIsModalOpen}
                             />
+                            <div className="mt-8 mb-6">
+                                <CancellationPolicy cancPolicy={homeStay?.data?.cancellationPolicy}/>
+                            </div>
                         </div>
 
                         {

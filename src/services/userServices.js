@@ -309,6 +309,32 @@ const userService = {
       throw error;
     }
   },
+  userUploadIdProof: async (doc) => {
+    try {
+      const response = await axiosInstance.post(
+        apiEndpoints.Bestays_User_Idproof_Upload,
+        doc, // No need for JSON.stringify(), FormData should be sent directly
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file uploads
+          },
+        }
+      );
+      return response; // Extracting response data
+    } catch (error) {
+      throw error.response?.data || "Upload failed"; // More meaningful error handling
+    }
+  },
+  userGetIdProofStatus: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_User_Idproof_Status
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 }
 
 export default userService;

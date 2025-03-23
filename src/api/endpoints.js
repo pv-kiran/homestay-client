@@ -27,6 +27,9 @@ const apiEndpoints = {
   Bestays_User_Homestay_Submit_Review: "/user/submit-review",
   Bestays_User_Homestay_Get_Review: "/user/test/:$homeStayId",
   Bestays_User_Homestay_Download_Receipt: "/user/download-receipt/:$bookingId",
+  Bestays_User_Idproof_Upload: `/user/auth/upload-idproof`,
+  Bestays_User_Idproof_Status: `/user/get-idstatus`,
+
 
   // admin api
   Bestays_Admin_Signup: "/admin/auth/signup",
@@ -81,6 +84,9 @@ const apiEndpoints = {
   Bestays_Admin_Get_ADDONS: "/admin/homestay/allservice?city=:city",
   Bestays_Admin_Put_HomeStay_OtherService: "/admin/homestay/allservice/:id",
   Bestays_Admin_Booking_Refund: "/admin/booking/refund/:id",
+  Bestays_Admin_Idproof_Status: "/admin/get-idstatus",
+  Bestays_Admin_Idproof_Update: "/admin/update-idcontrol",
+  Bestays_Admin_Put_Cancellation_Policy: "/admin/cancellation-policy/:homestayId",
 };
 
 export default apiEndpoints;

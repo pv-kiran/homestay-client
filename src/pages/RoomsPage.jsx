@@ -20,6 +20,7 @@ import { ImageGrid } from '../components/ImageGrid';
 import { Loader } from '../components/common/Loader';
 import { EmptyState } from '../components/common/EmptyState';
 import AddonsForm from '../components/forms/AddonsForm';
+import CancPolForm from '../components/forms/CancPolForm';
 
 
 const schema = yup.object({
@@ -135,6 +136,7 @@ const RoomsPage = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isAddons, setIsAddons] = useState(false);
+  const [isCancPolicy, setIsCancPolicy] = useState(false);
   const [homeStayImages, setHomeStayImages] = useState([]);
   const [fileError, setFileError] = useState(false);
   const [pageSize, setPageSize] = useState(10);
@@ -246,7 +248,8 @@ const RoomsPage = () => {
     setImages([]);
     setHomeStayId(null);
     setIsReorder(false)
-    setIsAddons(false)
+    setIsAddons(false);
+    setIsCancPolicy(false);
     setSelectedHomeStay([])
     reset();
   };
@@ -531,6 +534,13 @@ const RoomsPage = () => {
     getAllAddOns(address?.city)
   }
 
+  const handleCancPolicy = (id) => {
+    setIsModalOpen(true);
+    setIsCancPolicy(true);
+    const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay?._id === id);
+    setHomeStayId(id);
+  }
+
   const getActions = (item) => [
     {
       icon: "view",
@@ -551,6 +561,11 @@ const RoomsPage = () => {
       icon: "addons",
       onClick: () => handleAddons(item?._id),
       title: "Addons",
+    },
+    {
+      icon: "cancpolicy",
+      onClick: () => handleCancPolicy(item?._id),
+      title: "Cancellation Policy",
     },
     {
       icon: "toggle",
@@ -908,6 +923,15 @@ const RoomsPage = () => {
               handleClose={handleClose}
               selectedHomestay={selectedHomestay}
               getHomeStayAddons={getHomeStayAddons}
+            />
+          }
+          {
+            isCancPolicy && <CancPolForm
+              // addOndata={allAddOns}
+              homeStayId={homeStayId}
+              handleClose={handleClose}
+              // selectedHomestay={selectedHomestay}
+              // getHomeStayAddons={getHomeStayAddons}
             />
           }
         </Modal>

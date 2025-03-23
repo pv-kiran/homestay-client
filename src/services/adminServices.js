@@ -609,6 +609,40 @@ const adminService = {
       throw error;
     }
   },
+  adminUpdateIdProof: async ({ data }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Idproof_Update,
+        data,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminGetIdProofStatus: async () => {
+    try {
+      const response = await axiosInstance.get(
+        apiEndpoints.Bestays_Admin_Idproof_Status,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  adminEditCancellationPolicy: async ({ data, homeStayId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_Cancellation_Policy.replace(
+          ":homestayId", homeStayId
+        ),
+        data,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;
