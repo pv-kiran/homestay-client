@@ -13,6 +13,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from 'react-toastify';
 import axiosInstance from '../api/axiosInstance';
 import { formatDate } from '../utils/dateDifference';
+import UploadIdProof from './UploadIdProof';
+import { Loader } from './common/Loader';
+
 
 
 const schema = yup.object({
@@ -50,6 +53,12 @@ function ProfileCard({ onIdProofChange }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [preview, setPreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+
+  const [idProof, setIdProof] = useState(null);
+
+  const handleIdProofChange = (idProofData) => {
+    setIdProof(idProofData);
+  };
 
 
   const dispatch = useDispatch();
@@ -221,219 +230,230 @@ function ProfileCard({ onIdProofChange }) {
   }, [userProfile?.user?.idProof, onIdProofChange, authState]);
 
   return (
-    <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-      <div className="h-32 bg-gradient-to-r from-[#14B8A6] to-[#2BC0B4]"></div>
-      <div className="px-6 pb-6">
-        <div className="flex flex-col md:flex-row gap-8 -mt-16">
-          {/* Left Section - Profile Picture & Stats */}
-          <div className="md:w-1/3 flex flex-col items-center">
-            <div className="relative">
-              <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-100">
-                {preview || userProfile?.user?.profilePic ? (
-                  <img
-                    src={preview || userProfile?.user?.profilePic}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-50">
-                    <User2 className="w-12 h-12 text-gray-400" />
+    <>
+      {
+        userProfileLoading ? <div className='mt-2 h-[100vh] flex items-center justify-center'>
+          <Loader />
+        </div> : <div>
+          <div className="bg-white shadow-lg rounded-xl overflow-hidden p-4">
+            <div className="h-32 bg-gradient-to-r from-[#14B8A6] to-[#2BC0B4]"></div>
+            <div className="px-6 pb-6">
+              <div className="flex flex-col md:flex-row gap-8 -mt-16">
+                {/* Left Section - Profile Picture & Stats */}
+                <div className="md:w-1/3 flex flex-col items-center">
+                  <div className="relative">
+                    <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-100">
+                      {preview || userProfile?.user?.profilePic ? (
+                        <img
+                          src={preview || userProfile?.user?.profilePic}
+                          alt="Profile"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                          <User2 className="w-12 h-12 text-gray-400" />
+                        </div>
+                      )}
+                      {isUploading && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#14B8A6]"></div>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={triggerFileInput}
+                      disabled={isUploading}
+                      className="absolute bottom-0 right-0 bg-[#14B8A6] p-2 rounded-full text-white hover:bg-[#2BC0B4] transition-colors shadow-lg"
+                      title="Upload photo"
+                    >
+                      <Upload className="w-4 h-4" />
+                    </button>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      accept="image/*"
+                      className="hidden"
+                    />
                   </div>
-                )}
-                {isUploading && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#14B8A6]"></div>
+
+                  {/* Stats Section */}
+                  <div className="mt-6 w-full bg-gray-50 rounded-lg overflow-hidden">
+                    <Stat label="Bookings" value={userProfile?.bookingsCount} />
+                    <Stat label="Member Since" value={new Date(userProfile?.user?.createdAt).getFullYear()} />
                   </div>
-                )}
-              </div>
-              <button
-                onClick={triggerFileInput}
-                disabled={isUploading}
-                className="absolute bottom-0 right-0 bg-[#14B8A6] p-2 rounded-full text-white hover:bg-[#2BC0B4] transition-colors shadow-lg"
-                title="Upload photo"
-              >
-                <Upload className="w-4 h-4" />
-              </button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                className="hidden"
-              />
-            </div>
+                </div>
 
-            {/* Stats Section */}
-            <div className="mt-6 w-full bg-gray-50 rounded-lg overflow-hidden">
-              <Stat label="Bookings" value={userProfile?.bookingsCount} />
-              <Stat label="Member Since" value={new Date(userProfile?.user?.createdAt).getFullYear()} />
-            </div>
-          </div>
-
-          {/* Right Section - User Information */}
-          <div className="md:w-2/3">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {userProfile?.user?.fullName}
-                </h2>
-                {userProfile?.user?.address?.city && userProfile?.user?.address?.country && (
-                  <p className="text-sm text-gray-500 flex items-center mt-1">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {userProfile?.user?.address?.city}, {userProfile?.user?.address?.country}
-                  </p>
-                )}
-              </div>
-              {/* <button
+                {/* Right Section - User Information */}
+                <div className="md:w-2/3">
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">
+                        {userProfile?.user?.fullName}
+                      </h2>
+                      {userProfile?.user?.address?.city && userProfile?.user?.address?.country && (
+                        <p className="text-sm text-gray-500 flex items-center mt-1">
+                          <MapPin className="w-4 h-4 mr-1" />
+                          {userProfile?.user?.address?.city}, {userProfile?.user?.address?.country}
+                        </p>
+                      )}
+                    </div>
+                    {/* <button
                 onClick={onEdit}
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#24988F] hover:bg-[#1c9e94] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#24988F] transition-colors"
               >
                 <Edit2 className="w-4 h-4 mr-2" />
                 Edit Profile
               </button> */}
-              <Button
-                variant='transparent'
-                onClick={() => setIsModalOpen(true)} size="sm">
-                <Edit2 className='pr-1 pb-1' color="#FFFFFF" />
-                <span color='#FFFFFF'>Edit Profile</span>
-              </Button>
-              <Modal
-                isOpen={isModalOpen}
-                onClose={handleClose}
-                title={"Edit Profile"}
-                description={
-                  "Add more details about you"
-                }
-              >
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
-                  <FormField
-                    type="text"
-                    name="fullName"
-                    label="Fullname"
-                    placeholder="Enter fullname"
-                    register={register}
-                    error={errors.fullName}
-                    disabled={true}
-                  />
-                  <FormField
-                    type="text"
-                    name="email"
-                    label="Email"
-                    placeholder="Enter email"
-                    register={register}
-                    error={errors.email}
-                    disabled={true}
-                  />
-                  <FormField
-                    type="text"
-                    name="dob"
-                    label="Date of birth"
-                    placeholder="Enter date of birth"
-                    register={register}
-                    error={errors.dob}
-                    disabled={true}
-                  />
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      type="text"
-                      name="street"
-                      label="Street"
-                      placeholder="Enter street"
-                      register={register}
-                      error={errors.street}
-                    />
-                    <FormField
-                      type="text"
-                      name="city"
-                      label="City"
-                      placeholder="Enter city"
-                      register={register}
-                      error={errors.city}
-                    />
+                    <Button
+                      variant='transparent'
+                      onClick={() => setIsModalOpen(true)} size="sm">
+                      <Edit2 className='pr-1 pb-1' color="#FFFFFF" />
+                      <span color='#FFFFFF'>Edit Profile</span>
+                    </Button>
+                    <Modal
+                      isOpen={isModalOpen}
+                      onClose={handleClose}
+                      title={"Edit Profile"}
+                      description={
+                        "Add more details about you"
+                      }
+                    >
+                      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
+                        <FormField
+                          type="text"
+                          name="fullName"
+                          label="Fullname"
+                          placeholder="Enter fullname"
+                          register={register}
+                          error={errors.fullName}
+                          disabled={true}
+                        />
+                        <FormField
+                          type="text"
+                          name="email"
+                          label="Email"
+                          placeholder="Enter email"
+                          register={register}
+                          error={errors.email}
+                          disabled={true}
+                        />
+                        <FormField
+                          type="text"
+                          name="dob"
+                          label="Date of birth"
+                          placeholder="Enter date of birth"
+                          register={register}
+                          error={errors.dob}
+                          disabled={true}
+                        />
+                        <div className="grid grid-cols-2 gap-4">
+                          <FormField
+                            type="text"
+                            name="street"
+                            label="Street"
+                            placeholder="Enter street"
+                            register={register}
+                            error={errors.street}
+                          />
+                          <FormField
+                            type="text"
+                            name="city"
+                            label="City"
+                            placeholder="Enter city"
+                            register={register}
+                            error={errors.city}
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <FormField
+                            type="text"
+                            name="district"
+                            label="District"
+                            placeholder="Enter district"
+                            register={register}
+                            error={errors.district}
+                          />
+                          <FormField
+                            type="text"
+                            name="state"
+                            label="State"
+                            placeholder="Enter state"
+                            register={register}
+                            error={errors.state}
+                          />
+                        </div>
+                        <FormField
+                          type="text"
+                          name="zip"
+                          label="Zip"
+                          placeholder="Enter zip code"
+                          register={register}
+                          error={errors.zip}
+                        />
+                        <FormField
+                          type="text"
+                          name="country"
+                          label="Country"
+                          placeholder="Enter country"
+                          register={register}
+                          error={errors.country}
+                        />
+                        <FormField
+                          type="text"
+                          name="phone"
+                          label="Phone number"
+                          placeholder="Enter phone number"
+                          register={register}
+                          error={errors.phone}
+                        />
+                        <FormField
+                          type="radio"
+                          name="gender"
+                          label="Gender"
+                          register={register}
+                          error={errors.gender}
+                          options={[
+                            { label: "Male", value: "Male" },
+                            { label: "Female", value: "Female" },
+                            { label: "Other", value: "Other" },
+                          ]}
+                        />
+                        <Button
+                          type="submit"
+                          fullWidth
+                          isLoading={userUpdateLoading}
+                        >
+                          Submit
+                        </Button>
+                      </form>
+                    </Modal>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      type="text"
-                      name="district"
-                      label="District"
-                      placeholder="Enter district"
-                      register={register}
-                      error={errors.district}
-                    />
-                    <FormField
-                      type="text"
-                      name="state"
-                      label="State"
-                      placeholder="Enter state"
-                      register={register}
-                      error={errors.state}
-                    />
-                  </div>
-                  <FormField
-                    type="text"
-                    name="zip"
-                    label="Zip"
-                    placeholder="Enter zip code"
-                    register={register}
-                    error={errors.zip}
-                  />
-                  <FormField
-                    type="text"
-                    name="country"
-                    label="Country"
-                    placeholder="Enter country"
-                    register={register}
-                    error={errors.country}
-                  />
-                  <FormField
-                    type="text"
-                    name="phone"
-                    label="Phone number"
-                    placeholder="Enter phone number"
-                    register={register}
-                    error={errors.phone}
-                  />
-                  <FormField
-                    type="radio"
-                    name="gender"
-                    label="Gender"
-                    register={register}
-                    error={errors.gender}
-                    options={[
-                      { label: "Male", value: "Male" },
-                      { label: "Female", value: "Female" },
-                      { label: "Other", value: "Other" },
-                    ]}
-                  />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    isLoading={userUpdateLoading}
-                  >
-                    Submit
-                  </Button>
-                </form>
-              </Modal>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InfoRow icon={Mail} label="Email" value={userProfile?.user?.email} />
-              <InfoRow icon={Phone} label="Phone" value={userProfile?.user?.phone} />
-              <InfoRow icon={Calendar} label="Year of Birth" value={formatDate(userProfile?.user?.dob)} />
-              <InfoRow icon={User2} label="Gender" value={userProfile?.user?.gender} />
-              <InfoRow
-                icon={Home}
-                label="Address"
-                value={userProfile?.user?.address?.street && `${userProfile?.user?.address?.street}${userProfile?.user?.address?.city ? `, 
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <InfoRow icon={Mail} label="Email" value={userProfile?.user?.email} />
+                    <InfoRow icon={Phone} label="Phone" value={userProfile?.user?.phone} />
+                    <InfoRow icon={Calendar} label="Year of Birth" value={formatDate(userProfile?.user?.dob)} />
+                    <InfoRow icon={User2} label="Gender" value={userProfile?.user?.gender} />
+                    <InfoRow
+                      icon={Home}
+                      label="Address"
+                      value={userProfile?.user?.address?.street && `${userProfile?.user?.address?.street}${userProfile?.user?.address?.city ? `, 
                       ${userProfile?.user?.address?.city}` : ''}${userProfile?.user?.address?.state ? `, ${userProfile?.user?.address?.state}` : ''} ${userProfile?.user?.address?.zip || ''}`}
-              />
-              <InfoRow icon={Globe} label="Country" value={userProfile?.user?.address?.country} />
-              {/* <InfoRow icon={User2} label="Marital Status" value={userProfile?.user?.maritalStatus} /> */}
+                    />
+                    <InfoRow icon={Globe} label="Country" value={userProfile?.user?.address?.country} />
+                    {/* <InfoRow icon={User2} label="Marital Status" value={userProfile?.user?.maritalStatus} /> */}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+          <UploadIdProof idProofData={idProof} />
         </div>
-      </div>
-    </div>
+      }
+    </>
+
+
   );
 }
 

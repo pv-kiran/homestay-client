@@ -18,6 +18,7 @@ import { Button } from './common/Button';
 import { motion } from 'framer-motion';
 import { Modal } from "../components/common/Modal";
 import AddonsPrice from './addons/AddonsPrice';
+import UploadIdProof from './UploadIdProof';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Asia/Kolkata');
@@ -53,6 +54,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     const [couponCode, setCouponCode] = useState('');
     const [checkInError, setCheckInError] = useState(null);
     const [checkOutError, setCheckOutError] = useState(null);
+    const [idProof, setIdProof] = useState(null);
 
     const navigate = useNavigate();
 
@@ -63,21 +65,12 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     } = useApi(userService.userBookHomestay);
 
     const {
-        // data,
-        // error,
-        // loading,
         execute: getValidCoupons,
-        // success,
-        // reset,
     } = useApi(userService.userGetValidCoupons);
 
     const {
-        // data,
         error: couponError,
-        // loading,
         execute: applyCoupon,
-        // success,
-        // reset,
     } = useApi(userService.userApplyCoupon);
     const {
         error: bookingError,
@@ -88,6 +81,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isUploadedModalOpen, setIsUploadedModalOpen] = useState(false);
     const differenceInDays = checkOut && checkIn ? dayjs(checkOut).diff(dayjs(checkIn), 'day') : null;
 
 
@@ -108,9 +102,15 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
 
+    console.log(authState, "HHHHH")
+
     const handleReserve = async () => {
         if (!authState) {
             setIsModalOpen(true);
+            return;
+        }
+        else if (!authState?.isIdUploaded) {
+            setIsUploadedModalOpen(true);
             return;
         }
         else if (!checkIn || !checkOut) {
@@ -315,6 +315,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             handleRemoveCoupon()
         }
     }, [checkIn, checkOut, currency])
+
 
 
     return (
@@ -747,6 +748,23 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                 />
+                {/* <SignupModal
+                    isOpen={isUploadedModalOpen}
+                    onClose={() => setIsCouponModalOpen(false)}
+                /> */}
+                <Modal
+                    isOpen={isUploadedModalOpen}
+                    onClose={() => setIsUploadedModalOpen(false)}
+                    title={"Please upload document"}
+                    maxWidth='600px'
+                >
+                    <UploadIdProof
+                        idProofData={idProof}
+                        uploadModalOpen
+                        isUploadModalOpen
+                        closeUploadModal={() => setIsUploadedModalOpen(false)}
+                    />
+                </Modal>
             </ThemeProvider>
         </LocalizationProvider>
     );
