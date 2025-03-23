@@ -11,6 +11,7 @@ import { clearAuth } from "../app/features/users/authSlice";
 import { processCurrencyData } from "../utils/currency";
 import { CurrencyDropdown } from "./common/CurrencyDropdown";
 import MenuItem from "./MenuItem";
+import { toast } from "react-toastify";
 
 
 export default function UserNavbar() {
@@ -19,6 +20,7 @@ export default function UserNavbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currencies, setCurrencies] = useState([]);
   const [selectedCurrency, setSelectedCurrency] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     execute: signOutUser,
@@ -31,6 +33,40 @@ export default function UserNavbar() {
   const isHomepage = location.pathname === "/";
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const showLogoutMessage = (username = "User") => {
+    try {
+      toast(
+        <div className="flex items-center gap-3 py-1">
+          <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-b from-turquoise-400 to-turquoise-600 rounded-full">
+            <LogOut className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="font-medium text-turquoise-700">
+              Adios, <span className="font-semibold">{username?.split(" ")[0]}</span>! 👋
+            </p>
+            <p className="text-sm text-gray-500">See you again soon!</p>
+          </div>
+        </div>,
+        {
+          position: "bottom-center",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          className: "!bg-white !rounded-xl !shadow-xl !px-4",
+          bodyClassName: "!p-0",
+          progressClassName: "!bg-gradient-to-r !from-turquoise-400 !to-turquoise-600"
+        }
+      );
+    } catch (error) {
+      toast.error('Failed to log out. Please try again.', {
+        position: "bottom-center",
+        className: "!bg-white !rounded-xl !shadow-xl",
+      });
+    }
+  };
 
   const handleSignIn = () => {
     setIsModalOpen(true);
@@ -45,7 +81,8 @@ export default function UserNavbar() {
   };
 
   useEffect(() => {
-    if (signOutSuccess) {
+    if (signOutSuccess) {      
+      showLogoutMessage(authState?.name);
       localStorage.removeItem("user");
       dispatch(clearAuth());
       reset();

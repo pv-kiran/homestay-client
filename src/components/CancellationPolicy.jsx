@@ -53,7 +53,7 @@ const CancellationPolicy = ({ cancPolicy }) => {
           </div>
 
           <div className="flex items-start gap-2 mt-3 bg-gray-50 p-2 rounded text-xs text-gray-600">
-            <Info className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <Info className="w-4 h-4 text-blue-500 flex-shrink-0" />
             <p>Refunds are automatically processed to your original payment method.</p>
           </div>
         </div>
