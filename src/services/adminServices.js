@@ -630,6 +630,19 @@ const adminService = {
       throw error;
     }
   },
+  adminEditCancellationPolicy: async ({ data, homeStayId }) => {
+    try {
+      const response = await axiosInstance.put(
+        apiEndpoints.Bestays_Admin_Put_Cancellation_Policy.replace(
+          ":homestayId", homeStayId
+        ),
+        data,
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default adminService;

@@ -85,6 +85,7 @@ const apiEndpoints = {
   Bestays_Admin_Booking_Refund: "/admin/booking/refund/:id",
   Bestays_Admin_Idproof_Status: "/admin/get-idstatus",
   Bestays_Admin_Idproof_Update: "/admin/update-idcontrol",
+  Bestays_Admin_Put_Cancellation_Policy: "/admin/cancellation-policy/:homestayId",
 };
 
 export default apiEndpoints;
