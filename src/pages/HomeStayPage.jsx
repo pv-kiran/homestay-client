@@ -142,9 +142,11 @@ function HomeStayPage() {
                                     initiatePayment={initiatePayment}
                                     completePayment={completePayment}
                                 />
-                                <div className="mt-8 mb-6">
-                                    <CancellationPolicy cancPolicy={homeStay?.data?.cancellationPolicy} />
-                                </div>
+                                {Array.isArray(homeStay?.data?.cancellationPolicy) && homeStay.data.cancellationPolicy.length > 0 && (
+                                    <div className="mt-8 mb-6">
+                                        <CancellationPolicy cancPolicy={homeStay?.data?.cancellationPolicy} />
+                                    </div>
+                                )}
                             </div>
                         </div>
 

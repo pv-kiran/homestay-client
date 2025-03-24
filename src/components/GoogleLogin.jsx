@@ -5,6 +5,8 @@ import userService from "../services/userServices";
 import useApi from "../hooks/useApi";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../app/features/users/authSlice";
+import { Sparkles } from "lucide-react";
+import { toast } from "react-toastify";
 
 const GoogleLogin = ({ handleSuccess }) => {
   const navigate = useNavigate();
@@ -18,11 +20,46 @@ const GoogleLogin = ({ handleSuccess }) => {
     reset,
   } = useApi(userService.UserGoogleSignup);
 
+  const showWelcomeToast = async (username = "User") => {
+    try {      
+      toast(
+        <div className="flex items-center gap-3 py-1">
+          <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-b from-turquoise-400 to-turquoise-600 rounded-full">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="font-medium text-turquoise-700">
+              Welcome, <span className="font-semibold">{username?.split(" ")[0]}</span>! ✨
+            </p>
+            <p className="text-sm text-gray-500">We're glad to see you.</p>
+          </div>
+        </div>,
+        {
+          position: "bottom-center",
+          autoClose: 4000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          className: "!bg-white !rounded-xl !shadow-xl !px-4",
+          bodyClassName: "!p-0",
+          progressClassName: "!bg-gradient-to-r !from-turquoise-400 !to-turquoise-600"
+        }
+      );
+    } catch (error) {
+      toast.error('Failed to load user data. Please try again.', {
+        position: "bottom-center",
+        className: "!bg-white !rounded-xl !shadow-xl",
+      });
+    }
+  };
+
   useEffect(() => {
     if (success) {
       localStorage.setItem("user", JSON.stringify(data?.userDetails));
       dispatch(setAuth());
       handleSuccess(data?.userDetails);
+      showWelcomeToast(data?.userDetails?.name);
     }
   }, [success]);
 
