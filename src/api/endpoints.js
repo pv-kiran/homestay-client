@@ -29,6 +29,8 @@ const apiEndpoints = {
   Bestays_User_Homestay_Download_Receipt: "/user/download-receipt/:$bookingId",
   Bestays_User_Idproof_Upload: `/user/auth/upload-idproof`,
   Bestays_User_Idproof_Status: `/user/get-idstatus`,
+  Bestays_User_Contact_Us: `/user/contact-us`,
+
 
 
   // admin api

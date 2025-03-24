@@ -29,6 +29,8 @@ import Rides from "./pages/Rides";
 import Entertainments from "./pages/Entertainments";
 import OtherServices from "./pages/OtherService";
 import IdProofPage from "./pages/IdProofPage";
+import AboutUs from "./pages/AboutUsPage";
+import { ContactUs } from "./pages/ContactUsPage";
 
 
 function AppRoutes() {
@@ -42,6 +44,8 @@ function AppRoutes() {
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/mybookings" element={<MyBookings />} />
         <Route path="/booking/:id/success" element={<BookingSuccess />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/contact-us" element={<ContactUs/>} />
       </Route>
 
       <Route element={<PublicRoutesAdmin />}>
