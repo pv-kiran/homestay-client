@@ -636,7 +636,9 @@ const adminService = {
         apiEndpoints.Bestays_Admin_Put_Cancellation_Policy.replace(
           ":homestayId", homeStayId
         ),
-        data,
+        {
+          cancellationPolicy: data,
+        },
       );
       return response;
     } catch (error) {

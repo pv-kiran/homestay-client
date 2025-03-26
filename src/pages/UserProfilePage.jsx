@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ProfileCard from '../components/ProfileCard'
 
 function UserProfilePage() {
-
+  const [isProof, setIdProof] = useState(false);
   const handleIdProofChange = (idProofData) => {
     setIdProof(idProofData);
   };

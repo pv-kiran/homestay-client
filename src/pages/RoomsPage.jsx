@@ -146,6 +146,7 @@ const RoomsPage = () => {
   const [images, setImages] = useState([]);
   const [selectedHomestay, setSelectedHomeStay] = useState([]);
   const timer = useRef(null);
+  const [homestaySelected, setHomestaySelected] = useState(null);
 
   const [isShowLoading, setIsShowLoading] = useState(true);
 
@@ -251,6 +252,7 @@ const RoomsPage = () => {
     setIsAddons(false);
     setIsCancPolicy(false);
     setSelectedHomeStay([])
+    setHomestaySelected(null);
     reset();
   };
 
@@ -538,6 +540,7 @@ const RoomsPage = () => {
     setIsModalOpen(true);
     setIsCancPolicy(true);
     const chosenHomeStay = allHomeStays?.data.filter((homeStay) => homeStay?._id === id);
+    setHomestaySelected(chosenHomeStay[0]);
     setHomeStayId(id);
   }
 
@@ -603,6 +606,15 @@ const RoomsPage = () => {
     handleClose();
   }
 
+
+  const getHomestays = async () => {
+    setIsShowLoading(false);
+    await getAllHomeStays({
+      pagePerData: pageSize,
+      pageNumber: currentPage,
+      searchParams: searchKey
+    });
+  }
 
 
 
@@ -927,11 +939,10 @@ const RoomsPage = () => {
           }
           {
             isCancPolicy && <CancPolForm
-              // addOndata={allAddOns}
               homeStayId={homeStayId}
               handleClose={handleClose}
-              // selectedHomestay={selectedHomestay}
-              // getHomeStayAddons={getHomeStayAddons}
+              selectedHomeStay={homestaySelected}
+              getHomestays={getHomestays}
             />
           }
         </Modal>
