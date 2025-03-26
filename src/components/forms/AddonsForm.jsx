@@ -7,6 +7,8 @@ import { Button } from '../common/Button';
 
 const AddonsForm = ({ addOndata, homeStayId, handleClose, selectedHomestay, getHomeStayAddons }) => {
 
+
+
     const {
         loading: addHomeStayAddonsLoading,
         execute: addHomeStayAddons,
@@ -115,6 +117,8 @@ const AddonsForm = ({ addOndata, homeStayId, handleClose, selectedHomestay, getH
             })
         }
     }, [selectedHomestay]);
+
+
     return (
         <div className="min-h-screen bg-gray-100 p-2">
             <div className="max-w-4xl mx-auto">

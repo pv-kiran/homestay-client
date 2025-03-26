@@ -83,6 +83,7 @@ const apiEndpoints = {
   Bestays_Admin_Add_OtherService: "/admin/add-otherservice",
   Bestays_Admin_Get_OtherService: "/admin/get-otherservice",
   Bestays_Admin_Put_OtherService: "/admin/otherservice/:id",
+  Bestays_Admin_Get_ADDONS: "/admin/homestay/allservice?city=:city",
   Bestays_Admin_Put_HomeStay_OtherService: "/admin/homestay/allservice/:id",
   Bestays_Admin_Booking_Refund: "/admin/booking/refund/:id",
   Bestays_Admin_Idproof_Status: "/admin/get-idstatus",

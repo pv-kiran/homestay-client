@@ -11,6 +11,11 @@ import {
     Legend
 } from 'chart.js';
 
+import { Download } from "lucide-react";
+import { exportToExcel } from '../../utils/excell';
+
+
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -22,6 +27,7 @@ ChartJS.register(
 );
 
 const Monthly = ({ monthlyData }) => {
+    const headers = ["Month", "Revenue", "Bookings", "Occupancy"];
     const data = {
         labels: monthlyData?.map(d => d.month),
         datasets: [
@@ -51,9 +57,18 @@ const Monthly = ({ monthlyData }) => {
             },
         },
     };
+
     return (
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Monthly Report</h2>
+        <div className="bg-white p-6 rounded-lg">
+            <div className="flex justify-between items-center bg-white p-4  rounded-lg">
+                <h2 className="text-xl font-bold text-gray-800">Monthly Report</h2>
+                <button
+                    onClick={() => exportToExcel({ headers, data: monthlyData })}
+                    className="flex items-center gap-2  text-white font-semibold py-1 px-2 rounded-lg transition duration-300"
+                >
+                    <Download color='gray' size={20} />
+                </button>
+            </div>
             <Line options={options} data={data} />
         </div>
     );

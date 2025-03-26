@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import ProfileCard from '../components/ProfileCard'
-import UploadIdProof from '../components/UploadIdProof'
 
 function UserProfilePage() {
-  const [idProof, setIdProof] = useState(null);
-
+  const [isProof, setIdProof] = useState(false);
   const handleIdProofChange = (idProofData) => {
     setIdProof(idProofData);
   };
 
   return (
-    <div className='mt-7 mr-24 ml-24'>
-        <ProfileCard onIdProofChange={handleIdProofChange}/>
-        <UploadIdProof idProofData={idProof}/>
+    <div className='lg:mt-6 lg:mr-24 lg:ml-24 p-2 border'>
+      <ProfileCard onIdProofChange={handleIdProofChange} />
     </div>
   )
 }

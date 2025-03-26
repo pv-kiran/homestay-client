@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Calendar, MapPin, Clock } from 'lucide-react';
+import { Calendar, MapPin, Clock, Eye } from 'lucide-react';
 import BookingButtons from './BookingButtons';
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
@@ -14,6 +14,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
+import BookingDetailsModal from './BookingDetailsModal';
 
 const MyBookingCard = ({
     _id,
@@ -31,7 +32,8 @@ const MyBookingCard = ({
     isCancelled,
     homestayId,
     setLoading,
-    refundId
+    refundId,
+    selectedItems
 }) => {
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -41,6 +43,16 @@ const MyBookingCard = ({
         title: '',
         message: ''
     });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [chosenBooking, setchosenBooking] = useState([]);
+
+    const handleView = (booking) => {
+        setIsModalOpen(true);
+        setchosenBooking([booking])
+    };
+
+    console.log(selectedItems, "SELECTED ITEMS")
 
     const { currency } = useSelector((store) => store?.currency)
 
@@ -165,6 +177,11 @@ const MyBookingCard = ({
         setIsReviewModalOpen(false);
     }
 
+    const handleDetailsClose = () => {
+        setIsModalOpen(false);
+        setchosenBooking([]);
+    }
+
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
             {/* Image Section */}
@@ -185,18 +202,38 @@ const MyBookingCard = ({
             <div className="p-4">
                 <div className="flex justify-between items-start mb-3">
                     <h3 className="text-lg font-bold text-gray-900 line-clamp-1">{homestayName}</h3>
-                    {(!isCancelled && paymentId) && (
-                        <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full">
-                            Paid
-                        </span>
-                    )}
-                    {
-                        (isCancelled && refundId) && (
+                    <div className='flex gap-2'>
+                        <button
+                            onClick={() => handleView({
+                                homestayName,
+                                homestayAddress,
+                                homestayImage,
+                                checkIn,
+                                checkOut,
+                                paymentId,
+                                amount,
+                                createdAt,
+                                refundId,
+                                addOns: selectedItems
+                            })}
+                            className="text-sm font-semibold text-emerald-600 hover:text-emerald-500 w-full text-center"
+                        >
+                            <Eye />
+                        </button>
+                        {(!isCancelled && paymentId) && (
                             <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full">
-                                Refunding
+                                Paid
                             </span>
-                        )
-                    }
+                        )}
+                        {
+                            (isCancelled && refundId) && (
+                                <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full">
+                                    Refunding
+                                </span>
+                            )
+                        }
+                    </div>
+
                 </div>
 
                 <div className="space-y-2">
@@ -236,6 +273,7 @@ const MyBookingCard = ({
                         </div>
                     )
                 }
+
                 <BookingButtons
                     checkIn={checkIn}
                     checkOut={checkOut}
@@ -284,9 +322,19 @@ const MyBookingCard = ({
                         onClose={handleClose}
                     />
                 </Modal>
+                {
+                    chosenBooking?.length === 1 && <BookingDetailsModal
+                        chosenBooking={chosenBooking}
+                        isModalOpen={isModalOpen}
+                        handleClose={handleDetailsClose}
+                        from='user'
+                    />
+                }
+
             </div>
         </div>
     );
 };
+
 
 export default MyBookingCard;

@@ -75,6 +75,8 @@ export default function DashboardPage() {
   }, [overallData])
 
 
+  console.log(monthlyData, homeStayData, categoryData, yealryData)
+
   return (
     <div>
       <div className="space-y-6">

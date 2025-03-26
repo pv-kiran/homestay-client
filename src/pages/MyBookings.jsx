@@ -11,6 +11,7 @@ const MyBookings = () => {
     const [isShowLoading, setIsShowLoading] = useState(true);
     const { currency } = useSelector((store) => store?.currency);
 
+
     const {
         data,
         loading,
@@ -30,6 +31,8 @@ const MyBookings = () => {
     const getUpdatedBookings = () => {
         getMyBookings(currency?.code);
     }
+
+    console.log(data, "DATA")
 
 
     return (
