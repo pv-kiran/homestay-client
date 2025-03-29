@@ -48,7 +48,10 @@ const MapView = ({ position, title, address }) => {
                             </div>
                             <div className="flex items-start gap-2">
                                 <Navigation className="w-4 h-4 mt-1" />
-                                <span>{address?.street}, {address?.city}, {address?.state}</span>
+                                <span>
+                                    {address?.city},
+                                    {address?.state}
+                                </span>
                             </div>
                         </div>
                     </Popup>

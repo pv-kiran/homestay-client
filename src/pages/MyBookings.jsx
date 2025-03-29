@@ -32,7 +32,6 @@ const MyBookings = () => {
         getMyBookings(currency?.code);
     }
 
-    console.log(data, "DATA")
 
 
     return (
