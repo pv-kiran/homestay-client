@@ -52,7 +52,6 @@ const MyBookingCard = ({
         setchosenBooking([booking])
     };
 
-    console.log(selectedItems, "SELECTED ITEMS")
 
     const { currency } = useSelector((store) => store?.currency)
 
