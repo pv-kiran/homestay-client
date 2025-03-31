@@ -102,7 +102,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
 
-    console.log(authState, "HHHHH")
 
     const handleReserve = async () => {
         if (!authState) {
@@ -263,8 +262,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
     const calculateGst = (price, differenceInDays, gst) => {
-        console.log(gst, "HHHHH")
-        console.log(Math.ceil(((price * differenceInDays) * gst) / 100));
         return gst ? Math.ceil(((price * differenceInDays) * gst) / 100) : 0
     }
 
@@ -745,18 +742,18 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                             0,
                                             insuranceDetails?.insurancePercentage,
                                             gst,
-                                            true).toFixed(2))}`)
+                                            true)).toFixed(2)}`)
                                         : (differenceInDays ? `${parseFloat(totalPrice(
                                             price,
                                             differenceInDays, insuranceDetails?.insurancePercentage,
                                             gst,
-                                            false).toFixed(2))}`
+                                            false)).toFixed(2)}`
                                             :
                                             `${parseFloat(totalPrice(
                                                 price,
                                                 1,
                                                 insuranceDetails?.insurancePercentage, gst,
-                                                false).toFixed(2))}`)
+                                                false)).toFixed(2)}`)
                                 }
                             </span>
                         </div>

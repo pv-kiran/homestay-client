@@ -12,6 +12,7 @@ import { processCurrencyData } from "../utils/currency";
 import { CurrencyDropdown } from "./common/CurrencyDropdown";
 import MenuItem from "./MenuItem";
 import { toast } from "react-toastify";
+import logo from '../assets/logo.png'
 
 
 export default function UserNavbar() {
@@ -81,7 +82,7 @@ export default function UserNavbar() {
   };
 
   useEffect(() => {
-    if (signOutSuccess) {      
+    if (signOutSuccess) {
       showLogoutMessage(authState?.name);
       localStorage.removeItem("user");
       dispatch(clearAuth());
@@ -121,11 +122,11 @@ export default function UserNavbar() {
             <div className="flex items-center">
               <a
                 href="/"
-                className="flex items-center space-x-2 text-turquoise-400 hover:text-turquoise-600">
-                <Home className="h-8 w-8" />
-                <span className="font-bold text-xl hidden sm:block">
+                className="flex items-center space-x-2 text-turquoise-500 hover:text-turquoise-600">
+                <img src={logo} alt="" className="h-16 w-32 mr-[-12px]" />
+                {/* <span className="font-bold text-xl hidden sm:block mt-2">
                   BeStays
-                </span>
+                </span> */}
               </a>
             </div>
 
@@ -146,7 +147,7 @@ export default function UserNavbar() {
                 {isMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                     <div className="py-1" role="menu">
-                      {authState ? (
+                      {authState?.role === 'user' ? (
                         <>
                           <MenuItem setIsMenuOpen={setIsMenuOpen} />
                         </>

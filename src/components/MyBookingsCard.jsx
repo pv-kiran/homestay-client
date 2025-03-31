@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, MapPin, Clock, Eye } from 'lucide-react';
 import BookingButtons from './BookingButtons';
 import useApi from '../hooks/useApi';
@@ -180,6 +180,19 @@ const MyBookingCard = ({
         setIsModalOpen(false);
         setchosenBooking([]);
     }
+
+
+    useEffect(() => {
+        if (checkInError) {
+            toast.error(checkInError.message);
+        }
+        if (checkOutError) {
+            toast.error(checkOutError.message);
+        }
+        if (cancelError) {
+            toast.error(cancelError.message);
+        }
+    }, [checkInError, checkOutError, cancelError])
 
     return (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
