@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check, Minus, Plus } from 'lucide-react';
-
+import { useSelector } from 'react-redux';
 
 
 export const MenuItem = ({
@@ -10,6 +10,7 @@ export const MenuItem = ({
     onToggle,
     onQuantityChange
 }) => {
+    const { currency } = useSelector((store) => store?.currency);
     return (
         <div
             className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-lg transition-all duration-200 ${isSelected ? 'bg-turquoise-50 border-turquoise-200' : 'bg-white hover:bg-turquoise-50'
@@ -48,7 +49,7 @@ export const MenuItem = ({
                     </div>
                 )}
                 <p className="text-sm sm:text-base font-semibold text-gray-900">
-                    ₹{(item.price) * (quantity || 1).toFixed(2)}
+                    {currency?.symbol}{(item.price) * (quantity || 1).toFixed(2)}
                 </p>
             </div>
         </div>

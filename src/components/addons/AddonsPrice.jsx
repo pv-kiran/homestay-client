@@ -3,19 +3,24 @@ import { ChevronDown, ShoppingCart } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
 
-function formatPrice(price) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'INR'
-    }).format(price);
-}
+
 
 function AddonsPrice() {
 
     const { selectedItems } = useSelector((store) => store?.addOns);
+    const { currency } = useSelector((store) => store?.currency);
+
+    console.log(currency, "HHHH")
 
     const [isOpen, setIsOpen] = useState(false);
 
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency?.code
+        }).format(price);
+    };
     const totalAmount = Object.values(selectedItems).reduce(
         (sum, category) =>
             sum + Object.values(category).reduce(

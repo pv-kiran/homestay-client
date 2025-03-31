@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react';
 
 
 export const ServiceSection = ({ title, subtitle, children }) => {
+
     const [isOpen, setIsOpen] = useState(false);
 
     return (
