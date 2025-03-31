@@ -3,6 +3,7 @@ import SearchBar from './SearchBar';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
+
 function Hero() {
 
     const navigate = useNavigate();
