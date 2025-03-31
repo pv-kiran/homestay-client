@@ -263,6 +263,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
     const calculateGst = (price, differenceInDays, gst) => {
+        console.log(gst, "HHHHH")
+        console.log(Math.ceil(((price * differenceInDays) * gst) / 100));
         return gst ? Math.ceil(((price * differenceInDays) * gst) / 100) : 0
     }
 
@@ -276,11 +278,13 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
 
     const totalPrice = (price, differenceInDays, insuranceCoverage, gst, isCouponApplied) => {
+        console.log(price, insuranceCoverage, differenceInDays, gst)
         if (!isCouponApplied) {
             // const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
             const insurance = calculateInsurance(price, differenceInDays, insuranceCoverage)
+            const gstPrice = calculateGst(price, differenceInDays, gst)
             const totalPrice = price * differenceInDays;
-            const totalAmount = totalPrice + insurance;
+            const totalAmount = totalPrice + insurance + gstPrice;
             return Math.ceil(totalAmount + getAddonAmount() + price);
         }
         return price + getCouponInsurance(price, insuranceCoverage) + getCouponGST(price, gst) + Math.ceil(getAddonAmount());
@@ -736,9 +740,23 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 }
                                 {
                                     appliedCoupon !== null ?
-                                        (`${totalPrice(appliedCoupon?.newPrice, 0, insuranceDetails?.insurancePercentage, gst, true)}/-`)
-                                        : (differenceInDays ? `${totalPrice(price, differenceInDays, insuranceDetails?.insurancePercentage, gst, false)}/-`
-                                            : `${totalPrice(price, 1, insuranceDetails?.insurancePercentage, gst, false)} /-`)
+                                        (`${parseFloat(totalPrice(
+                                            appliedCoupon?.newPrice,
+                                            0,
+                                            insuranceDetails?.insurancePercentage,
+                                            gst,
+                                            true).toFixed(2))}`)
+                                        : (differenceInDays ? `${parseFloat(totalPrice(
+                                            price,
+                                            differenceInDays, insuranceDetails?.insurancePercentage,
+                                            gst,
+                                            false).toFixed(2))}`
+                                            :
+                                            `${parseFloat(totalPrice(
+                                                price,
+                                                1,
+                                                insuranceDetails?.insurancePercentage, gst,
+                                                false).toFixed(2))}`)
                                 }
                             </span>
                         </div>
