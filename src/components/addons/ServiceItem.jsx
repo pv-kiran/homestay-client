@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Minus, Plus } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 import { useSelector } from 'react-redux';
 

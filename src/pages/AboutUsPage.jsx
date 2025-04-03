@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Home, Users, Clock, Shield, MapPin, Phone } from 'lucide-react';
 
 const AboutUs = () => {
@@ -25,11 +25,15 @@ const AboutUs = () => {
     }
   ];
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="relative h-[400px] overflow-hidden">
-        <img 
+        <img
           src="https://res.cloudinary.com/djd2rpgil/image/upload/v1732096381/homestay-landing_bg/ne02gazrscv7bgwdfnae.jpg"
           alt="Luxury homestay"
           className="w-full h-full object-cover"
