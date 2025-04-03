@@ -21,6 +21,7 @@ const MyBookings = () => {
     } = useApi(userService.userGetHomeStayBookings);
 
     useEffect(() => {
+        setIsShowLoading(false)
         getMyBookings(currency?.code);
     }, [currency])
 
