@@ -188,7 +188,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             } catch (err) {
                 // TODO: - payment failure
                 completePayment();
-                console.log(err)
             }
 
         }
@@ -275,7 +274,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
 
     const totalPrice = (price, differenceInDays, insuranceCoverage, gst, isCouponApplied) => {
-        console.log(price, insuranceCoverage, differenceInDays, gst)
         if (!isCouponApplied) {
             // const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
             const insurance = calculateInsurance(price, differenceInDays, insuranceCoverage)

@@ -55,7 +55,6 @@ function CancPolForm({ homeStayId, handleClose, selectedHomeStay, getHomestays }
     });
 
     const onSubmit = async (data) => {
-        console.log(data);
         const result = await addCancPol({
             data: data?.cancellationPolicy.map(({ _id, ...rest }) => rest),
             homeStayId
