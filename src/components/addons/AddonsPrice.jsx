@@ -10,7 +10,6 @@ function AddonsPrice() {
     const { selectedItems } = useSelector((store) => store?.addOns);
     const { currency } = useSelector((store) => store?.currency);
 
-    console.log(currency, "HHHH")
 
     const [isOpen, setIsOpen] = useState(false);
 

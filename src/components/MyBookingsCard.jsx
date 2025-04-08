@@ -311,15 +311,22 @@ const MyBookingCard = ({
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleConfirmDialogClose} color="inherit">
+                        <Button
+                            onClick={handleConfirmDialogClose} color="inherit"
+                            disabled={checkInLoading || checkOutLoading || cancelLoading}
+                        >
                             Cancel
                         </Button>
                         <Button
                             onClick={handleConfirmAction}
                             color={confirmDialog.type === 'cancel' ? 'error' : 'primary'}
                             autoFocus
+                            disabled={checkInLoading || checkOutLoading || cancelLoading}
                         >
-                            Confirm
+                            {
+                                (checkInLoading || checkOutLoading || cancelLoading) ?
+                                    'Loading ...' : 'Confirm'
+                            }
                         </Button>
                     </DialogActions>
                 </Dialog>

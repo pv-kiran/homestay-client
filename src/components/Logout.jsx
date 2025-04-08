@@ -23,7 +23,6 @@ const Logout = () => {
       // Redirect to login page
       //   navigate('/login');
     } catch (error) {
-      console.error("Logout error:", error);
     }
   };
 

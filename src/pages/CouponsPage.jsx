@@ -121,7 +121,6 @@ export default function CouponsPage() {
     handleClose();
   };
 
-  console.log(watch('expiryDate'), "HHHHHH")
 
   const handleClose = () => {
     setIsModalOpen(false);

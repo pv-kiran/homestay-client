@@ -1,5 +1,6 @@
 import React from 'react';
 import ServiceCard from './ServiceCard';
+import { useSelector } from 'react-redux';
 
 
 const formatTitle = (key) => {
@@ -10,6 +11,10 @@ const formatTitle = (key) => {
 };
 
 const ServiceList = ({ data }) => {
+
+    const { currency } = useSelector((store) => store?.currency);
+
+
     // Filter out the _id field if it exists at the top level
     const serviceCategories = Object.entries(data).filter(([key]) => key !== '_id');
 
@@ -25,6 +30,7 @@ const ServiceList = ({ data }) => {
         );
     }, 0);
 
+
     return (
         <div className="max-w-4xl mx-auto p-6">
             <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
@@ -36,7 +42,8 @@ const ServiceList = ({ data }) => {
                     <div className="text-right">
                         <p className="text-sm text-gray-600">Grand Total</p>
                         <p className="text-2xl font-bold text-gray-800">
-                            ${grandTotal?.toFixed(2)}
+                            {currency?.symbol}
+                            {grandTotal?.toFixed(2)}
                         </p>
                     </div>
                 </div>

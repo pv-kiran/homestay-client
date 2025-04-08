@@ -10,6 +10,8 @@ import useApi from "../../hooks/useApi";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../../app/features/users/authSlice";
 import { toast } from "react-toastify";
+import { setCurrency } from "../../app/features/users/currencySlice";
+
 
 const adminSigninSchema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -56,6 +58,8 @@ const AdminSigninForm = () => {
       resetField("email", "");
       resetField("password", "");
       navigate("/admin");
+      localStorage.setItem("currency", JSON.stringify({ code: 'INR', name: 'Indian rupee', symbol: '₹' }))
+      dispatch(setCurrency());
     }
     if (adminError) {
       toast.error(adminError?.errorInfo);
