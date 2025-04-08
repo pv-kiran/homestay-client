@@ -169,9 +169,9 @@ export default function RoomServices() {
 
     const getDescription = () => {
         if (!isEditing) {
-            return "Add a new image with title. Click submit when you're done";
+            return "Add room service details. Click submit when you're done";
         } else {
-            return "Edit the title and upload the image if u need. Click submit when you're done";
+            return "Edit the room service details. Click submit when you're done";
         }
     };
 
