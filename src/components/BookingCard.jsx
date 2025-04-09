@@ -539,8 +539,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                 </div>
                                                 <p className="text-xs text-gray-500">
                                                     You saved
-                                                    <span className='mr-2'>{currency?.symbol}</span>
-                                                    {appliedCoupon?.discountAmount}
+                                                    <span className='mr-2'>{` ${currency?.symbol}${appliedCoupon?.discountAmount}`}</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -590,7 +589,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                     </div>
                                                     <p className="text-xs text-gray-500">
                                                         You saved
-                                                        <span className='mr-2'>{currency?.symbol}</span>{appliedCoupon?.discountAmount}
+                                                        <span className='mr-2'>{` ${currency?.symbol}${appliedCoupon?.discountAmount}`}</span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -685,7 +684,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
                                 <span>
                                     {
-                                        differenceInDays ? `${calculateInsurance(price, differenceInDays, insuranceDetails?.insurancePercentage)} /-` : `${calculateInsurance(price, 1, insuranceDetails?.insurancePercentage,
+                                        differenceInDays ? `${calculateInsurance(price, differenceInDays, insuranceDetails?.insurancePercentage)}/-` : `${calculateInsurance(price, 1, insuranceDetails?.insurancePercentage,
                                         )}/-`
                                     }
                                 </span>
@@ -699,7 +698,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                 </span>
                                 <span>
                                     {
-                                        differenceInDays ? `${calculateGst(price, differenceInDays, gst)} /-` : `${calculateGst(price, 1, gst
+                                        differenceInDays ? `${calculateGst(price, differenceInDays, gst)}/-` : `${calculateGst(price, 1, gst
                                         )}/-`
                                     }
                                 </span>
@@ -712,18 +711,18 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                             </span>
                             <span>
                                 {
-                                    `${price} /-`
+                                    `${price}/-`
                                 }
                             </span>
                         </div>
                         <AddonsPrice />
                         {appliedCoupon !== null && (
-                            <div className="flex justify-between mb-2">
+                            <div className="flex justify-between mb-2 mt-2">
                                 <div className='flex'>
                                     <Tag className='text-green-600 h-5' size={14} />
                                     <span className="text-green-600 text-sm pl-1">Discount applied</span>
                                 </div>
-                                <span className="text-green-600 text-sm">{`-${appliedCoupon?.discountAmount}/-`}</span>
+                                <span className="text-green-600 text-sm">{`- ${appliedCoupon?.discountAmount}/-`}</span>
                             </div>
                         )}
 

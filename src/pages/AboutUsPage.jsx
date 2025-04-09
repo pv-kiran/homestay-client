@@ -55,7 +55,7 @@ const AboutUs = () => {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-6">Our Mission</h2>
           <p className="text-lg text-gray-600 leading-relaxed">
-            At HomeStay Haven, we believe that travel should be more than just visiting places – it should be about experiencing life as locals do. Our mission is to connect travelers with unique homestays and hosts who can provide authentic, memorable experiences.
+            At BeStays, we believe that travel should be more than just visiting places – it should be about experiencing life as locals do. Our mission is to connect travelers with unique homestays and hosts who can provide authentic, memorable experiences.
           </p>
         </div>
       </div>

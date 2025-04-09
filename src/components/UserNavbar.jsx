@@ -123,7 +123,7 @@ export default function UserNavbar() {
               <a
                 href="/"
                 className="flex items-center space-x-2 text-turquoise-500 hover:text-turquoise-600">
-                <img src={logo} alt="" className="h-16 w-32 mr-[-12px]" />
+                <img src={"https://res.cloudinary.com/djd2rpgil/image/upload/v1744133672/mvp_bestays/dxbbpgaoy7uztjy3ykxd.png"} alt="" className="h-16 w-32 mr-[-12px]" />
                 {/* <span className="font-bold text-xl hidden sm:block mt-2">
                   BeStays
                 </span> */}
