@@ -22,6 +22,8 @@ const BookingDetailsModal = ({
 }) => {
 
 
+
+
     const { currency } = useSelector((store) => store?.currency);
 
     return (

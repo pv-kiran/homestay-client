@@ -49,6 +49,7 @@ const MyBookingCard = ({
 
     const handleView = (booking) => {
         setIsModalOpen(true);
+        console.log(booking, "HHHHH")
         setchosenBooking([booking])
     };
 
@@ -217,6 +218,7 @@ const MyBookingCard = ({
                     <div className='flex gap-2'>
                         <button
                             onClick={() => handleView({
+                                _id,
                                 homestayName,
                                 homestayAddress,
                                 homestayImage,
