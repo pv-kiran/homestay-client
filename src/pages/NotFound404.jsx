@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function NotFound404() {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#f9ffff] via-[#a8f0e6] to-white flex items-center justify-center p-4">
+        <div className="min-h-screen flex items-center justify-center p-4">
           <div className="max-w-2xl w-full text-center relative">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden">

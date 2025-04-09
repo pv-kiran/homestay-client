@@ -45,7 +45,7 @@ function AddonsPrice() {
                     >
                         <span className="text-gray-600 text-md">Add-ons</span>
                         <div className="flex items-center">
-                            <span className="text-md mr-1 text-gray-600">{parseFloat(totalAmount?.toFixed(2))}</span>
+                            <span className="text-md mr-1 text-gray-600">{`${parseFloat(totalAmount?.toFixed(2))}/-`}</span>
                             <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                         </div>
                     </button>
