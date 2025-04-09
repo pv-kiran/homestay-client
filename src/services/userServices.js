@@ -128,7 +128,7 @@ const userService = {
     }
   },
   userProfileUpdate: async (userData) => {
-    const { street, city, district, state, zip, country, gender, phone } = userData
+    const { street, city, district, state, zip, country, gender, phone, dob } = userData
     try {
       const response = await axiosInstance.post(
         apiEndpoints.Bestays_User_Profile_Update,
@@ -142,7 +142,8 @@ const userService = {
             country,
           },
           gender,
-          phone
+          phone,
+          dob
         })
       )
       return response
@@ -336,7 +337,7 @@ const userService = {
     }
   },
 
-  
+
   UserContactUs: async (emailData) => {
     try {
       const response = await axiosInstance.post(

@@ -17,6 +17,8 @@ import UploadIdProof from './UploadIdProof';
 import { Loader } from './common/Loader';
 
 
+const currentYear = new Date().getFullYear();
+const maxYear = currentYear - 18;
 
 const schema = yup.object({
   street: yup
@@ -25,6 +27,12 @@ const schema = yup.object({
   city: yup
     .string()
     .required("Please enter city"),
+  dob: yup
+    .number()
+    .typeError('Only numbers are allowed')
+    .min(1975, 'Minimum allowed year is 1975')
+    .max(maxYear, `Maximum allowed year is ${maxYear}`)
+    .required('This field is required'),
   district: yup
     .string()
     .required("Please enter district"),
@@ -46,7 +54,7 @@ const schema = yup.object({
     .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
 })
 
-function ProfileCard({ onIdProofChange }) {
+function ProfileCard({ onIdProofChange, idProof }) {
 
   const { authState } = useSelector((state) => state?.userAuth);
   // const [userData, setUserData] = useState(initialUserData);
@@ -54,11 +62,11 @@ function ProfileCard({ onIdProofChange }) {
   const [preview, setPreview] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const [idProof, setIdProof] = useState(null);
+  // const [idProof, setIdProof] = useState(null);
 
-  const handleIdProofChange = (idProofData) => {
-    setIdProof(idProofData);
-  };
+  // const handleIdProofChange = (idProofData) => {
+  //   setIdProof(idProofData);
+  // };
 
 
   const dispatch = useDispatch();
@@ -206,6 +214,7 @@ function ProfileCard({ onIdProofChange }) {
   };
 
   const onSubmit = async (data) => {
+    console.log(data, "HHHHH")
     try {
       const response = await userDataSubmit(data, authState?.userId);
       if (response.success === true) {
@@ -336,7 +345,6 @@ function ProfileCard({ onIdProofChange }) {
                           placeholder="Enter email"
                           register={register}
                           error={errors.email}
-                          disabled={true}
                         />
                         <FormField
                           type="text"
@@ -345,7 +353,6 @@ function ProfileCard({ onIdProofChange }) {
                           placeholder="Enter date of birth"
                           register={register}
                           error={errors.dob}
-                          disabled={true}
                         />
                         <div className="grid grid-cols-2 gap-4">
                           <FormField
@@ -433,7 +440,7 @@ function ProfileCard({ onIdProofChange }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <InfoRow icon={Mail} label="Email" value={userProfile?.user?.email} />
                     <InfoRow icon={Phone} label="Phone" value={userProfile?.user?.phone} />
-                    <InfoRow icon={Calendar} label="Year of Birth" value={formatDate(userProfile?.user?.dob)} />
+                    <InfoRow icon={Calendar} label="Year of Birth" value={userProfile?.user?.dob} />
                     <InfoRow icon={User2} label="Gender" value={userProfile?.user?.gender} />
                     <InfoRow
                       icon={Home}
