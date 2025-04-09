@@ -36,7 +36,6 @@ const DatePickButton = ({
 
       return 'Select date';
     } catch (error) {
-      console.error('Error formatting date:', error);
       return 'Select date';
     }
   };

@@ -4,6 +4,7 @@ import { CheckCircle, Calendar, CreditCard, Home, User, Clock } from 'lucide-rea
 import useApi from '../hooks/useApi';
 import userService from '../services/userServices';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 
 function BookingSuccess() {
@@ -18,7 +19,7 @@ function BookingSuccess() {
 
   const location = useLocation();
   const { bookingResponse } = location.state || {};
-
+  const { currency } = useSelector((store) => store?.currency);
 
   const { data } = bookingResponse;
 
@@ -162,7 +163,7 @@ function BookingSuccess() {
                     <div className="text-right">
                       <p className="text-sm text-gray-500">Amount Paid</p>
                       <p className="text-xl font-bold text-gray-900">
-                        ₹{data?.amount?.toLocaleString()}
+                        {currency?.symbol} {data?.price?.toLocaleString()}
                       </p>
                     </div>
                   </div>

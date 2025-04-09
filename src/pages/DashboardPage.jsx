@@ -75,7 +75,6 @@ export default function DashboardPage() {
   }, [overallData])
 
 
-  console.log(monthlyData, homeStayData, categoryData, yealryData)
 
   return (
     <div>

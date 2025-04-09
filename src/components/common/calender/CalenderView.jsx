@@ -56,7 +56,6 @@ const CalenderView = ({
 
       return new Date();
     } catch (error) {
-      console.error("Error parsing date:", error);
       return new Date();
     }
   };
