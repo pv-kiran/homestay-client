@@ -169,13 +169,16 @@ function HomeStayPage() {
                                         insuranceDescription: homeStay?.data?.insuranceDescription
                                     }
                                 }
+                                gst={homeStay?.data?.gst}
                                 guests={guests}
                                 setGuests={setGuests}
                                 maxGuests={homeStay?.data?.maxGuests}
                                 setModal={setIsModalOpen}
+                                initiatePayment={initiatePayment}
+                                completePayment={completePayment}
                             />
                             <div className="mt-8 mb-6">
-                                <CancellationPolicy cancPolicy={homeStay?.data?.cancellationPolicy}/>
+                                <CancellationPolicy cancPolicy={homeStay?.data?.cancellationPolicy} />
                             </div>
                         </div>
 

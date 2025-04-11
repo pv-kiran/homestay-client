@@ -13,7 +13,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import BookingDetailsModal from './BookingDetailsModal';
 
 const MyBookingCard = ({
@@ -33,8 +33,10 @@ const MyBookingCard = ({
     homestayId,
     setLoading,
     refundId,
-    selectedItems
+    selectedItems,
+    currency
 }) => {
+
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [confirmDialog, setConfirmDialog] = useState({
@@ -49,12 +51,8 @@ const MyBookingCard = ({
 
     const handleView = (booking) => {
         setIsModalOpen(true);
-        console.log(booking, "HHHHH")
         setchosenBooking([booking])
     };
-
-
-    const { currency } = useSelector((store) => store?.currency)
 
     const {
         loading: checkInLoading,
@@ -89,7 +87,7 @@ const MyBookingCard = ({
         if (!amount) return '';
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
-            currency: `${currency?.code}`,
+            currency: `${currency}`,
             maximumFractionDigits: 0,
         }).format(amount);
     };

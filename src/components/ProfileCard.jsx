@@ -214,7 +214,6 @@ function ProfileCard({ onIdProofChange, idProof }) {
   };
 
   const onSubmit = async (data) => {
-    console.log(data, "HHHHH")
     try {
       const response = await userDataSubmit(data, authState?.userId);
       if (response.success === true) {

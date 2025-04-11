@@ -12,8 +12,6 @@ import { processCurrencyData } from "../utils/currency";
 import { CurrencyDropdown } from "./common/CurrencyDropdown";
 import MenuItem from "./MenuItem";
 import { toast } from "react-toastify";
-import logo from '../assets/logo.png'
-
 
 export default function UserNavbar() {
   const { authState } = useSelector((state) => state?.userAuth);
@@ -30,6 +28,7 @@ export default function UserNavbar() {
   } = useApi(userService.UserLogout);
   const dispatch = useDispatch();
   const location = useLocation();
+
 
   const isHomepage = location.pathname === "/";
 
@@ -164,11 +163,13 @@ export default function UserNavbar() {
                   </div>
                 )}
               </div>
-              <CurrencyDropdown
-                currencies={currencies}
-                onSelect={handleCurrencySelect}
-                isHomepage={isHomepage}
-              />
+              {
+                location.pathname !== "/mybookings" && <CurrencyDropdown
+                  currencies={currencies}
+                  onSelect={handleCurrencySelect}
+                  isHomepage={isHomepage}
+                />
+              }
             </div>
           </div>
         </div>
