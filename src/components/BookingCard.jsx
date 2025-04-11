@@ -283,6 +283,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             return Math.ceil(totalAmount + addOnPrice + price);
         }
 
+
+
         return price + getCouponInsurance(price, insuranceCoverage) + getCouponGST(price, gst) + addOnPrice;
     }
 
@@ -335,8 +337,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             Math.ceil(getAddonAmount()),
             false
         );
-
-
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
