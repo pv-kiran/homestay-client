@@ -40,7 +40,7 @@ export default function Footer() {
                         <ul className="space-y-2 text-gray-400">
                             <li><Link to="/about-us" className="hover:text-white transition">About Us</Link></li>
                             <li><Link to="/contact-us" className="hover:text-white transition">Support</Link></li>
-                            <li><a href="#" className="hover:text-white transition">Terms & Conditions</a></li>
+                            {/* <li><a href="#" className="hover:text-white transition">Terms & Conditions</a></li> */}
                         </ul>
                     </div>
 
