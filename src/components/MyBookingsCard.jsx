@@ -83,8 +83,8 @@ const MyBookingCard = ({
         });
     };
 
-    const formatAmount = (amount) => {
-        if (!amount) return '';
+    const formatAmount = (amount,currency) => {        
+        if (!amount || !currency) return '';
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
             currency: `${currency}`,
@@ -204,7 +204,7 @@ const MyBookingCard = ({
                 />
                 {amount && (
                     <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full shadow-md">
-                        <span className="text-emerald-600 font-semibold">{formatAmount(amount)}</span>
+                        <span className="text-emerald-600 font-semibold">{formatAmount(amount,currency)}</span>
                     </div>
                 )}
             </div>
