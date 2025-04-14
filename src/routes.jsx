@@ -31,6 +31,7 @@ import OtherServices from "./pages/OtherService";
 import IdProofPage from "./pages/IdProofPage";
 import AboutUs from "./pages/AboutUsPage";
 import { ContactUs } from "./pages/ContactUsPage";
+import PrivateRoutesUser from "./utils/PrivateRoutesUser";
 
 
 function AppRoutes() {
@@ -41,11 +42,14 @@ function AppRoutes() {
         <Route index element={<LandingPage />} />
         <Route path="/homestays/all" element={<AllHomeStaysPage />} />
         <Route path="/homestay/view/:id" element={<HomeStayPage />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+      </Route>
+
+      <Route element={<PrivateRoutesUser />}>
         <Route path="/profile" element={<UserProfilePage />} />
         <Route path="/mybookings" element={<MyBookings />} />
         <Route path="/booking/:id/success" element={<BookingSuccess />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/contact-us" element={<ContactUs/>} />
       </Route>
 
       <Route element={<PublicRoutesAdmin />}>

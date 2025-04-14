@@ -3,7 +3,7 @@ import ServiceList from './addons/ServiceList';
 import { Modal } from './common/Modal';
 import { Button } from './common/Button';
 import { formatDate } from '../utils/dateDifference';
-
+import { useSelector } from 'react-redux';
 import {
     User,
     Calendar,
@@ -22,7 +22,9 @@ const BookingDetailsModal = ({
 }) => {
 
 
-    console.log(chosenBooking)
+
+
+    const { currency } = useSelector((store) => store?.currency);
 
     return (
         <Modal
@@ -87,7 +89,10 @@ const BookingDetailsModal = ({
                                 <CreditCard className="w-5 h-5" />
                                 <span className="font-medium">Amount</span>
                             </div>
-                            <p className="mt-1 ml-7">₹{chosenBooking[0].amount.toLocaleString()}</p>
+                            <p className="mt-1 ml-7">
+                                {currency?.symbol}
+                                {chosenBooking[0].amount.toLocaleString()}
+                            </p>
                         </div>
 
                         {/* Status */}

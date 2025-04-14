@@ -21,7 +21,7 @@ const GoogleLogin = ({ handleSuccess }) => {
   } = useApi(userService.UserGoogleSignup);
 
   const showWelcomeToast = async (username = "User") => {
-    try {      
+    try {
       toast(
         <div className="flex items-center gap-3 py-1">
           <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-b from-turquoise-400 to-turquoise-600 rounded-full">
@@ -69,7 +69,6 @@ const GoogleLogin = ({ handleSuccess }) => {
     },
     onError: (error) => {
       // TODO : Handle google login error handle
-      console.error("Login Failed:", error);
     },
   });
 

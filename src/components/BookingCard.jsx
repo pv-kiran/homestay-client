@@ -188,7 +188,6 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
             } catch (err) {
                 // TODO: - payment failure
                 completePayment();
-                console.log(err)
             }
 
         }
@@ -274,17 +273,19 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
     }
 
 
-    const totalPrice = (price, differenceInDays, insuranceCoverage, gst, isCouponApplied) => {
-        console.log(price, insuranceCoverage, differenceInDays, gst)
+    const totalPrice = (price, differenceInDays, insuranceCoverage, gst, addOnPrice, isCouponApplied) => {
         if (!isCouponApplied) {
             // const insurance = Math.ceil(((price * differenceInDays) * insuranceCoverage) / 100);
             const insurance = calculateInsurance(price, differenceInDays, insuranceCoverage)
             const gstPrice = calculateGst(price, differenceInDays, gst)
             const totalPrice = price * differenceInDays;
             const totalAmount = totalPrice + insurance + gstPrice;
-            return Math.ceil(totalAmount + getAddonAmount() + price);
+            return Math.ceil(totalAmount + addOnPrice + price);
         }
-        return price + getCouponInsurance(price, insuranceCoverage) + getCouponGST(price, gst) + Math.ceil(getAddonAmount());
+
+
+
+        return price + getCouponInsurance(price, insuranceCoverage) + getCouponGST(price, gst) + addOnPrice;
     }
 
     useEffect(() => {
@@ -315,9 +316,27 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
         if (couponCode) {
             handleRemoveCoupon()
         }
-    }, [checkIn, checkOut, currency])
+    }, [checkIn, checkOut, currency, selectedItems])
 
 
+
+    const finalPrice = JSON.parse(sessionStorage.getItem('appliedCoupon'))?.newPrice
+        ? totalPrice(
+            JSON.parse(sessionStorage.getItem('appliedCoupon'))?.newPrice,
+            0,
+            insuranceDetails?.insurancePercentage,
+            gst,
+            Math.ceil(getAddonAmount()),
+            true
+        )
+        : totalPrice(
+            price,
+            differenceInDays || 1,
+            insuranceDetails?.insurancePercentage,
+            gst,
+            Math.ceil(getAddonAmount()),
+            false
+        );
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -730,7 +749,7 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
 
                         <div className="flex justify-between pt-4 mt-6 border-t font-semibold text-lg">
                             <span>Total</span>
-                            <span>
+                            {/* <span>
                                 {
                                     currency?.symbol
                                 }
@@ -754,7 +773,8 @@ export const BookingCard = ({ checkIn, checkOut, onCheckInChange, onCheckOutChan
                                                 insuranceDetails?.insurancePercentage, gst,
                                                 false)).toFixed(2)}`)
                                 }
-                            </span>
+                            </span> */}
+                            <span>{currency?.symbol}{parseFloat(finalPrice).toFixed(2)}</span>
                         </div>
                     </div>
                 </div>

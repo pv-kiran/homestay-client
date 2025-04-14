@@ -10,10 +10,10 @@ import userService from '../services/userServices';
 import { toast } from 'react-toastify';
 
 const schema = yup.object({
-    name: yup.string().required("Full name is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
-    subject: yup.string().required("Subject is required"),
-    message: yup.string().required("Message is required"),
+  name: yup.string().required("Full name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  subject: yup.string().required("Subject is required"),
+  message: yup.string().required("Message is required"),
 });
 
 export const ContactUs = () => {
@@ -33,16 +33,20 @@ export const ContactUs = () => {
 
   const onSubmit = async (data) => {
     const result = await UserContactForm(data);
-    if(result?.success) {
-        toast.success(result?.message);
+    if (result?.success) {
+      toast.success(result?.message);
     }
   };
 
   useEffect(() => {
-      if (contactUsError) {
-          toast.error("Failed to send message");
-      }
+    if (contactUsError) {
+      toast.error("Failed to send message");
+    }
   }, [contactUsError]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 mt-10">
@@ -142,11 +146,11 @@ export const ContactUs = () => {
                   Message
                 </label>
                 <FormField
-                    name="message"
-                    type="textarea"
-                    register={register}
-                    error={errors.message}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#30D5C8] focus:border-[#30D5C8] outline-none transition-colors resize-none"
+                  name="message"
+                  type="textarea"
+                  register={register}
+                  error={errors.message}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#30D5C8] focus:border-[#30D5C8] outline-none transition-colors resize-none"
                 ></FormField>
               </div>
               <div>

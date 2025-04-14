@@ -1,9 +1,13 @@
 import React from 'react';
 import { ShoppingCart } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 
 
 const ServiceCard = ({ title, items }) => {
+
+    const { currency } = useSelector((store) => store?.currency);
+
     const totalAmount = Object.values(items).reduce((sum, item) =>
         sum + (item.price * item.quantity), 0
     );
@@ -13,7 +17,7 @@ const ServiceCard = ({ title, items }) => {
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
                 <div className="text-sm font-medium text-gray-600">
-                    Total: ${totalAmount?.toFixed(2)}
+                    Total: {currency?.symbol}{totalAmount?.toFixed(2)}
                 </div>
             </div>
 
@@ -45,10 +49,12 @@ const ServiceCard = ({ title, items }) => {
                         <div className="flex items-center gap-6">
                             <div className="text-right">
                                 <div className="font-medium text-gray-800">
-                                    ${(item.price * item.quantity)?.toFixed(2)}
+                                    {currency?.symbol}
+                                    {(item.price * item.quantity)?.toFixed(2)}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                    ${item.price?.toFixed(2)} × {item.quantity}
+                                    {currency?.symbol}
+                                    {item.price?.toFixed(2)} × {item.quantity}
                                 </div>
                             </div>
 

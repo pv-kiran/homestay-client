@@ -13,7 +13,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import BookingDetailsModal from './BookingDetailsModal';
 
 const MyBookingCard = ({
@@ -33,8 +33,10 @@ const MyBookingCard = ({
     homestayId,
     setLoading,
     refundId,
-    selectedItems
+    selectedItems,
+    currency
 }) => {
+
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [confirmDialog, setConfirmDialog] = useState({
@@ -51,9 +53,6 @@ const MyBookingCard = ({
         setIsModalOpen(true);
         setchosenBooking([booking])
     };
-
-
-    const { currency } = useSelector((store) => store?.currency)
 
     const {
         loading: checkInLoading,
@@ -88,7 +87,7 @@ const MyBookingCard = ({
         if (!amount) return '';
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
-            currency: `${currency?.code}`,
+            currency: `${currency}`,
             maximumFractionDigits: 0,
         }).format(amount);
     };
@@ -217,6 +216,7 @@ const MyBookingCard = ({
                     <div className='flex gap-2'>
                         <button
                             onClick={() => handleView({
+                                _id,
                                 homestayName,
                                 homestayAddress,
                                 homestayImage,
@@ -311,15 +311,22 @@ const MyBookingCard = ({
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleConfirmDialogClose} color="inherit">
+                        <Button
+                            onClick={handleConfirmDialogClose} color="inherit"
+                            disabled={checkInLoading || checkOutLoading || cancelLoading}
+                        >
                             Cancel
                         </Button>
                         <Button
                             onClick={handleConfirmAction}
                             color={confirmDialog.type === 'cancel' ? 'error' : 'primary'}
                             autoFocus
+                            disabled={checkInLoading || checkOutLoading || cancelLoading}
                         >
-                            Confirm
+                            {
+                                (checkInLoading || checkOutLoading || cancelLoading) ?
+                                    'Loading ...' : 'Confirm'
+                            }
                         </Button>
                     </DialogActions>
                 </Dialog>
